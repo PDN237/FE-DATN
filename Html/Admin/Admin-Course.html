@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Course Management - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/FrondEnd/Style/style.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/admin.css">
+</head>
+<body>
+    <div class="app-container admin-app">
+        <div class="top-section">
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h1>Admin Panel</h1>
+                </div>
+                <nav class="admin-nav">
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html">Dashboard</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html" class="active">Courses</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html">Users</a>
+                </nav>
+            </aside>
+            <main class="admin-main">
+                <div class="admin-header">
+                    <h1 class="admin-page-title">Course Management</h1>
+                    <p class="admin-subtitle">Manage courses, modules, and lessons</p>
+                </div>
+                
+                <div class="admin-toolbar">
+                    <input type="search" class="search-input" id="courseSearch" placeholder="Search courses by title...">
+                    <button class="btn btn-primary" id="btnAddCourse">
+                        <span>+</span> Add Course
+                    </button>
+                </div>
+                
+                <div class="admin-table-wrap" id="coursesTableWrap">
+                    <table class="admin-table" id="coursesTable">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Level</th>
+                                <th>Modules</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="coursesTableBody">
+                            <tr>
+                                <td colspan="5" class="text-center">Loading courses...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="pagination-wrap" id="pagination" style="display: none;">
+                    <button class="btn btn-secondary btn-sm" id="prevPage">Previous</button>
+                    <span id="pageInfo"></span>
+                    <button class="btn btn-secondary btn-sm" id="nextPage">Next</button>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Course Modal -->
+    <div class="modal-overlay" id="courseModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="courseModalTitle">Add New Course</h2>
+                <button class="close-btn" id="closeCourseModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="courseForm">
+                    <input type="hidden" id="courseId">
+                    <div class="form-group">
+                        <label for="courseTitle">Title *</label>
+                        <input type="text" id="courseTitle" required maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="courseDescription">Description *</label>
+                        <textarea id="courseDescription" required maxlength="1000" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseLevel">Level</label>
+                        <select id="courseLevel">
+                            <option value="Cơ bản">Cơ bản</option>
+                            <option value="Trung cấp">Trung cấp</option>
+                            <option value="Nâng cao">Nâng cao</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="courseThumbnail">Thumbnail URL (optional)</label>
+                        <input type="url" id="courseThumbnail" placeholder="https://example.com/thumbnail.jpg">
+                        <div class="thumbnail-preview" id="thumbnailPreview"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelCourse">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveCourse">Save Course</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteConfirmModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteCourseTitle"></strong>?</p>
+                <p class="text-danger" id="deleteWarning" style="display: none;"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin-api.js"></script>
+    <script type="module" src="js/admin-course.js"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin Dashboard - Statistics</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/Dashboard.css" />
+</head>
+
+<body>
+    <div class="app-container admin-app">
+        <div class="top-section">
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h1>Admin Panel</h1>
+                </div>
+                <nav class="admin-nav">
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html" class="active"><i class="fas fa-chart-pie"
+                            style="width: 20px;"></i> Dashboard</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html"><i class="fas fa-book" style="width: 20px;"></i>
+                        Content (Courses)</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html"><i class="fas fa-users"
+                            style="width: 20px;"></i> Users</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-problems.html"><i class="fas fa-code" style="width: 20px;"></i>
+                        Problems</a>
+                </nav>
+            </aside>
+
+            <main class="admin-main">
+                <h1 class="admin-page-title" style="margin-bottom: 0.5rem;">Cofounder Dashboard</h1>
+                <p style="color: #9ca3af; margin-bottom: 2rem; font-size: 0.95rem;">Tổng quan toàn diện về hoạt động của
+                    nền tảng.</p>
+
+                <!-- STATS GRID -->
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Tổng Học Viên</h3>
+                            <span class="value" id="statUsers">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Tổng Khóa Học</h3>
+                            <span class="value" id="statCourses">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Bài Tập Hệ Thống</h3>
+                            <span class="value" id="statProblems">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon" style="color: #10b981;">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Lượt Nộp Bài</h3>
+                            <span class="value" id="statSubmissions">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DASHBOARD TABLES -->
+                <div class="dashboard-tables">
+                    <!-- Học viên mới nhất -->
+                    <div class="activity-card">
+                        <div class="activity-card-header">
+                            <div class="activity-card-title">
+                                <i class="fas fa-user-plus" style="color: #22d3ee;"></i> Học viên mới đăng ký
+                            </div>
+                        </div>
+                        <overflow-wrapper style="display: block; overflow-x: auto;">
+                            <table class="activity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Học viên</th>
+                                        <th>Email</th>
+                                        <th>Ngày tham gia</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentUsersTable">
+                                    <tr>
+                                        <td colspan="3" style="text-align: center; color: #6b7280;">Đang tải...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </overflow-wrapper>
+                    </div>
+
+                    <!-- Lượt nộp bài mới nhất -->
+                    <div class="activity-card">
+                        <div class="activity-card-header">
+                            <div class="activity-card-title">
+                                <i class="fas fa-tasks" style="color: #10b981;"></i> Lượt nộp bài (Challenge)
+                            </div>
+                        </div>
+                        <overflow-wrapper style="display: block; overflow-x: auto;">
+                            <table class="activity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Học viên</th>
+                                        <th>Bài tập</th>
+                                        <th>Kết quả</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentSubmissionsTable">
+                                    <tr>
+                                        <td colspan="3" style="text-align: center; color: #6b7280;">Đang tải...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </overflow-wrapper>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
+            </div>
+            <div class="footer-text">
+                <p>Admin Dashboard · Built with MN-Team</p>
+            </div>
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/Dashboard.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Practice - Problems</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/Problem.css">
+</head>
+
+<body>
+    <!-- Header with Navigation -->
+    <header>
+        <nav>
+            <ul>
+                <li><a href="../../Index.html">Home</a></li>
+                <li><a href="../Tutor/index.html">Tutor</a></li>
+                <li><a href="../Course/course.html">Course</a></li>
+                <li><a href="../Practice/Problems.html" class="active">Practice</a></li>
+                <li><a href="../profile/profile.html">Profile</a></li>
+                <li><a href="../Login/login.html">Login</a></li>
+                <li><a href="../Admin/admin-dashboard.html">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-wrapper">
+            <div class="page-header">
+                <h1>Problem Set</h1>
+                <p>Choose a category to get started</p>
+            </div>
+
+            <!-- Search and Filter Section -->
+            <div class="filter-section">
+                <div class="search-container">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search problems..." class="search-input">
+                </div>
+                <div class="filter-options">
+
+                    <select class="filter-select">
+                        <option>All Difficulty</option>
+                        <option>Easy</option>
+                        <option>Medium</option>
+                        <option>Hard</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <button class="filter-tab active">All</button>
+                <button class="filter-tab easy">Easy</button>
+                <button class="filter-tab medium">Medium</button>
+                <button class="filter-tab hard">Hard</button>
+            </div>
+
+            <!-- Problem Table -->
+            <div class="table-container">
+                <table class="problem-table">
+                    <thead>
+                        <tr>
+                            <th class="col-num">#</th>
+                            <th class="col-title">Title</th>
+                            <th class="col-difficulty">Difficulty</th>
+                            <th class="col-acceptance">Acceptance</th>
+                            <th class="col-frequency">Frequency</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="problem-row">
+                            <td class="col-num">1</td>
+                            <td class="col-title">
+                                <a href="ProblemsDetail.html">Two Sum</a>
+                                <div class="problem-tags">
+                                    <span class="tag">Array</span>
+                                    <span class="tag">Hash Table</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty easy">Easy</span></td>
+                            <td class="col-acceptance">49.2%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 90%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">2</td>
+                            <td class="col-title">
+                                <a href="#">Add Two Numbers</a>
+                                <div class="problem-tags">
+                                    <span class="tag">Linked List</span>
+                                    <span class="tag">Math</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty medium">Medium</span></td>
+                            <td class="col-acceptance">39.1%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 75%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">3</td>
+                            <td class="col-title">
+                                <a href="#">Longest Substring Without Repeating Characters</a>
+                                <div class="problem-tags">
+                                    <span class="tag">Hash Table</span>
+                                    <span class="tag">String</span>
+                                    <span class="tag">Sliding Window</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty medium">Medium</span></td>
+                            <td class="col-acceptance">33.5%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 85%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">4</td>
+                            <td class="col-title">
+                                <a href="#">Median of Two Sorted Arrays</a>
+                                <div class="problem-tags">
+                                    <span class="tag">Array</span>
+                                    <span class="tag">Binary Search</span>
+                                    <span class="tag">Divide and Conquer</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty hard">Hard</span></td>
+                            <td class="col-acceptance">31.2%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 95%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">5</td>
+                            <td class="col-title">
+                                <a href="#">Longest Palindromic Substring</a>
+                                <div class="problem-tags">
+                                    <span class="tag">String</span>
+                                    <span class="tag">Dynamic Programming</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty medium">Medium</span></td>
+                            <td class="col-acceptance">31.2%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 80%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">6</td>
+                            <td class="col-title">
+                                <a href="#">Zigzag Conversion</a>
+                                <div class="problem-tags">
+                                    <span class="tag">String</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty medium">Medium</span></td>
+                            <td class="col-acceptance">44.1%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 65%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">7</td>
+                            <td class="col-title">
+                                <a href="#">Reverse Integer</a>
+                                <div class="problem-tags">
+                                    <span class="tag">Math</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty medium">Medium</span></td>
+                            <td class="col-acceptance">26.8%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 70%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">8</td>
+                            <td class="col-title">
+                                <a href="#">String to Integer (atoi)</a>
+                                <div class="problem-tags">
+                                    <span class="tag">String</span>
+                                    <span class="tag">Math</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty medium">Medium</span></td>
+                            <td class="col-acceptance">15.8%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 60%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">9</td>
+                            <td class="col-title">
+                                <a href="#">Palindrome Number</a>
+                                <div class="problem-tags">
+                                    <span class="tag">Math</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty easy">Easy</span></td>
+                            <td class="col-acceptance">52.3%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 55%"></div>
+                            </td>
+                        </tr>
+                        <tr class="problem-row">
+                            <td class="col-num">10</td>
+                            <td class="col-title">
+                                <a href="#">Regular Expression Matching</a>
+                                <div class="problem-tags">
+                                    <span class="tag">String</span>
+                                    <span class="tag">Dynamic Programming</span>
+                                    <span class="tag">Recursion</span>
+                                </div>
+                            </td>
+                            <td class="col-difficulty"><span class="difficulty hard">Hard</span></td>
+                            <td class="col-acceptance">28.1%</td>
+                            <td class="col-frequency">
+                                <div class="frequency-bar" style="--width: 88%"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" disabled>
+                    << /button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <button class="page-btn">...</button>
+                        <button class="page-btn">100</button>
+                        <button class="page-btn">></button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
+            </div>
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Fetch problems from API
+        async function fetchProblems() {
+            try {
+                const userId = localStorage.getItem('userId');
+                const url = userId ? `https://be-datn-6gb6.onrender.com/api/problems?userId=${userId}` : 'https://be-datn-6gb6.onrender.com/api/problems';
+                const response = await fetch(url);
+                const result = await response.json();
+
+                if (result.success) {
+                    displayProblems(result.data);
+                } else {
+                    console.error('Error:', result.message);
+                }
+            } catch (error) {
+                console.error('Error fetching problems:', error);
+            }
+        }
+
+        // Display problems in table
+        function displayProblems(problems) {
+            const tbody = document.querySelector('.problem-table tbody');
+            tbody.innerHTML = '';
+
+            problems.forEach((problem, index) => {
+                const difficultyClass = problem.difficulty.toLowerCase();
+                let statusIcon = '';
+                if (problem.user_status === 'Solved') {
+                    statusIcon = '<i class="fas fa-check-circle" style="color: #2ecc71; margin-right: 8px;" title="Solved"></i>';
+                } else if (problem.user_status === 'Attempted') {
+                    statusIcon = '<i class="fas fa-dot-circle" style="color: #f39c12; margin-right: 8px;" title="Attempted"></i>';
+                }
+
+                const row = document.createElement('tr');
+                row.className = 'problem-row';
+                row.innerHTML = `
+                    <td class="col-num">${index + 1}</td>
+                    <td class="col-title">
+                        ${statusIcon}
+                        <a href="ProblemsDetail.html?id=${problem.id}">${problem.title}</a>
+                        <div class="problem-tags">
+                            <span class="tag">${problem.difficulty}</span>
+                        </div>
+                    </td>
+                    <td class="col-difficulty"><span class="difficulty ${difficultyClass}">${problem.difficulty}</span></td>
+                    <td class="col-acceptance">-</td>
+                    <td class="col-frequency">
+                        <div class="frequency-bar" style="--width: 50%"></div>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Load problems when page loads
+        document.addEventListener('DOMContentLoaded', fetchProblems);
+    </script>
+</body>
+
+</html>

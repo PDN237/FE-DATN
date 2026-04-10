@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="/FrondEnd/Style/profile.css">
+    
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <div class="header-left">
+                <h1 class="logo">Profile</h1>
+                <nav class="nav">
+                    <button class="nav-btn" onclick="location.href='/FrondEnd/Index.html'">Khám phá</button>
+                    <button class="nav-btn" onclick="location.href='/FrondEnd/Html/Course/Courses.html'">Khóa học</button>
+                    <button class="nav-btn" onclick="location.href='/FrondEnd/Html/Practice/Problems.html'">Bài tập</button>
+                    <button class="nav-btn profile">Profile</button>
+                </nav>
+            </div>
+           <div class="header-right">
+                <button class="icon-btn">🌐</button>
+                <button class="icon-btn">
+                    <img id="headerAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="avatar">
+                </button>
+           </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="grid">
+            <!-- Left Sidebar -->
+            <div>
+                <!-- Profile Card -->
+                <div class="card">
+                    <h3 class="card-title">Chi tiết cá nhân</h3>
+                    
+                    <div class="profile-info">
+                        <img id="avatarPreview"
+                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                            class="profile-avatar"
+                            onclick="document.getElementById('avatarInput').click()">
+
+                        <input type="file" id="avatarInput" accept="image/*" hidden>
+
+                        <h2 class="profile-name" id="sidebarName">Đang tải...</h2>
+                        <p class="profile-subtitle" id="sidebarEmail">...</p>
+                    </div>
+
+                    <div class="stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Bài tập đã giải</span>
+                            <span class="stat-value" id="statProblems">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Khóa học hoàn thành</span>
+                            <span class="stat-value" id="statCourses">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Info Form -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <h3 class="card-title">Thông tin cá nhân</h3>
+
+                    <form id="profileForm">
+                        <div class="form-group">
+                            <label class="form-label">Họ và tên</label>
+                            <input type="text" class="form-input" id="inputName">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" id="inputEmail" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-input" id="inputPhone">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Vị trí</label>
+                            <input type="text" class="form-input" id="inputLocation" placeholder="Nhập địa chỉ của bạn">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Giới tính</label>
+                            <select class="form-select" id="inputGender">
+                                <option value="">Chọn giới tính</option>
+                                <option value="Nam">Nam</option>
+                                <option value="Nữ">Nữ</option>
+                                <option value="Khác">Khác</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Năm sinh</label>
+                            <input type="number" class="form-input" id="inputBirthYear" min="1950" max="2020">
+                        </div>
+
+                        <button type="submit" class="update-btn">Cập nhật thông tin</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Right Content -->
+            <div>
+                <!-- Progress Overview -->
+                <div class="card">
+                    <div class="section-header">
+                        <h3 class="card-title" style="margin: 0;">Tiến độ học tập</h3>
+                    </div>
+
+                    <div class="progress-grid" style="grid-template-columns: repeat(2, 1fr);">
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <span style="font-size: 24px;">💻</span>
+                                <div>
+                                    <div class="progress-number" id="overviewProblems">0</div>
+                                    <div class="progress-label">Bài tập đã giải</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <span style="font-size: 24px;">📖</span>
+                                <div>
+                                    <div class="progress-number" id="overviewCourses">0</div>
+                                    <div class="progress-label">Khóa học hoàn thành</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Courses -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="section-header">
+                        <h3 class="card-title" style="margin: 0;">Các khóa học đã tham gia</h3>
+                    </div>
+
+                    <div id="coursesContainer">
+                        <p style="color: #9ca3af; font-size: 0.9rem;">Đang tải danh sách khóa học...</p>
+                    </div>
+                </div>
+
+                <!-- Solved Problems -->
+                <div class="card" style="margin-top: 1.5rem;">
+                    <div class="section-header">
+                        <h3 class="card-title" style="margin: 0;">Các bài tập đã giải</h3>
+                    </div>
+
+                    <div id="problemsContainer">
+                        <p style="color: #9ca3af; font-size: 0.9rem;">Đang tải danh sách bài tập...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Thêm thư viện SweetAlert2 hoặc tương tự nếu muốn (tùy chọn), ở đây dùng alert nội bộ hoặc mặc định -->
+    <script src="/FrondEnd/Html/profile/profile.js"></script>
+</body>
+</html>

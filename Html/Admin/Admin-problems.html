@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Problem Management - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../Style/style.css">
+    <link rel="stylesheet" href="../../Style/admin.css">
+    <link rel="stylesheet" href="../../Style/Admin-problems.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container admin-app">
+        <div class="top-section">
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h1>Admin Panel</h1>
+                </div>
+                <nav class="admin-nav">
+                    <a href="admin-dashboard.html">Dashboard</a>
+                    <a href="Admin-Course.html">Courses</a>
+                    <a href="" class="active">Problems</a>
+                    <a href="user-management.html">Users</a>
+                </nav>
+            </aside>
+
+            <main class="admin-main">
+                <!-- Header -->
+                <div class="admin-header">
+                    <h1 class="admin-page-title">ADMIN PROBLEM MANAGEMENT</h1>
+                    <p class="admin-subtitle">Create, edit and manage coding problems and test cases</p>
+                </div>
+
+                <!-- Toolbar -->
+                <div class="admin-toolbar">
+                    <input type="text" class="search-input" id="problemSearch" placeholder="Search problems by title...">
+                    <button class="btn btn-primary" id="btnAddProblem">
+                        <i class="fas fa-plus"></i> Create New Problem
+                    </button>
+                </div>
+
+                <!-- Problem List Section -->
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Problem List</h2>
+                        <div class="section-actions">
+                            <span id="selectedProblemInfo" style="color: #94a3b8;"></span>
+                        </div>
+                    </div>
+                    <div class="admin-table-wrap" id="problemsTableWrap">
+                        <table class="admin-table problem-table" id="problemsTable">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Difficulty</th>
+                                    <th>Time Limit (ms)</th>
+                                    <th>Test Cases</th>
+                                    <th>Submissions</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="problemsTableBody">
+                                <tr>
+                                    <td colspan="6" class="text-center">Loading problems...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination-wrap" id="problemPagination" style="display: none;">
+                        <button class="btn btn-secondary btn-sm" id="prevProblemPage">Previous</button>
+                        <span id="problemPageInfo"></span>
+                        <button class="btn btn-secondary btn-sm" id="nextProblemPage">Next</button>
+                    </div>
+                </div>
+
+                <!-- Test Case Manager Section -->
+                <div class="admin-section">
+                    <div class="section-header">
+                        <h2>Test Case Manager</h2>
+                        <span id="tcWarning" class="badge badge-warning" style="display: none;">⚠️ Add at least 2 test cases (1 public)</span>
+                    </div>
+                    <div class="admin-table-wrap" id="testcasesTableWrap" style="display: none;">
+                        <table class="admin-table testcase-table" id="testcasesTable">
+                            <thead>
+                                <tr>
+                                    <th>Input Data</th>
+                                    <th>Expected Output</th>
+                                    <th>Time Limit</th>
+                                    <th>Hidden</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="testcasesTableBody">
+                                <tr>
+                                    <td colspan="5" class="text-center">Select a problem to manage test cases</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="admin-toolbar" id="testcaseToolbar" style="display: none; margin-top: 16px;">
+                        <button class="btn btn-primary" id="btnAddTestCase">
+                            <i class="fas fa-plus"></i> Add Test Case
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Problem Editor Modal -->
+    <div class="modal-overlay" id="problemModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="problemModalTitle">Create New Problem</h2>
+                <button class="close-btn" id="closeProblemModal">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="problemForm">
+                    <input type="hidden" id="problemId">
+                    <div class="form-group">
+                        <label for="problemTitle">Problem Title *</label>
+                        <input type="text" id="problemTitle" required maxlength="255">
+                    </div>
+                    <div class="form-group">
+                        <label for="problemDifficulty">Difficulty *</label>
+                        <select id="problemDifficulty" required>
+                            <option value="">Select difficulty</option>
+                            <option value="Easy">Easy</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Hard">Hard</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="problemTimeLimit">Time Limit (ms) *</label>
+                        <input type="number" id="problemTimeLimit" required min="100" max="5000" value="2000">
+                    </div>
+                    <div class="form-group">
+                        <label for="problemDescription">Problem Description *</label>
+                        <textarea id="problemDescription" required rows="8" placeholder="Write detailed problem description..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="problemHints">Hints</label>
+                        <textarea id="problemHints" rows="3" placeholder="Optional hints for users..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="problemExamples">Examples</label>
+                        <textarea id="problemExamples" rows="6" placeholder="Example Input/Output format:
+Input:
+5
+1 2 3 4 5
+
+Output:
+5"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelProblem">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveProblem">
+                    <i class="fas fa-save"></i> Save Problem
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Test Case Modal -->
+    <div class="modal-overlay" id="testcaseModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="testcaseModalTitle">Add Test Case</h2>
+                <button class="close-btn" id="closeTestcaseModal">×</button>
+            </div>
+            <div class="modal-body">
+                <form id="testcaseForm">
+                    <input type="hidden" id="testcaseId">
+                    <input type="hidden" id="currentProblemId">
+                    <div class="form-group">
+                        <label for="testcaseInput">Input Data *</label>
+                        <textarea id="testcaseInput" required rows="6" placeholder="Enter input data..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="testcaseOutput">Expected Output *</label>
+                        <textarea id="testcaseOutput" required rows="6" placeholder="Enter expected output..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="testcaseTimeLimit">Time Limit (ms)</label>
+                        <input type="number" id="testcaseTimeLimit" min="100" max="5000" value="2000">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="testcaseHidden"> Hidden Test Case
+                        </label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelTestcase">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveTestcase">
+                    <i class="fas fa-save"></i> Save Test Case
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteConfirmModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Confirm Delete</h2>
+                <button class="close-btn" id="closeDeleteModal">×</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete <strong id="deleteItemName"></strong>?</p>
+                <p class="text-danger" id="deleteWarning"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirmDelete">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin-api.js"></script>
+    <script type="module" src="js/admin-problem.js"></script>
+</body>
+</html>

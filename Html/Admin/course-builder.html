@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Course Builder - Admin</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/FrondEnd/Style/style.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/admin.css">
+    <style>
+        .builder-container { display: flex; height: calc(100vh - 120px); gap: 24px; }
+        .tree-panel { flex: 1; background: rgba(15, 23, 42, 0.9); border-radius: 12px; padding: 20px; overflow-y: auto; border: 1px solid rgba(139, 92, 246, 0.2); }
+        .content-panel { flex: 2; background: rgba(30, 41, 59, 0.9); border-radius: 12px; padding: 20px; border: 1px solid rgba(16, 185, 129, 0.2); }
+        .tree-node { padding: 12px; border-radius: 8px; margin-bottom: 4px; cursor: pointer; transition: all 0.2s; position: relative; display: flex; justify-content: space-between; align-items: center; }
+        .tree-node:hover { background: rgba(139, 92, 246, 0.1); }
+        .tree-node.active { background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981; }
+        .tree-node-title { flex: 1; }
+        .tree-node-actions { display: flex; gap: 4px; opacity: 0.7; }
+        .tree-node:hover .tree-node-actions { opacity: 1; }
+        .add-btn { padding: 4px 8px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: #3b82f6; color: white; }
+        .btn-secondary { background: #6b7280; color: white; }
+        .btn-danger { background: #ef4444; color: white; }
+        .tree-children { margin-left: 24px; margin-top: 8px; }
+        .course-header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); }
+        .modal-footer .btn { margin-left: 8px; }
+    </style>
+</head>
+<body>
+    <script>
+      window.CourseBuilder = window.CourseBuilder || {
+        ready: false,
+        init: () => console.log('CourseBuilder ready (fallback)'),
+        showAddModal: () => alert('Loading...'),
+        editNode: () => {},
+        deleteNode: () => {},
+        loadCourse: () => {},
+        renderTree: () => {}
+      };
+    </script>
+    <div class="app-container admin-app">
+        <div class="top-section">
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h1>Admin Panel</h1>
+                </div>
+                <nav class="admin-nav">
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html">Dashboard</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html">Courses</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html">Users</a>
+                </nav>
+            </aside>
+            <main class="admin-main">
+                <div class="admin-header">
+                    <h1 class="admin-page-title" id="courseTitleHeader">Course Builder</h1>
+                    <p class="admin-subtitle" id="courseSubtitle">Loading course...</p>
+                </div>
+                
+                <div class="admin-toolbar">
+                    <button class="btn btn-primary" id="addFirstModule">+ Add First Module</button>
+                    <button class="btn btn-secondary" id="saveAllChanges">💾 Save All Changes</button>
+                    <button class="btn btn-secondary" id="exportCourse">📥 Export Structure</button>
+                </div>
+                
+                <div class="builder-container">
+                    <div class="tree-panel">
+                        <div class="course-header">
+                            <h2 id="courseName">Loading...</h2>
+                            <small id="courseModulesCount">0 modules</small>
+                        </div>
+                        <div id="courseTree"></div>
+                    </div>
+                    <div class="content-panel" id="contentPanel">
+                        <div class="text-center" style="padding: 60px; color: #94a3b8;">
+                            <div style="font-size: 48px; margin-bottom: 16px;">📚</div>
+                            <h3>Select an item to edit</h3>
+                            <p>Click on modules, lessons, or quizzes in the tree to manage content</p>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Global Add Modal -->
+    <div class="modal-overlay" id="addModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 id="addModalTitle">Add Module</h2>
+                <button class="close-btn" id="closeAddModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="addForm">
+                    <input type="hidden" id="parentId" name="parentId">
+                    <input type="hidden" id="parentType" name="parentType">
+                    <div class="form-group">
+                        <label for="itemTitle">Title *</label>
+                        <input type="text" id="itemTitle" required>
+                    </div>
+                    <div id="lessonTypeGroup" style="display: none;">
+                        <label for="lessonType">Type</label>
+                        <select id="lessonType">
+                            <option value="video">Video</option>
+                            <option value="reading">Reading</option>
+                            <option value="quiz">Quiz</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="cancelAdd">Cancel</button>
+                <button type="button" class="btn btn-primary" id="saveAdd">Add</button>
+            </div>
+        </div>
+    </div>
+
+<script type="module" src="js/admin-api.js"></script>
+     <script type="module" src="js/course-builder-fixed.js"></script>
+     <script src="js/quiz-editor.js"></script>
+     <script src="js/lesson-editor.js"></script>
+</body>
+</html>
+
