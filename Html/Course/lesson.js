@@ -146,10 +146,26 @@ async function loadQuiz(lessonId) {
   renderQuestion();
 }
 
+function formatMediaUrl(url) {
+  if (!url) return '';
+  const ytRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const ytMatch = url.match(ytRegExp);
+  if (ytMatch && ytMatch[2].length === 11) {
+    return 'https://www.youtube.com/embed/' + ytMatch[2];
+  }
+  const driveRegex = /(?:drive\.google\.com\/)(?:file\/d\/|open\?id=)([a-zA-Z0-9_\-]+)/;
+  const driveMatch = url.match(driveRegex);
+  if (driveMatch && driveMatch[1]) {
+    return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+  }
+  return url;
+}
+
 function safeRenderIframe(url, fallbackText = 'Nội dung không khả dụng') {
   try {
+    const formattedUrl = formatMediaUrl(url);
     // Always try iframe first, let browser handle blocking
-    return `<iframe src="${url}" width="100%" height="100%" frameborder="0" allowfullscreen style="border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"></iframe>`;
+    return `<iframe src="${formattedUrl}" width="100%" height="100%" frameborder="0" allowfullscreen style="border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"></iframe>`;
   } catch (e) {
     console.warn('Invalid URL for iframe:', url);
     return `<div style="padding:2rem;text-align:center;color:#64748b;display:none;">Iframe error fallback</div>`;

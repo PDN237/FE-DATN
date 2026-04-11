@@ -8,11 +8,19 @@ class LessonEditor {
   static formatVideoUrl(url) {
     if (!url) return '';
     // Auto convert youtube watch links to embed links
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-    const match = url.match(regExp);
-    if (match && match[2].length === 11) {
-      return 'https://www.youtube.com/embed/' + match[2];
+    const ytRegExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const ytMatch = url.match(ytRegExp);
+    if (ytMatch && ytMatch[2].length === 11) {
+      return 'https://www.youtube.com/embed/' + ytMatch[2];
     }
+    
+    // Auto convert Google Drive links to preview links
+    const driveRegex = /(?:drive\.google\.com\/)(?:file\/d\/|open\?id=)([a-zA-Z0-9_\-]+)/;
+    const driveMatch = url.match(driveRegex);
+    if (driveMatch && driveMatch[1]) {
+      return `https://drive.google.com/file/d/${driveMatch[1]}/preview`;
+    }
+    
     return url;
   }
 
@@ -120,7 +128,8 @@ class LessonEditor {
       return `<iframe src="${this.escapeHtml(videoSrc || '')}" width="100%" style="aspect-ratio: 16/9; min-height: 350px; border-radius: 8px;" frameborder="0" allowfullscreen></iframe>`;
     } else if (lesson.Type === 'reading') {
       if (lesson.ContentUrl) {
-        return `<iframe src="${this.escapeHtml(lesson.ContentUrl)}" width="100%" height="100%" style="min-height:500px; border:none;" allowfullscreen></iframe>`;
+        const formattedUrl = this.formatVideoUrl(lesson.ContentUrl);
+        return `<iframe src="${this.escapeHtml(formattedUrl)}" width="100%" height="100%" style="min-height:500px; border:none; border-radius: 8px;" allowfullscreen></iframe>`;
       }
       return `<div class="reading-preview">${lesson.ContentHtml || '<p>Chưa có nội dung...</p>'}</div>`;
     } else {
@@ -228,7 +237,8 @@ class LessonEditor {
     const content = document.getElementById('reading-content')?.value;
     
     if (url) {
-      preview.innerHTML = `<iframe src="${LessonEditor.escapeHtml(url)}" width="100%" height="100%" style="min-height:500px; border:none;" allowfullscreen></iframe>`;
+      const formattedUrl = LessonEditor.formatVideoUrl(url);
+      preview.innerHTML = `<iframe src="${LessonEditor.escapeHtml(formattedUrl)}" width="100%" height="100%" style="min-height:500px; border:none; border-radius: 8px;" allowfullscreen></iframe>`;
     } else {
       preview.innerHTML = `<div class="reading-preview">${content || '<p>Chưa có nội dung...</p>'}</div>`;
     }
@@ -249,10 +259,11 @@ class LessonEditor {
 
     if (formData.Type === 'video') {
       const rawUrl = document.getElementById('video-url')?.value || '';
-      formData.ContentUrl = LessonEditor.formatVideoUrl(rawUrl);
+      formData.ContentUrl = LessonEditor.formatVideoUrl(rawUrl).trim();
     }
     if (formData.Type === 'reading') {
-      formData.ContentUrl = document.getElementById('reading-url')?.value || '';
+      const rawUrl = document.getElementById('reading-url')?.value || '';
+      formData.ContentUrl = LessonEditor.formatVideoUrl(rawUrl).trim();
       formData.ContentHtml = document.getElementById('reading-content')?.value || '';
     }
 
