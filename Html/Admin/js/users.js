@@ -126,7 +126,8 @@ async function saveUser() {
         FullName: fullName,
         Email: email,
         RoleID: roleId,
-        IsActive: isActive
+        IsActive: isActive,
+        Describe: document.getElementById('userDescribe') ? document.getElementById('userDescribe').value : ''
     };
 
     if (password) userData.PassWord = password;
@@ -175,6 +176,11 @@ async function loadUserForEdit(userId) {
         
         const statusStr = user.IsActive ? 'active' : 'inactive';
         document.getElementById('userStatus').value = statusStr;
+        
+        // Load describe/bio
+        if (document.getElementById('userDescribe')) {
+            document.getElementById('userDescribe').value = user.Describe || '';
+        }
         
         // Password remains empty for edit
     } catch (error) {

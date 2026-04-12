@@ -1,169 +1,345 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profile</title>
-    <link rel="stylesheet" href="/FrondEnd/Style/profile.css">
-    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Teen Lab – Hồ Sơ Cá Nhân</title>
+    <meta name="description"
+        content="Xem và chỉnh sửa thông tin cá nhân, theo dõi tiến độ học tập và bài tập đã giải trên Teen Lab." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../../Style/style.css" />
+    <link rel="stylesheet" href="../../Style/profile.css" />
 </head>
+
 <body>
-    <!-- Header -->
-    <header class="header">
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="modern-header">
         <div class="header-container">
-            <div class="header-left">
-                <h1 class="logo">Profile</h1>
-                <nav class="nav">
-                    <button class="nav-btn" onclick="location.href='/FrondEnd/Index.html'">Khám phá</button>
-                    <button class="nav-btn" onclick="location.href='/FrondEnd/Html/Course/Courses.html'">Khóa học</button>
-                    <button class="nav-btn" onclick="location.href='/FrondEnd/Html/Practice/Problems.html'">Bài tập</button>
-                    <button class="nav-btn profile">Profile</button>
-                </nav>
+            <div class="brand" onclick="location.href='../Index.html'">
+                <svg class="brand-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 4H21V6H3V4ZM9 11H21V13H9V11ZM3 18H21V20H3V18Z" fill="currentColor" />
+                </svg>
+                <span class="brand-name">Teen Lab</span>
+                <span class="brand-badge">Pro</span>
             </div>
-           <div class="header-right">
-                <button class="icon-btn">🌐</button>
-                <button class="icon-btn">
-                    <img id="headerAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="avatar">
+
+            <nav class="main-nav">
+                <a href="../../Index.html" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor" />
+                    </svg>
+                    Home
+                </a>
+                <a href="../Course/course.html" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
+                            stroke-width="2" />
+                    </svg>
+                    Course
+                </a>
+                <a href="../Practice/Problems.html" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
+                    </svg>
+                    Problem
+                </a>
+                <a href="../AI/AICoach.html" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+                            fill="currentColor" />
+                    </svg>
+                    AI Coach
+                </a>
+                <a href="#" class="nav-link active" id="profileNavLink">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+                            fill="currentColor" />
+                    </svg>
+                    Profile
+                </a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="theme-toggle" title="Toggle theme" id="themeToggle">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                            stroke="currentColor" stroke-width="2" />
+                    </svg>
                 </button>
-           </div>
+                <a href="#" class="profile-btn" id="headerAvatarBtn">
+                    <img id="headerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
+                </a>
+            </div>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <main class="main-container">
-        <div class="grid">
-            <!-- Left Sidebar -->
-            <div>
-                <!-- Profile Card -->
-                <div class="card">
-                    <h3 class="card-title">Chi tiết cá nhân</h3>
-                    
-                    <div class="profile-info">
-                        <img id="avatarPreview"
-                            src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-                            class="profile-avatar"
-                            onclick="document.getElementById('avatarInput').click()">
-
-                        <input type="file" id="avatarInput" accept="image/*" hidden>
-
-                        <h2 class="profile-name" id="sidebarName">Đang tải...</h2>
-                        <p class="profile-subtitle" id="sidebarEmail">...</p>
-                    </div>
-
-                    <div class="stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Bài tập đã giải</span>
-                            <span class="stat-value" id="statProblems">0</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Khóa học hoàn thành</span>
-                            <span class="stat-value" id="statCourses">0</span>
-                        </div>
-                    </div>
+    <!-- ================= PROFILE HERO ================= -->
+    <section class="profile-hero">
+        <div class="profile-hero-bg"></div>
+        <div class="profile-hero-content">
+            <div class="profile-avatar-wrapper">
+                <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
+                    class="profile-avatar-large" onclick="document.getElementById('avatarInput').click()"
+                    title="Nhấn để thay đổi ảnh đại diện" />
+                <div class="avatar-overlay">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                            stroke="currentColor" stroke-width="2" />
+                        <circle cx="12" cy="13" r="3" stroke="currentColor" stroke-width="2" />
+                    </svg>
                 </div>
-
-                <!-- Personal Info Form -->
-                <div class="card" style="margin-top: 1.5rem;">
-                    <h3 class="card-title">Thông tin cá nhân</h3>
-
-                    <form id="profileForm">
-                        <div class="form-group">
-                            <label class="form-label">Họ và tên</label>
-                            <input type="text" class="form-input" id="inputName">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-input" id="inputEmail" readonly>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Số điện thoại</label>
-                            <input type="tel" class="form-input" id="inputPhone">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Vị trí</label>
-                            <input type="text" class="form-input" id="inputLocation" placeholder="Nhập địa chỉ của bạn">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Giới tính</label>
-                            <select class="form-select" id="inputGender">
-                                <option value="">Chọn giới tính</option>
-                                <option value="Nam">Nam</option>
-                                <option value="Nữ">Nữ</option>
-                                <option value="Khác">Khác</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Năm sinh</label>
-                            <input type="number" class="form-input" id="inputBirthYear" min="1950" max="2020">
-                        </div>
-
-                        <button type="submit" class="update-btn">Cập nhật thông tin</button>
-                    </form>
+                <input type="file" id="avatarInput" accept="image/*" hidden>
+            </div>
+            <div class="profile-hero-info">
+                <h1 id="heroName" class="profile-hero-name">Đang tải...</h1>
+                <p id="heroEmail" class="profile-hero-email">...</p>
+                <div class="profile-hero-stats">
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="statProblems">0</div>
+                        <div class="hero-stat-label">Bài tập đã giải</div>
+                    </div>
+                    <div class="hero-stat-divider"></div>
+                    <div class="hero-stat">
+                        <div class="hero-stat-number" id="statCourses">0</div>
+                        <div class="hero-stat-label">Khóa học hoàn thành</div>
+                    </div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <!-- Right Content -->
-            <div>
-                <!-- Progress Overview -->
-                <div class="card">
-                    <div class="section-header">
-                        <h3 class="card-title" style="margin: 0;">Tiến độ học tập</h3>
+    <!-- ================= MAIN CONTENT ================= -->
+    <main class="profile-main">
+        <div class="profile-grid">
+
+            <!-- ===== LEFT COLUMN ===== -->
+            <div class="profile-left">
+
+                <!-- Personal Info Card -->
+                <div class="pf-card" id="personalInfoCard">
+                    <div class="pf-card-header">
+                        <h2 class="pf-card-title">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+                                    fill="currentColor" />
+                            </svg>
+                            Thông tin cá nhân
+                        </h2>
                     </div>
-
-                    <div class="progress-grid" style="grid-template-columns: repeat(2, 1fr);">
-                        <div class="progress-card">
-                            <div class="progress-header">
-                                <span style="font-size: 24px;">💻</span>
-                                <div>
-                                    <div class="progress-number" id="overviewProblems">0</div>
-                                    <div class="progress-label">Bài tập đã giải</div>
+                    <div class="pf-card-body">
+                        <form id="profileForm">
+                            <div class="pf-form-row">
+                                <div class="pf-form-group">
+                                    <label class="pf-label" for="inputName">Họ và tên</label>
+                                    <input type="text" class="pf-input" id="inputName" placeholder="Nhập họ và tên" />
+                                </div>
+                                <div class="pf-form-group">
+                                    <label class="pf-label" for="inputPhone">Số điện thoại</label>
+                                    <input type="tel" class="pf-input" id="inputPhone"
+                                        placeholder="Nhập số điện thoại" />
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="progress-card">
-                            <div class="progress-header">
-                                <span style="font-size: 24px;">📖</span>
-                                <div>
-                                    <div class="progress-number" id="overviewCourses">0</div>
-                                    <div class="progress-label">Khóa học hoàn thành</div>
+                            <div class="pf-form-group">
+                                <label class="pf-label" for="inputEmail">Email</label>
+                                <input type="email" class="pf-input pf-input-readonly" id="inputEmail" readonly />
+                            </div>
+
+                            <div class="pf-form-row">
+                                <div class="pf-form-group">
+                                    <label class="pf-label" for="inputGender">Giới tính</label>
+                                    <select class="pf-input pf-select" id="inputGender">
+                                        <option value="">Chọn giới tính</option>
+                                        <option value="Nam">Nam</option>
+                                        <option value="Nữ">Nữ</option>
+                                        <option value="Khác">Khác</option>
+                                    </select>
+                                </div>
+                                <div class="pf-form-group">
+                                    <label class="pf-label" for="inputBirthYear">Năm sinh</label>
+                                    <input type="number" class="pf-input" id="inputBirthYear" min="1950" max="2020"
+                                        placeholder="VD: 2000" />
+                                </div>
+                            </div>
+
+                            <div class="pf-form-group">
+                                <label class="pf-label" for="inputLocation">
+                                    <svg viewBox="0 0 24 24" fill="none"
+                                        style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;">
+                                        <path
+                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                                            fill="currentColor" />
+                                    </svg>
+                                    Địa chỉ
+                                </label>
+                                <input type="text" class="pf-input" id="inputLocation"
+                                    placeholder="Nhập địa chỉ của bạn" />
+                            </div>
+
+                            <!-- BIO / DESCRIBE - NEW LARGE INPUT -->
+                            <div class="pf-form-group">
+                                <label class="pf-label" for="inputDescribe">
+                                    <svg viewBox="0 0 24 24" fill="none"
+                                        style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;">
+                                        <path d="M3 5h18v2H3V5zm0 4h18v2H3V9zm0 4h12v2H3v-2z" fill="currentColor" />
+                                    </svg>
+                                    Giới thiệu bản thân
+                                </label>
+                                <textarea class="pf-input pf-textarea" id="inputDescribe" rows="5"
+                                    placeholder="Hãy chia sẻ về bản thân bạn: kinh nghiệm, sở thích lập trình, mục tiêu học tập... (Tối đa 5000 ký tự)"
+                                    maxlength="5000"></textarea>
+                                <div class="pf-char-counter"><span id="describeCharCount">0</span> / 5000 ký tự</div>
+                            </div>
+
+                            <button type="submit" class="pf-btn-primary" id="updateBtn">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Cập nhật thông tin
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- ===== RIGHT COLUMN ===== -->
+            <div class="profile-right">
+
+                <!-- Progress Overview -->
+                <div class="pf-card">
+                    <div class="pf-card-header">
+                        <h2 class="pf-card-title">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path
+                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                    stroke="currentColor" stroke-width="2" />
+                            </svg>
+                            Tiến độ học tập
+                        </h2>
+                    </div>
+                    <div class="pf-card-body">
+                        <div class="progress-overview-grid">
+                            <div class="pov-card pov-card--problems">
+                                <div class="pov-icon">💻</div>
+                                <div class="pov-data">
+                                    <div class="pov-number" id="overviewProblems">0</div>
+                                    <div class="pov-label">Bài tập đã giải</div>
+                                </div>
+                            </div>
+                            <div class="pov-card pov-card--courses">
+                                <div class="pov-icon">📖</div>
+                                <div class="pov-data">
+                                    <div class="pov-number" id="overviewCourses">0</div>
+                                    <div class="pov-label">Khóa học hoàn thành</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Courses -->
-                <div class="card" style="margin-top: 1.5rem;">
-                    <div class="section-header">
-                        <h3 class="card-title" style="margin: 0;">Các khóa học đã tham gia</h3>
+                <!-- Enrolled Courses -->
+                <div class="pf-card" style="margin-top: 1.5rem;">
+                    <div class="pf-card-header">
+                        <h2 class="pf-card-title">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
+                                    stroke-width="2" />
+                            </svg>
+                            Các khóa học đã tham gia
+                        </h2>
+                        <a href="../Course/course.html" class="pf-see-all">Xem tất cả →</a>
                     </div>
-
-                    <div id="coursesContainer">
-                        <p style="color: #9ca3af; font-size: 0.9rem;">Đang tải danh sách khóa học...</p>
+                    <div class="pf-card-body">
+                        <div id="coursesContainer">
+                            <div class="pf-loading">
+                                <div class="pf-spinner"></div>
+                                <span>Đang tải khóa học...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <!-- Solved Problems -->
-                <div class="card" style="margin-top: 1.5rem;">
-                    <div class="section-header">
-                        <h3 class="card-title" style="margin: 0;">Các bài tập đã giải</h3>
+                <div class="pf-card" style="margin-top: 1.5rem;">
+                    <div class="pf-card-header">
+                        <h2 class="pf-card-title">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
+                            </svg>
+                            Bài tập đã giải
+                        </h2>
+                        <a href="../Practice/Problems.html" class="pf-see-all">Xem thêm →</a>
                     </div>
-
-                    <div id="problemsContainer">
-                        <p style="color: #9ca3af; font-size: 0.9rem;">Đang tải danh sách bài tập...</p>
+                    <div class="pf-card-body">
+                        <div id="problemsContainer">
+                            <div class="pf-loading">
+                                <div class="pf-spinner"></div>
+                                <span>Đang tải bài tập...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </main>
 
-    <!-- Thêm thư viện SweetAlert2 hoặc tương tự nếu muốn (tùy chọn), ở đây dùng alert nội bộ hoặc mặc định -->
-    <script src="/FrondEnd/Html/profile/profile.js"></script>
+    <!-- ================= TOAST NOTIFICATION ================= -->
+    <div id="toastNotif" class="pf-toast" aria-live="polite"></div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="modern-footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <div class="brand">
+                    <svg class="brand-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 4H21V6H3V4ZM9 11H21V13H9V11ZM3 18H21V20H3V18Z" fill="currentColor" />
+                    </svg>
+                    <span class="brand-name">Teen Lab</span>
+                </div>
+                <p class="footer-tagline">Master algorithms through visualization</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Learn</h4>
+                    <a href="#">Algorithms</a>
+                    <a href="#">Data Structures</a>
+                    <a href="#">Tutorials</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Practice</h4>
+                    <a href="../Practice/Problems.html">Problems</a>
+                    <a href="#">Challenges</a>
+                    <a href="#">Contest</a>
+                </div>
+                <div class="footer-column">
+                    <h4>Community</h4>
+                    <a href="#">Forum</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Contributors</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Teen Lab | Interactive Learning Platform</p>
+        </div>
+    </footer>
+
+    <script src="../profile/profile.js"></script>
 </body>
+
 </html>

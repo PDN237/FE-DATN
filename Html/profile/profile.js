@@ -1,5 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const defaultAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+    const defaultAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
+
+    // ---- Toast helper ----
+    function showToast(msg, type = 'success') {
+        const toast = document.getElementById('toastNotif');
+        if (!toast) { alert(msg); return; }
+        toast.textContent = msg;
+        toast.className = 'pf-toast ' + type + ' show';
+        clearTimeout(toast._timer);
+        toast._timer = setTimeout(() => { toast.className = 'pf-toast'; }, 3200);
+    }
 
     // 1. Fetch user ID from localStorage (giả sử có lưu user ID lúa login)
     let userStr = localStorage.getItem("user");
@@ -36,13 +46,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 
                 document.getElementById("avatarPreview").src = avatarUrl;
                 document.getElementById("headerAvatar").src = avatarUrl;
-                
-                document.getElementById("sidebarName").textContent = user.FullName || "Chưa có tên";
-                document.getElementById("sidebarEmail").textContent = user.Email || "";
+
+                // Hero / sidebar info
+                const heroName = document.getElementById("heroName");
+                const heroEmail = document.getElementById("heroEmail");
+                if (heroName) heroName.textContent = user.FullName || "Chưa có tên";
+                if (heroEmail) heroEmail.textContent = user.Email || "";
 
                 document.getElementById("statProblems").textContent = stats.solvedProblems;
                 document.getElementById("statCourses").textContent = stats.completedCourses;
-                
                 document.getElementById("overviewProblems").textContent = stats.solvedProblems;
                 document.getElementById("overviewCourses").textContent = stats.completedCourses;
 
@@ -54,27 +66,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("inputGender").value = user.Gender || "";
                 document.getElementById("inputBirthYear").value = user.BirthYear || "";
 
+                // Describe / Bio field
+                const describeEl = document.getElementById("inputDescribe");
+                if (describeEl) {
+                    describeEl.value = user.Describe || "";
+                    updateCharCount();
+                }
+
                 // Render Courses
                 const coursesContainer = document.getElementById("coursesContainer");
                 coursesContainer.innerHTML = "";
 
                 if (courses.length === 0) {
-                    coursesContainer.innerHTML = "<p style='color: #9ca3af; font-size: 0.9rem;'>Bạn chưa tham gia khóa học nào.</p>";
+                    coursesContainer.innerHTML = '<p class="pf-empty">Bạn chưa tham gia khóa học nào.</p>';
                 } else {
                     courses.forEach(course => {
                         const isCompleted = course.status === 'completed';
-                        const badgeClass = isCompleted ? 'badge-complete' : 'badge-learning';
+                        const badgeClass = isCompleted ? 'pf-badge--complete' : 'pf-badge--learning';
                         const badgeText = isCompleted ? 'Hoàn thành' : 'Đang học';
 
                         const courseHtml = `
-                            <div class="course-card">
-                                <div class="course-header">
-                                    <h4 class="course-title">${course.title}</h4>
-                                    <span class="badge ${badgeClass}">${badgeText}</span>
+                            <div class="pf-course-card">
+                                <div class="pf-course-header">
+                                    <h4 class="pf-course-title">${course.title}</h4>
+                                    <span class="pf-badge ${badgeClass}">${badgeText}</span>
                                 </div>
-                                <p class="course-progress">Hoàn thành: ${course.progress}%</p>
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar" style="width: ${course.progress}%; background-color: #22d3ee;"></div>
+                                <p class="pf-course-progress-text">Hoàn thành: ${course.progress}%</p>
+                                <div class="pf-progress-bar-container">
+                                    <div class="pf-progress-bar" style="width: ${course.progress}%;"></div>
                                 </div>
                             </div>
                         `;
@@ -89,18 +108,19 @@ document.addEventListener("DOMContentLoaded", () => {
                     const solvedProblemsList = data.data.solvedProblemsList || [];
 
                     if (solvedProblemsList.length === 0) {
-                        problemsContainer.innerHTML = "<p style='color: #9ca3af; font-size: 0.9rem;'>Bạn chưa giải bài tập nào.</p>";
+                        problemsContainer.innerHTML = '<p class="pf-empty">Bạn chưa giải bài tập nào.</p>';
                     } else {
+                        const diffColors = { Easy: { bg: '#e8f5e9', color: '#48c78e', border: '#a5d6a7' }, Medium: { bg: '#fff8e1', color: '#f7b731', border: '#ffe082' }, Hard: { bg: '#fce4ec', color: '#ee5a6f', border: '#f48fb1' } };
                         solvedProblemsList.forEach(prob => {
-                            const difficultyColor = prob.difficulty === 'Easy' ? '#10b981' : (prob.difficulty === 'Medium' ? '#f59e0b' : '#ef4444');
+                            const dc = diffColors[prob.difficulty] || { bg: '#f3f4f6', color: '#718096', border: '#cbd5e0' };
                             const date = new Date(prob.solvedAt).toLocaleDateString('vi-VN');
                             const problemHtml = `
-                                <div class="course-card" style="display: flex; justify-content: space-between; align-items: center; padding: 1rem; border-bottom: 1px solid #1e3a52; border-radius: 0; background: transparent; margin-bottom: 0;">
+                                <div class="pf-problem-row">
                                     <div>
-                                        <h4 class="course-title" style="margin-bottom: 0.25rem;"><a href="/FrondEnd/Html/Practice/ProblemsDetail.html?id=${prob.id}" style="color: #22d3ee; text-decoration: none;">${prob.title}</a></h4>
-                                        <span style="font-size: 0.8rem; color: #9ca3af;">Đã giải: ${date}</span>
+                                        <a href="/FrondEnd/Html/Practice/ProblemsDetail.html?id=${prob.id}" class="pf-problem-title">${prob.title}</a>
+                                        <span class="pf-problem-date">Đã giải: ${date}</span>
                                     </div>
-                                    <span class="badge" style="background-color: ${difficultyColor}20; color: ${difficultyColor}; border: 1px solid ${difficultyColor}40;">${prob.difficulty || 'N/A'}</span>
+                                    <span class="pf-diff-badge" style="background:${dc.bg};color:${dc.color};border:1px solid ${dc.border};">${prob.difficulty || 'N/A'}</span>
                                 </div>
                             `;
                             problemsContainer.insertAdjacentHTML('beforeend', problemHtml);
@@ -119,6 +139,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     loadProfileData();
 
+    // ---- Char counter for bio textarea ----
+    function updateCharCount() {
+        const el = document.getElementById("inputDescribe");
+        const counter = document.getElementById("describeCharCount");
+        if (el && counter) counter.textContent = el.value.length;
+    }
+    const describeEl = document.getElementById("inputDescribe");
+    if (describeEl) describeEl.addEventListener("input", updateCharCount);
+
     // 3. Handle Form Submit
     const form = document.getElementById("profileForm");
     form.addEventListener("submit", async function (e) {
@@ -130,12 +159,13 @@ document.addEventListener("DOMContentLoaded", () => {
             Phone: document.getElementById("inputPhone").value,
             Location: document.getElementById("inputLocation").value,
             Gender: document.getElementById("inputGender").value,
-            BirthYear: document.getElementById("inputBirthYear").value
+            BirthYear: document.getElementById("inputBirthYear").value,
+            Describe: (document.getElementById("inputDescribe") || {}).value || ''
         };
 
-        const updateBtn = form.querySelector('.update-btn');
-        const oldText = updateBtn.textContent;
-        updateBtn.textContent = 'Đang cập nhật...';
+        const updateBtn = document.getElementById('updateBtn');
+        const oldHTML = updateBtn.innerHTML;
+        updateBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px;animation:pfSpin 0.7s linear infinite"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-dasharray="28 8"/></svg> Đang cập nhật...';
         updateBtn.disabled = true;
 
         try {
@@ -147,17 +177,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const data = await response.json();
             if (data.success) {
-                alert("Cập nhật thông tin thành công!");
-                // Update sidebar name dynamically without reload
-                document.getElementById("sidebarName").textContent = updateData.FullName;
+                showToast("✅ Cập nhật thông tin thành công!", 'success');
+                // Update hero name
+                const heroName = document.getElementById("heroName");
+                if (heroName) heroName.textContent = updateData.FullName;
             } else {
-                alert("Cập nhật thất bại: " + data.message);
+                showToast("❌ Cập nhật thất bại: " + data.message, 'error');
             }
         } catch (error) {
             console.error(error);
-            alert("Đã xảy ra lỗi khi cập nhật!");
+            showToast("❌ Đã xảy ra lỗi khi cập nhật!", 'error');
         } finally {
-            updateBtn.textContent = oldText;
+            updateBtn.innerHTML = oldHTML;
             updateBtn.disabled = false;
         }
     });
