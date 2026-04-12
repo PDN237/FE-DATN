@@ -267,6 +267,7 @@
         // Store code for each language
         const codeStorage = {};
         let currentTab = 'testCases';
+        window.currentTestCases = [];
 
         function getProblemId() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -415,9 +416,11 @@
                 const response = await fetch('https://be-datn-6gb6.onrender.com/api/problems/' + problemId + '/testcases');
                 const result = await response.json();
                 if (result.success && result.data.length > 0) {
+                    window.currentTestCases = result.data;
                     displayTestCases(result.data);
                     document.getElementById('testCaseCount').textContent = '(' + result.data.length + ')';
                 } else {
+                    window.currentTestCases = [];
                     document.getElementById('testCasesContainer').innerHTML = '<div class="no-testcases">No test cases available</div>';
                     document.getElementById('testCaseCount').textContent = '(0)';
                 }
@@ -519,6 +522,139 @@
             updateLineNumbers();
         }
 
+        async function runCode() {
+            const code = document.getElementById('codeInput').value;
+            const language = getSelectedLanguage();
+            const problemId = getProblemId();
+            
+            if (!code || !problemId || !window.currentTestCases || window.currentTestCases.length === 0) {
+                return;
+            }
+            
+            const visibleCases = window.currentTestCases.filter(tc => !tc.is_hidden);
+            if (visibleCases.length === 0) return alert('No public test cases to run.');
+
+            switchTab('results');
+            const badge = document.getElementById('resultStatusBadge');
+            badge.className = 'status-badge pending';
+            badge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
+            
+            const container = document.getElementById('testResultsContainer');
+            container.innerHTML = '<div class="loading-message" style="color:white; padding: 20px;">Running test cases on server...</div>';
+            
+            let html = '';
+            let allPassed = true;
+            let maxRuntime = 0;
+            let maxMemory = 0;
+
+            for (let i = 0; i < visibleCases.length; i++) {
+                const tc = visibleCases[i];
+                try {
+                    const res = await fetch(`https://be-datn-6gb6.onrender.com/api/submit/${problemId}`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            code, language,
+                            testCaseId: tc.id,
+                            inputData: tc.input_data,
+                            expectedOutput: tc.expected_output
+                        })
+                    });
+                    const data = await res.json();
+                    
+                    if (data.success && data.data) {
+                        const status = data.data.status;
+                        if (status !== 'Accepted') allPassed = false;
+                        maxRuntime = Math.max(maxRuntime, data.data.runtime || 0);
+                        maxMemory = Math.max(maxMemory, data.data.memory || 0);
+                        
+                        const statusClass = status === 'Accepted' ? 'accepted' : 'rejected';
+                        html += `
+                        <div class="test-case-card" style="margin-bottom: 20px;">
+                            <div class="test-case-header">
+                                <div class="test-case-title">
+                                    <span>Sample ${i + 1}</span>
+                                </div>
+                                <span class="test-case-badge" style="color: ${status === 'Accepted' ? '#10b981' : '#ef4444'}">${status}</span>
+                            </div>
+                            <div class="test-case-body">
+                                <div class="test-case-row"><span class="test-case-label">Input:</span><code class="test-case-value">${escapeHtml(tc.input_data)}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Expected:</span><code class="test-case-value">${escapeHtml(tc.expected_output)}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Actual:</span><code class="test-case-value">${escapeHtml(data.data.output || 'No output')}</code></div>
+                            </div>
+                        </div>`;
+                    } else {
+                        allPassed = false;
+                        html += `<div style="color: #ef4444; padding: 10px;">Error on Sample ${i+1}: ${data.message}</div>`;
+                    }
+                } catch (e) {
+                    allPassed = false;
+                    html += `<div style="color: #ef4444; padding: 10px;">Network error on Sample ${i+1}</div>`;
+                }
+            }
+            
+            container.innerHTML = html;
+            badge.className = 'status-badge ' + (allPassed ? 'accepted' : 'rejected');
+            badge.innerHTML = allPassed ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> Failed';
+            document.getElementById('runtimeValue').textContent = maxRuntime + ' ms';
+            document.getElementById('memoryValue').textContent = maxMemory + ' MB';
+        }
+
+        async function submitCode() {
+            const code = document.getElementById('codeInput').value;
+            const language = getSelectedLanguage();
+            const problemId = getProblemId();
+            const userId = localStorage.getItem('userId');
+            
+            if (!code || !problemId) return;
+
+            switchTab('results');
+            const badge = document.getElementById('resultStatusBadge');
+            badge.className = 'status-badge pending';
+            badge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            
+            const container = document.getElementById('testResultsContainer');
+            container.innerHTML = '<div class="loading-message" style="color:white; padding: 20px;">Evaluating submission on server...</div>';
+            
+            try {
+                const res = await fetch(`https://be-datn-6gb6.onrender.com/api/submit/${problemId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, language, userId })
+                });
+                const data = await res.json();
+                
+                if (data.success && data.data) {
+                    const status = data.data.status;
+                    const statusClass = status === 'Accepted' ? 'accepted' : 'rejected';
+                    badge.className = 'status-badge ' + statusClass;
+                    badge.innerHTML = status === 'Accepted' ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> ' + status;
+                    
+                    document.getElementById('runtimeValue').textContent = (data.data.runtime || 0) + ' ms';
+                    document.getElementById('memoryValue').textContent = (data.data.memory || 0) + ' MB';
+                    
+                    let html = '<h3 style="color:white; margin: 15px 10px;">Test Cases (' + data.data.testcases.length + ')</h3><div style="display:flex; flex-wrap:wrap; gap:10px; padding: 10px;">';
+                    data.data.testcases.forEach((tc, i) => {
+                        const bg = tc.status === 'Accepted' ? '#10b981' : (tc.status.includes('Not Executed') ? '#64748b' : '#ef4444');
+                        html += `<div style="padding: 15px; border-radius: 8px; background-color: #1e293b; border-left: 5px solid ${bg}; min-width: 140px; margin-bottom: 10px;">
+                            <div style="font-size:12px; color:#94a3b8; margin-bottom: 5px;">Test Case ${i+1}</div>
+                            <div style="font-size:15px; color:${bg}; font-weight:bold">${tc.status}</div>
+                        </div>`;
+                    });
+                    html += '</div>';
+                    container.innerHTML = html;
+                } else {
+                    badge.className = 'status-badge rejected';
+                    badge.innerHTML = 'Error';
+                    container.innerHTML = `<div style="color:#ef4444; padding: 20px;">${data.message || 'Unknown error'}</div>`;
+                }
+            } catch (e) {
+                badge.className = 'status-badge rejected';
+                badge.innerHTML = 'Network Error';
+                container.innerHTML = `<div style="color:#ef4444; padding: 20px;">Could not connect to server</div>`;
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const codeInput = document.getElementById('codeInput');
             const lineNumbers = document.getElementById('lineNumbers');
@@ -538,6 +674,11 @@
 
             fetchProblemDetail();
             fetchTestCases();
+            
+            const runBtn = document.getElementById('runBtn');
+            const submitBtn = document.getElementById('submitBtn');
+            if(runBtn) runBtn.addEventListener('click', runCode);
+            if(submitBtn) submitBtn.addEventListener('click', submitCode);
         });
     </script>
 </body>
