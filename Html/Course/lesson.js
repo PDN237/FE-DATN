@@ -127,15 +127,10 @@ async function loadLesson(lessonId) {
     // Always load quiz data (even for video/reading)
     await loadQuiz(lessonId);
     
-    // Handle lesson type
-    if (lesson.Type === 'quiz') {
-      document.getElementById('videoSection').classList.add('hidden');
-      switchTab('quiz');
-    } else {
-      document.getElementById('videoSection').classList.remove('hidden');
-      renderMediaContent(lesson);
-      switchTab('describe');
-    }
+    // Handle lesson rendering
+    document.getElementById('videoSection').classList.remove('hidden');
+    renderMediaContent(lesson);
+    switchTab('describe');
     
   } catch (error) {
     console.error('Error loading lesson:', error);

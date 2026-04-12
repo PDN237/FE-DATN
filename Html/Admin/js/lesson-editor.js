@@ -87,7 +87,6 @@ class LessonEditor {
               <select id="lesson-type">
                 <option value="video" ${lesson.Type === 'video' ? 'selected' : ''}>📹 Video</option>
                 <option value="reading" ${lesson.Type === 'reading' ? 'selected' : ''}>📖 Reading</option>
-                <option value="quiz" ${lesson.Type === 'quiz' ? 'selected' : ''}>🧠 Quiz</option>
               </select>
             </div>
             <div class="form-row">
@@ -104,8 +103,11 @@ class LessonEditor {
               <label>Mô tả chi tiết (Describe)</label>
               <textarea id="lesson-describe" style="width: 100%; min-height: 80px;" placeholder="Mô tả chi tiết bài học...">${this.escapeHtml(lesson.Describe || '')}</textarea>
             </div>
-            <div class="form-group" style="margin-top: 12px;">
-              <label>Tóm tắt nội dung (Summary)</label>
+            <div class="form-group" style="margin-top: 12px; position: relative;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <label style="margin-bottom: 0;">Tóm tắt nội dung (Summary)</label>
+                <button type="button" id="ai-generate-summary-btn" style="background-color: #8b5cf6; color: white; border: none; border-radius: 4px; padding: 4px 10px; font-weight: bold; font-size: 12px; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 4px rgba(139, 92, 246, 0.3);">✨ AI Generate</button>
+              </div>
               <textarea id="lesson-summary" style="width: 100%; min-height: 80px;" placeholder="Tóm tắt nội dung...">${this.escapeHtml(lesson.Summary || '')}</textarea>
             </div>
           </div>
@@ -214,8 +216,6 @@ class LessonEditor {
           <p class="help-text">Hỗ trợ HTML, preview live. Sẽ được hiển thị nếu trống Link ở trên.</p>
         </div>
       `;
-    } else {
-      preview.innerHTML = '<div class="quiz-preview"><div style="font-size:3rem;">🧠</div><h4>Quiz Preview</h4></div>';
     }
     
     html += `
@@ -354,6 +354,41 @@ class LessonEditor {
     
     // Bind save/delete buttons
     LessonEditor.bindButtons(lessonId);
+    
+    // AI Generate Summary
+    const aiBtn = document.getElementById('ai-generate-summary-btn');
+    if (aiBtn) {
+      aiBtn.onclick = async () => {
+        const describeText = document.getElementById('lesson-describe').value;
+        if (!describeText || !describeText.trim()) {
+          alert('Vui lòng nhập "Mô tả chi tiết" trước khi dùng AI tạo tóm tắt.');
+          return;
+        }
+        try {
+          aiBtn.disabled = true;
+          aiBtn.innerHTML = '⏳ Đang phân tích...';
+          const apiUrl = window.API_BASE_URL || 'http://localhost:5000'; // fallback test local
+          const baseUrl = window.location.href.includes('localhost') || window.location.href.includes('127.0.0.1') ? apiUrl : 'https://be-datn-6gb6.onrender.com';
+          
+          const res = await fetch(`${baseUrl}/api/admin/ai-summary`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ content: describeText })
+          });
+          const data = await res.json();
+          if (res.ok && data.summary) {
+            document.getElementById('lesson-summary').value = data.summary;
+          } else {
+            alert('Lỗi xử lý AI: ' + (data.error || 'Unknown server error'));
+          }
+        } catch (err) {
+          alert('Lỗi kết nối API AI Generator: ' + err.message);
+        } finally {
+          aiBtn.disabled = false;
+          aiBtn.innerHTML = '✨ AI Generate';
+        }
+      };
+    }
     
     // Auto-render quiz for all types since we now allow quizzes everywhere
     const container = document.getElementById('quiz-builder-inner');

@@ -209,15 +209,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         return `<iframe src="${this.escapeHtml(lesson.ContentUrl || '')}" allowfullscreen></iframe>`;
       } else if (type === 'reading') {
         return `<div class="reading-preview">${this.escapeHtml(lesson.ContentHtml || 'No content')}</div>`;
-      } else if (type === 'quiz') {
-        return `
-          <div class="quiz-preview">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
-            <h4>Quiz Preview</h4>
-            <p class="text-gray-400">Quiz questions will appear here for students</p>
-            <p class="text-sm mt-4">Manage questions in Quiz editor (coming soon)</p>
-          </div>
-        `;
       }
       return '<div class="text-center p-8 text-gray-400">Select type to see preview</div>';
     }
@@ -235,14 +226,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           <h3 class="text-lg font-semibold mb-4 text-white">Reading Content</h3>
           <textarea id="readingContentInput" placeholder="Enter reading content...">${this.escapeHtml(lesson.ContentHtml || '')}</textarea>
           <p class="text-sm text-gray-400 mt-2">HTML supported. Preview updates live.</p>
-        `;
-      } else if (type === 'quiz') {
-        return `
-          <div class="text-center p-8 text-gray-400">
-            <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
-            <h4>Quiz Editor (Coming Soon)</h4>
-            <p>Quiz questions and answers will be managed here</p>
-          </div>
         `;
       }
       return '<div class="text-center p-8 text-gray-400">Select lesson type</div>';
@@ -265,14 +248,6 @@ document.addEventListener('DOMContentLoaded', async () => {
           } else if (type === 'reading') {
             const content = document.getElementById('readingContentInput')?.value || '';
             preview.innerHTML = \`<div class="reading-preview">\${content}</div>\`;
-          } else if (type === 'quiz') {
-            preview.innerHTML = \`
-              <div class="quiz-preview">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🧠</div>
-                <h4>Quiz Preview</h4>
-                <p class="text-gray-400">Quiz will appear here</p>
-              </div>
-            \`;
           }
           
           // Switch content editor
