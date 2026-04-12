@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Sorting Visualizer</title>
+  <link rel="stylesheet" href="../../Style/AICoach.css" />
+</head>
+<body>
+
+<div class="app-container">
+  <!-- SIDEBAR   -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">AI SORTING</div>
+    </div> 
+
+    <nav class="sidebar-nav" id="sidebarNav"></nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-exit" onclick="window.location.href='../../Index.html'">Thoát ứng dụng</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main-content">
+    <header class="content-header">
+      <div class="breadcrumb">
+        <span id="backBtn" class="back-link">← Quay lại</span>
+        <span class="path" id="pathText">Hệ thống / Bước 1</span>
+      </div>
+    </header>
+
+    <div class="view-container" id="viewContainer"></div>
+    <div id="modalContainer"></div>
+  </main>
+</div>
+  <!-- Exit button (fixed, global) -->
+  <button id="exitBtn" class="exit-icon" title="Thoát ứng dụng (Esc)" onclick="window.location.href='../../Index.html'">  
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M12 2v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M5.07 6.93a8 8 0 1 0 13.86 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </button>
+
+<script src="AICoach.js"></script>
+</body>
+</html>
