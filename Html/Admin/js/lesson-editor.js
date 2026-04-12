@@ -100,6 +100,14 @@ class LessonEditor {
                 <input type="number" id="lesson-order" value="${lesson.OrderIndex || 0}" min="0">
               </div>
             </div>
+            <div class="form-group" style="margin-top: 12px;">
+              <label>Mô tả chi tiết (Describe)</label>
+              <textarea id="lesson-describe" style="width: 100%; min-height: 80px;" placeholder="Mô tả chi tiết bài học...">${this.escapeHtml(lesson.Describe || '')}</textarea>
+            </div>
+            <div class="form-group" style="margin-top: 12px;">
+              <label>Tóm tắt nội dung (Summary)</label>
+              <textarea id="lesson-summary" style="width: 100%; min-height: 80px;" placeholder="Tóm tắt nội dung...">${this.escapeHtml(lesson.Summary || '')}</textarea>
+            </div>
           </div>
           
           <div class="lesson-preview">
@@ -142,14 +150,15 @@ class LessonEditor {
   }
 
   static getContentEditor(lesson) {
+    let html = '';
     if (lesson.Type === 'video') {
-      return `
+      html = `
         <h3>🔗 Video URL</h3>
         <input type="url" id="video-url" value="${this.escapeHtml(lesson.ContentUrl || '')}" placeholder="https://youtube.com/embed/xxx">
         <p class="help-text">Paste YouTube embed URL để preview ngay</p>
       `;
     } else if (lesson.Type === 'reading') {
-      return `
+      html = `
         <div class="mb-4">
           <h3>🔗 Link Tài liệu (PDF/Document)</h3>
           <input type="url" id="reading-url" value="${this.escapeHtml(lesson.ContentUrl || '')}" placeholder="https://example.com/document.pdf">
@@ -161,9 +170,15 @@ class LessonEditor {
           <p class="help-text">Hỗ trợ HTML, preview live. Sẽ được hiển thị nếu trống Link ở trên.</p>
         </div>
       `;
-    } else {
-      return `<div id="quiz-builder-container" class="mt-4 border-t border-gray-700 pt-4"></div>`;
     }
+    
+    html += `
+      <div id="quiz-builder-container" class="mt-4 border-t border-gray-700 pt-4" style="margin-top: 30px; border-top: 1px solid #475569; padding-top: 20px;">
+        <h3 style="color:#2dd4bf; margin-bottom: 12px;">🧠 Quản lý câu hỏi (Quiz)</h3>
+        <div id="quiz-builder-inner"></div>
+      </div>
+    `;
+    return html;
   }
 
   static onTypeChange() {
@@ -175,16 +190,19 @@ class LessonEditor {
     const title = document.getElementById('lesson-title').value;
     document.getElementById('lesson-title-display').textContent = title || 'Lesson mới';
     
+    // Reset HTML to matching format from getContentEditor
+    let html = '';
+    
     // Demo content based on type
     if (type === 'video') {
       preview.innerHTML = '<iframe src="https://www.youtube.com/embed/kPRA0W1kECg" width="100%" style="aspect-ratio: 16/9; min-height: 350px; border-radius: 8px;" frameborder="0" allowfullscreen></iframe>';
-      editor.innerHTML = `
+      html = `
         <h3>🔗 Video URL</h3>
         <input type="url" id="video-url" value="https://www.youtube.com/embed/kPRA0W1kECg" placeholder="YouTube embed URL">
       `;
     } else if (type === 'reading') {
       preview.innerHTML = '<div class="reading-preview"><h3>Bài đọc mẫu</h3><p>Đây là nội dung bài đọc demo. Bạn có thể chỉnh sửa trực tiếp...</p></div>';
-      editor.innerHTML = `
+      html = `
         <div class="mb-4">
           <h3>🔗 Link Tài liệu (PDF/Document)</h3>
           <input type="url" id="reading-url" value="" placeholder="https://example.com/document.pdf">
@@ -198,12 +216,20 @@ class LessonEditor {
       `;
     } else {
       preview.innerHTML = '<div class="quiz-preview"><div style="font-size:3rem;">🧠</div><h4>Quiz Preview</h4></div>';
-      editor.innerHTML = '<div id="quiz-builder-container" class="mt-4 border-t border-gray-700 pt-4"></div>';
-      const container = document.getElementById('quiz-builder-container');
-      const lessonId = document.getElementById('contentPanel').dataset.currentLessonId;
-      if (window.QuizEditor && lessonId) {
-        window.QuizEditor.render(lessonId, container);
-      }
+    }
+    
+    html += `
+      <div id="quiz-builder-container" class="mt-4 border-t border-gray-700 pt-4" style="margin-top: 30px; border-top: 1px solid #475569; padding-top: 20px;">
+        <h3 style="color:#2dd4bf; margin-bottom: 12px;">🧠 Quản lý câu hỏi (Quiz)</h3>
+        <div id="quiz-builder-inner"></div>
+      </div>
+    `;
+    editor.innerHTML = html;
+    
+    const container = document.getElementById('quiz-builder-inner');
+    const lessonId = document.getElementById('contentPanel').dataset.currentLessonId;
+    if (window.QuizEditor && lessonId && container) {
+      window.QuizEditor.render(lessonId, container);
     }
     
     LessonEditor.bindContentEditor();
@@ -254,7 +280,9 @@ class LessonEditor {
       Title: document.getElementById('lesson-title').value,
       Type: document.getElementById('lesson-type').value,
       Duration: parseInt(document.getElementById('lesson-duration').value) || 0,
-      OrderIndex: parseInt(document.getElementById('lesson-order').value) || 0
+      OrderIndex: parseInt(document.getElementById('lesson-order').value) || 0,
+      Describe: document.getElementById('lesson-describe')?.value || '',
+      Summary: document.getElementById('lesson-summary')?.value || ''
     };
 
     if (formData.Type === 'video') {
@@ -327,10 +355,10 @@ class LessonEditor {
     // Bind save/delete buttons
     LessonEditor.bindButtons(lessonId);
     
-    // Auto-render quiz if type is currently quiz
-    if (document.getElementById('lesson-type').value === 'quiz') {
-      const container = document.getElementById('quiz-builder-container');
-      if (window.QuizEditor && container) window.QuizEditor.render(lessonId, container);
+    // Auto-render quiz for all types since we now allow quizzes everywhere
+    const container = document.getElementById('quiz-builder-inner');
+    if (window.QuizEditor && container) {
+      window.QuizEditor.render(lessonId, container);
     }
     
     console.log('✅ All events bound successfully');

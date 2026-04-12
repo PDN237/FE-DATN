@@ -56,8 +56,8 @@ function updateLessonUI() {
     const hasActiveLesson = module.lessons.some(l => l.id == currentLessonId);
     
     moduleDiv.innerHTML = `
-      <button class="module-header ${hasActiveLesson ? 'active' : ''}" onclick="toggleModule(${module.id})">
-        <span>${module.title}</span>
+      <button class="module-header ${hasActiveLesson ? 'active' : ''} ${module.lessons.every(l => l.completed) ? 'completed-module' : ''}" onclick="toggleModule(${module.id})">
+        <span style="${module.lessons.length > 0 && module.lessons.every(l => l.completed) ? 'text-decoration: line-through; opacity: 0.7;' : ''}">${module.title}</span>
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="module-arrow" style="transform: rotate(${isExpanded ? '180deg' : '0deg'});">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg>
@@ -116,13 +116,25 @@ async function loadLesson(lessonId) {
     
     if (courseNameEl) courseNameEl.textContent = lesson.Title?.split(' - ')[0] || 'Lesson';
     if (lessonTitleEl) lessonTitleEl.textContent = lesson.Title || 'Loading...';
-    if (lessonDescEl) lessonDescEl.textContent = lesson.Description || '';
+    
+    // Set Describe and Summary
+    const descEl = document.getElementById('describeContent');
+    if (descEl) descEl.innerHTML = lesson.Describe || '<p style="color:#94a3b8">Chưa có mô tả chi tiết.</p>';
+    
+    const sumEl = document.getElementById('summaryContent');
+    if (sumEl) sumEl.innerHTML = lesson.Summary || '<p style="color:#94a3b8">Chưa có tóm tắt nội dung.</p>';
+    
+    // Always load quiz data (even for video/reading)
+    await loadQuiz(lessonId);
     
     // Handle lesson type
     if (lesson.Type === 'quiz') {
-      await loadQuiz(lessonId);
+      document.getElementById('videoSection').classList.add('hidden');
+      switchTab('quiz');
     } else {
+      document.getElementById('videoSection').classList.remove('hidden');
       renderMediaContent(lesson);
+      switchTab('describe');
     }
     
   } catch (error) {
@@ -178,13 +190,8 @@ async function renderMediaContent(lesson) {
     readingProgressTracked = false;
     
     // Safe section toggles
-    const quizSection = document.getElementById('quizSection');
     const videoSection = document.getElementById('videoSection');
-    if (quizSection) quizSection.classList.add('hidden');
     if (videoSection) videoSection.classList.remove('hidden');
-    
-    // Handle transcript tab visibility - only for video
-    toggleTranscriptTab(lesson.Type === 'video');
     
     const player = document.querySelector('.video-player');
     const placeholder = document.querySelector('.video-placeholder');
@@ -214,56 +221,28 @@ async function renderMediaContent(lesson) {
     
     // Reading/PDF handling with scroll tracking
     if (lesson.Type === 'reading') {
-      if (lesson.ContentUrl && lesson.ContentUrl.includes('.pdf')) {
-        player.innerHTML = safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được');
-        trackReadingProgress(player);
-      } else if (lesson.ContentHtml) {
-        player.innerHTML = `<div class="reading-container" style="padding:2rem;height:100%;overflow-y:auto;background:white;border-radius:8px;">
+      const parts = [];
+      if (lesson.ContentHtml) {
+        parts.push(`<div class="reading-container" style="padding:2rem;height:auto;background:white;border-radius:8px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
           <div style="font-size:1.1em;line-height:1.7;">${lesson.ContentHtml}</div>
-        </div>`;
-        trackReadingProgress(player.querySelector('.reading-container'));
-      } else {
-        player.innerHTML = safeRenderIframe(lesson.ContentUrl || '', 'Tài liệu không khả dụng');
-        trackReadingProgress(player);
+        </div>`);
       }
-    }
-    
-    // Safe tab content updates
-    const transcriptContent = document.getElementById('transcriptContent');
-    const resourcesContent = document.getElementById('resourcesContent');
-    const detailsContent = document.getElementById('detailsContent');
-    
-    if (transcriptContent && lesson.Type === 'video' && lesson.ContentUrl?.trim()) {
-      transcriptContent.innerHTML = '<div style="padding:2rem;text-align:center;"><div style="width:24px;height:24px;border:2px solid #e2e8f0;border-top:2px solid #0891b2;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div><p style="color:#64748b;">📝 Đang tạo bản chép lời tự động (có thể mất 1-2 phút lần đầu)...</p></div>';
-      document.head.insertAdjacentHTML('beforeend', '<style>@keyframes spin{to{transform:rotate(360deg)}}</style>');
-      
-      try {
-        const transcriptRes = await window.apiFetch(`/api/courses/lessons/${currentLessonId}/transcript`);
-        
-        if (transcriptRes.formatted) {
-          transcriptContent.innerHTML = `
-            <div style="background:#f8fafc; padding:1.5rem; border-radius:8px; border-left:4px solid #0891b2;">
-              <h3 style="margin:0 0 1rem 0; color:#1e293b;">📄 Bản chép lời tự động</h3>
-              <div style="line-height:1.7; color:#475569;">${transcriptRes.formatted.replace(/\n/g, '<br>')}</div>
-              ${transcriptRes.raw ? `<details style="margin-top:1rem;"><summary style="cursor:pointer;color:#64748b;font-weight:500;">Xem transcript gốc (raw)</summary><pre style="background:#1e293b;color:#e2e8f0;padding:1rem;border-radius:4px;margin-top:0.5rem;overflow:auto;font-size:0.9em;">${transcriptRes.raw}</pre></details>` : ''}
-            </div>
-          `;
+      if (lesson.ContentUrl) {
+        if (lesson.ContentUrl.includes('.pdf')) {
+          parts.push(safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được'));
         } else {
-          transcriptContent.innerHTML = '<p style="color:#ef4444;padding:2rem;">❌ Lỗi xử lý transcript: ' + (transcriptRes.formatted || 'Unknown error') + '</p>';
+          parts.push(safeRenderIframe(lesson.ContentUrl, 'Tài liệu không khả dụng'));
         }
-      } catch (err) {
-        console.error('Transcript fetch error:', err);
-        transcriptContent.innerHTML = `<p style="color:#64748b;padding:2rem;">📝 ${err.message.includes('500') ? 'Dịch vụ transcript đang được cập nhật' : 'Bản ghi sẽ sớm có sẵn'}</p>`;
       }
-    } else if (transcriptContent) {
-      transcriptContent.innerHTML = '<p style="color:#64748b;padding:2rem;text-align:center;">📺 Transcript chỉ khả dụng cho video có URL hợp lệ</p>';
+      if (parts.length === 0) {
+        parts.push('<div style="padding:2rem;text-align:center;">Chưa có nội dung</div>');
+      }
+      
+      player.innerHTML = `<div style="display:flex; flex-direction:column; width:100%; height:100%; overflow-y:auto; padding:10px;">${parts.join('')}</div>`;
+      trackReadingProgress(player.querySelector('div'));
     }
-    if (resourcesContent) {
-      resourcesContent.innerHTML = '<div style="padding:2rem;color:#64748b;">📚 Chưa có tài nguyên bổ sung</div>';
-    }
-    if (detailsContent) {
-      detailsContent.textContent = lesson.Description || 'Không có mô tả chi tiết.';
-    }
+    
+    // Transcript and other legacy content removal
     
   } catch (error) {
     console.error('Error in renderMediaContent:', error);
@@ -276,7 +255,7 @@ async function renderMediaContent(lesson) {
 
 function showQuiz() {
   document.getElementById('videoSection').classList.add('hidden');
-  document.getElementById('quizSection').classList.remove('hidden');
+  switchTab('quiz');
 }
 
 function renderQuestion() {
@@ -427,40 +406,28 @@ function retryQuiz() {
 }
 
 function switchTab(tabId, targetBtn = event?.target) {
-  // Skip if switching to transcript but it's hidden
-  const transcriptBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.trim() === 'Bản chép lời');
-  if (tabId === 'transcript' && transcriptBtn && transcriptBtn.style.display === 'none') {
-    // Safe fallback to details
-    const detailsBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.trim() === 'Chi tiết');
-    if (detailsBtn) {
-      detailsBtn.classList.add('active');
-      document.getElementById('detailsTab').classList.add('active');
-    }
-    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
-    return;
-  }
-  
   // Update tabs
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  if (targetBtn) targetBtn.classList.add('active');
+  
+  if (targetBtn) {
+    targetBtn.classList.add('active');
+  } else {
+    // If called via code, find the button by its onclick function parameter
+    const allBtns = document.querySelectorAll('.tab-btn');
+    for (let btn of allBtns) {
+      if (btn.getAttribute('onclick')?.includes(tabId)) {
+        btn.classList.add('active');
+        break;
+      }
+    }
+  }
   
   document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
   const targetPanel = document.getElementById(tabId + 'Tab');
   if (targetPanel) targetPanel.classList.add('active');
 }
 
-function toggleTranscriptTab(show) {
-  const transcriptBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.trim() === 'Bản chép lời');
-  if (transcriptBtn) {
-    transcriptBtn.style.display = show ? '' : 'none';
-  }
-  // Safe tab switch - only if transcript was active
-  const transcriptPanel = document.getElementById('transcriptTab');
-  if (!show && transcriptPanel && transcriptPanel.classList.contains('active')) {
-    const detailsBtn = Array.from(document.querySelectorAll('.tab-btn')).find(btn => btn.textContent.trim() === 'Chi tiết');
-    if (detailsBtn) detailsBtn.click();
-  }
-}
+
 
 function trackVideoProgress(iframe) {
   if (!iframe) return;
@@ -470,8 +437,7 @@ function trackVideoProgress(iframe) {
     if (event.data && (event.data.playerState || event.data.event === 'timeupdate')) {
       const percent = event.data.percent || (event.data.time / event.data.duration * 100) || 0;
       if (percent >= 70 && !videoProgressTracked) {
-        videoProgressTracked = true;
-        completeLesson();
+    // Only track scroll, don't mark as complete (must complete quiz)
       }
     }
   };
@@ -489,8 +455,7 @@ function trackReadingProgress(container) {
     const { scrollTop, scrollHeight, clientHeight } = container;
     scrollProgress = ((scrollTop + clientHeight) / scrollHeight) * 100;
     if (scrollProgress >= 70 && !readingProgressTracked) {
-      readingProgressTracked = true;
-      completeLesson();
+    // Only track scroll, don't mark as complete (must complete quiz)
     }
   };
   
@@ -499,11 +464,7 @@ function trackReadingProgress(container) {
   container.addEventListener('transitionend', () => container.removeEventListener('scroll', handleScroll));
 }
 
-document.addEventListener('ended', async (e) => {
-  if (e.target.tagName === 'IFRAME') {
-    await completeLesson();
-  }
-}, true);
+  // Do not complete lesson on video end, must pass quiz
 
 function getLoggedUser() {
   try {

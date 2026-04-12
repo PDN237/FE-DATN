@@ -89,36 +89,25 @@
             <!-- Tabs -->
             <div class="tabs-container">
                 <div class="tabs">
-                    <button class="tab-btn active" onclick="switchTab('transcript')">Bản chép lời</button>
-                    <button class="tab-btn" onclick="switchTab('details')">Chi tiết</button>
-                    <button class="tab-btn" onclick="switchTab('resources')">Tài nguyên</button>
+                    <button class="tab-btn active" onclick="switchTab('describe')">Mô tả chi tiết</button>
+                    <button class="tab-btn" onclick="switchTab('summary')">Tóm tắt nội dung</button>
+                    <button class="tab-btn" onclick="switchTab('quiz')">Câu hỏi</button>
                 </div>
             </div>
 
             <!-- Tab Content -->
             <div class="tab-content">
-                <div id="transcriptTab" class="tab-panel active">
-                    <div id="transcriptContent"></div>
+                <div id="describeTab" class="tab-panel active">
+                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Mô tả chi tiết</h2>
+                    <div id="describeContent" style="color: #475569; line-height: 1.8;"></div>
                 </div>
-                <div id="detailsTab" class="tab-panel">
-                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Chi tiết bài học</h2>
-                    <p style="color: #475569; line-height: 1.8; margin-bottom: 16px;" id="detailsContent"></p>
-                    <h3 style="font-size: 18px; font-weight: 600; margin: 24px 0 12px;">Nội dung chính</h3>
-                    <ul style="color: #475569; line-height: 2;">
-                        <li>• Giới thiệu tổng quan về thuật toán</li>
-                        <li>• Phân tích độ phức tạp thời gian</li>
-                        <li>• Cài đặt thuật toán bằng nhiều ngôn ngữ</li>
-                        <li>• Ví dụ thực tế và ứng dụng</li>
-                    </ul>
+                <div id="summaryTab" class="tab-panel">
+                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Tóm tắt nội dung</h2>
+                    <div id="summaryContent" style="color: #475569; line-height: 1.8;"></div>
                 </div>
-                <div id="resourcesTab" class="tab-panel">
-                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Tài liệu bổ sung</h2>
-                    <div id="resourcesContent"></div>
-                </div>
-            </div>
-
-            <!-- Quiz Section (hidden by default) -->
-            <div id="quizSection" class="quiz-container hidden">
+                <div id="quizTab" class="tab-panel">
+                    <!-- Quiz Section -->
+                    <div id="quizSection" class="quiz-container">
                 <div class="quiz-content">
                     <div id="quizMain">
                         <div class="quiz-header">
@@ -175,6 +164,8 @@
                     </div>
                 </div>
             </div>
+        </div> <!-- end quizTab -->
+    </div> <!-- end tab-content -->
         </main>
     </div>
 
