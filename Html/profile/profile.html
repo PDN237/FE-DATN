@@ -305,16 +305,32 @@
 
                 <!-- ===== Tab Content: Các khóa học ===== -->
                 <div class="pf-tab-content" id="tabContentCourses">
-                    <div class="pf-section">
-                        <div class="pf-tab-placeholder">
-                            <div class="pf-tab-placeholder-icon">
+
+                    <!-- Toolbar: search + add -->
+                    <div class="mc-toolbar">
+                        <div class="mc-toolbar-left">
+                            <h2 class="mc-toolbar-title">
                                 <svg viewBox="0 0 24 24" fill="none">
                                     <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
                                         stroke="currentColor" stroke-width="2" />
                                 </svg>
-                            </div>
-                            <h3 class="pf-tab-placeholder-title">Quản lý khóa học</h3>
-                            <p class="pf-tab-placeholder-text">Tính năng quản lý và tạo khóa học sẽ sớm được cập nhật tại đây.</p>
+                                Khóa học của tôi
+                            </h2>
+                        </div>
+                        <button class="mc-btn-add" id="btnAddMyCourse">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2.5"
+                                    stroke-linecap="round" />
+                            </svg>
+                            Tạo khóa học
+                        </button>
+                    </div>
+
+                    <!-- Course grid -->
+                    <div id="myCoursesGrid" class="mc-grid">
+                        <div class="pf-loading">
+                            <div class="pf-spinner"></div>
+                            <span>Đang tải khóa học...</span>
                         </div>
                     </div>
                 </div>
@@ -322,6 +338,88 @@
             </div>
         </div>
     </main>
+
+    <!-- ================= COURSE MODAL ================= -->
+    <div class="mc-modal-backdrop" id="myCourseModal">
+        <div class="mc-modal">
+            <div class="mc-modal-header">
+                <h3 id="myCourseModalTitle">Tạo khóa học mới</h3>
+                <button class="mc-modal-close" id="closeMyCourseModal">&times;</button>
+            </div>
+            <form id="myCourseForm" class="mc-modal-body">
+                <input type="hidden" id="myCourseId">
+
+                <div class="pf-form-group">
+                    <label class="pf-label" for="myCourseTitle">Tên khóa học *</label>
+                    <input type="text" class="pf-input" id="myCourseTitle" required maxlength="255"
+                        placeholder="VD: Nhập môn Python" />
+                </div>
+
+                <div class="pf-form-group">
+                    <label class="pf-label" for="myCourseDesc">Mô tả *</label>
+                    <textarea class="pf-input pf-textarea" id="myCourseDesc" required maxlength="1000" rows="4"
+                        placeholder="Mô tả ngắn về nội dung khóa học..."></textarea>
+                </div>
+
+                <div class="pf-form-row">
+                    <div class="pf-form-group">
+                        <label class="pf-label" for="myCourseLevel">Cấp độ</label>
+                        <select class="pf-input pf-select" id="myCourseLevel">
+                            <option value="Cơ bản">Cơ bản</option>
+                            <option value="Trung cấp">Trung cấp</option>
+                            <option value="Nâng cao">Nâng cao</option>
+                        </select>
+                    </div>
+                    <div class="pf-form-group">
+                        <label class="pf-label" for="myCourseThumbnail">Ảnh bìa (URL)</label>
+                        <input type="url" class="pf-input" id="myCourseThumbnail"
+                            placeholder="https://example.com/image.jpg" />
+                    </div>
+                </div>
+
+                <div id="myCourseThumbnailPreview" class="mc-thumb-preview"></div>
+            </form>
+            <div class="mc-modal-footer">
+                <button type="button" class="mc-btn-cancel" id="cancelMyCourse">Hủy</button>
+                <button type="button" class="mc-btn-save" id="saveMyCourse">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Lưu khóa học
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= DELETE CONFIRM MODAL ================= -->
+    <div class="mc-modal-backdrop" id="deleteCourseModal">
+        <div class="mc-modal mc-modal--sm">
+            <div class="mc-modal-header mc-modal-header--danger">
+                <h3>Xác nhận xóa</h3>
+                <button class="mc-modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="mc-modal-body">
+                <p style="font-size: 0.95rem; line-height: 1.7; color: var(--text-secondary);">
+                    Bạn có chắc chắn muốn xóa khóa học
+                    <strong id="deleteCourseName" style="color: var(--color-danger);">—</strong>?
+                </p>
+                <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 8px;">
+                    Hành động này không thể hoàn tác.
+                </p>
+            </div>
+            <div class="mc-modal-footer">
+                <button type="button" class="mc-btn-cancel" id="cancelDeleteCourse">Hủy</button>
+                <button type="button" class="mc-btn-delete" id="confirmDeleteCourse">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Xóa khóa học
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- ================= TOAST NOTIFICATION ================= -->
     <div id="toastNotif" class="pf-toast" aria-live="polite"></div>
