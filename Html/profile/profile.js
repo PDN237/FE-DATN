@@ -306,6 +306,27 @@ document.addEventListener("DOMContentLoaded", () => {
             const escapedTitle = (course.Title || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
             const escapedDesc = (course.Description || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
+            // Determine status
+            let statusLabel = 'Đang soạn';
+            let statusClass = 'mc-status--draft';
+            if (course.Accept && course.IsCompleted) {
+                statusLabel = '✓ Đã xuất bản';
+                statusClass = 'mc-status--published';
+            } else if (course.Accept && !course.IsCompleted) {
+                statusLabel = '⏳ Chờ duyệt';
+                statusClass = 'mc-status--pending';
+            } else if (!course.Accept && course.Feedback) {
+                statusLabel = '✕ Bị từ chối';
+                statusClass = 'mc-status--rejected';
+            }
+
+            const feedbackHtml = (!course.Accept && course.Feedback)
+                ? `<div class="mc-card-feedback">
+                    <span class="mc-feedback-icon">💬</span>
+                    <span class="mc-feedback-text">Admin: ${(course.Feedback || '').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
+                   </div>`
+                : '';
+
             return `
                 <div class="mc-card" data-id="${course.CourseID}">
                     ${thumbUrl
@@ -317,10 +338,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     <div class="mc-card-body">
                         <div class="mc-card-meta">
                             <span class="mc-card-level" style="background:${lc.bg};color:${lc.color};border:1px solid ${lc.border};">${course.Level || 'Cơ bản'}</span>
+                            <span class="mc-card-status ${statusClass}">${statusLabel}</span>
                             <span class="mc-card-modules">${course.moduleCount || 0} module</span>
                         </div>
                         <h3 class="mc-card-title">${course.Title}</h3>
                         <p class="mc-card-desc">${(course.Description || '').substring(0, 100)}${(course.Description || '').length > 100 ? '...' : ''}</p>
+                        ${feedbackHtml}
                         <div class="mc-card-footer">
                             <span class="mc-card-date">📅 ${date}</span>
                             <div class="mc-card-actions">
@@ -329,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                     <svg viewBox="0 0 24 24" fill="none"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke="currentColor" stroke-width="2"/></svg>
                                 </button>
                                 <button class="mc-action-btn mc-action-btn--view" title="Quản lý nội dung"
-                                    onclick="window.location.href='/FrondEnd/Html/Admin/course-builder.html?courseId=${course.CourseID}'">
+                                    onclick="window.location.href='/FrondEnd/Html/Instructor/Instructor.html?courseId=${course.CourseID}'">
                                     <svg viewBox="0 0 24 24" fill="none"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke="currentColor" stroke-width="2"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke="currentColor" stroke-width="2"/></svg>
                                 </button>
                                 <button class="mc-action-btn mc-action-btn--delete" title="Xóa"

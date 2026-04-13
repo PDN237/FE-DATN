@@ -43,6 +43,8 @@ export const adminApi = {
   updateCourse: (id, data) => apiCall(`/courses/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteCourse: (id) => apiCall(`/courses/${id}`, { method: 'DELETE' }),
   getCourse: (id) => apiCall(`/courses/${id}`),
+  approveCourse: (id) => apiCall(`/courses/${id}/approve`, { method: 'PUT' }),
+  rejectCourse: (id, feedback) => apiCall(`/courses/${id}/reject`, { method: 'PUT', body: JSON.stringify({ feedback }) }),
   
 
   // Course Builder
