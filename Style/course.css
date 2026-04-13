@@ -137,6 +137,45 @@ header h1 {
     background-color: #0891b2;
 }
 
+.comment-form button {
+    margin-top: 16px;
+    padding: 12px 24px;
+    background-color: #06b6d4;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.comment-form button:hover {
+    background-color: #00bcd4;
+}
+
+/* Instructor Info Styles */
+.instructor-info {
+    margin: 16px 0;
+    font-size: 15px;
+    color: #9ca3af;
+}
+
+.instructor-info span {
+    margin-right: 8px;
+}
+
+.instructor-link {
+    color: #06b6d4;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.instructor-link:hover {
+    color: #00bcd4;
+    text-decoration: underline;
+}
+
 /* Course Grid */
 .course-grid {
     display: grid;

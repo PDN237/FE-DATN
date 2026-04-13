@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practice - Problems</title>
+    <title>Giảng Viên - Teen Lab</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="../../Style/Problem.css">
+    <link rel="stylesheet" href="../../Style/Information.css">
 </head>
 
 <body>
@@ -40,7 +40,7 @@
                     Course
                 </a>
 
-                <a href="../Practice/Problems.html" class="nav-link active">
+                <a href="../Practice/Problems.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
                     </svg>
@@ -82,62 +82,67 @@
     <!-- Main Content -->
     <main class="main-content">
         <div class="content-wrapper">
-            <div class="page-header">
-                <h1>Problem Set</h1>
-                <p>Choose a category to get started</p>
-            </div>
-
-            <!-- Search and Filter Section -->
-            <div class="filter-section">
-                <div class="search-container">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search problems by title..." class="search-input">
+            <!-- Instructor Profile Section -->
+            <section class="instructor-profile">
+                <div class="profile-header">
+                    <div class="avatar-container">
+                        <img id="instructorAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=default" alt="Instructor Avatar" class="instructor-avatar">
+                        <div class="avatar-badge">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="profile-info">
+                        <h1 id="instructorName" class="instructor-name">Đang tải...</h1>
+                        <p id="instructorEmail" class="instructor-email">email@example.com</p>
+                        <div class="instructor-stats">
+                            <div class="stat-item">
+                                <span class="stat-value" id="totalCourses">0</span>
+                                <span class="stat-label">Khóa học</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="publishedCourses">0</span>
+                                <span class="stat-label">Đã xuất bản</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-value" id="memberSince">-</span>
+                                <span class="stat-label">Tham gia</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="filter-options">
-                    <select id="difficultyFilter" class="filter-select">
-                        <option value="all">All Difficulty</option>
-                        <option value="Easy">Easy</option>
-                        <option value="Medium">Medium</option>
-                        <option value="Hard">Hard</option>
-                    </select>
-                    <select id="timeLimitFilter" class="filter-select">
-                        <option value="all">All Time Limits</option>
-                        <option value="1">1 second</option>
-                        <option value="2">2 seconds</option>
-                        <option value="3">3 seconds</option>
-                        <option value="5">5 seconds</option>
-                        <option value="10">10 seconds</option>
-                    </select>
+                
+                <div class="profile-details">
+                    <div class="detail-item" id="locationDetail" style="display: none;">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="instructorLocation"></span>
+                    </div>
+                    <div class="detail-item" id="phoneDetail" style="display: none;">
+                        <i class="fas fa-phone"></i>
+                        <span id="instructorPhone"></span>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Problem Table -->
-            <div class="table-container">
-                <table class="problem-table">
-                    <thead>
-                        <tr>
-                            <th class="col-num">#</th>
-                            <th class="col-title">Title</th>
-                            <th class="col-difficulty">Difficulty</th>
-                            <th class="col-timelimit">Time Limit</th>
-                        </tr>
-                    </thead>
-                    <tbody id="problemsTableBody">
-                        <!-- Problems will be loaded dynamically -->
-                    </tbody>
-                </table>
-            </div>
+                <div class="instructor-bio">
+                    <h3>Giới thiệu</h3>
+                    <p id="instructorBio" class="bio-text">Chưa có thông tin giới thiệu.</p>
+                </div>
+            </section>
 
-            <!-- Pagination -->
-            <div class="pagination">
-                <button class="page-btn" disabled>&lt;</button>
-                <button class="page-btn active">1</button>
-                <button class="page-btn">2</button>
-                <button class="page-btn">3</button>
-                <button class="page-btn">...</button>
-                <button class="page-btn">100</button>
-                <button class="page-btn">&gt;</button>
-            </div>
+            <!-- Courses Section -->
+            <section class="courses-section">
+                <div class="section-header">
+                    <h2>Khóa học của giảng viên</h2>
+                </div>
+
+                <div id="coursesGrid" class="courses-grid">
+                    <!-- Courses will be loaded dynamically -->
+                </div>
+
+                <div id="noCourses" class="no-courses" style="display: none;">
+                    <i class="fas fa-book-open"></i>
+                    <p>Chưa có khóa học nào</p>
+                </div>
+            </section>
         </div>
     </main>
 
@@ -198,86 +203,11 @@
         </div>
 
         <div class="footer-bottom">
-            <p> 2026 Teen Lab | Interactive Learning Platform</p>
+            <p>© 2026 Teen Lab | Interactive Learning Platform</p>
         </div>
     </footer>
 
-    <script>
-        let allProblems = [];
-
-        // Fetch problems from API
-        async function fetchProblems() {
-            try {
-                const userId = localStorage.getItem('userId');
-                const url = userId ? `https://be-datn-6gb6.onrender.com/api/problems?userId=${userId}` : 'https://be-datn-6gb6.onrender.com/api/problems';
-                const response = await fetch(url);
-                const result = await response.json();
-
-                if (result.success) {
-                    allProblems = result.data;
-                    displayProblems(allProblems);
-                } else {
-                    console.error('Error:', result.message);
-                }
-            } catch (error) {
-                console.error('Error fetching problems:', error);
-            }
-        }
-
-        // Display problems in table
-        function displayProblems(problems) {
-            const tbody = document.getElementById('problemsTableBody');
-            tbody.innerHTML = '';
-
-            problems.forEach((problem, index) => {
-                const difficultyClass = problem.difficulty.toLowerCase();
-                let statusIcon = '';
-                if (problem.user_status === 'Solved') {
-                    statusIcon = '<i class="fas fa-check-circle" style="color: #2ecc71; margin-right: 8px;" title="Solved"></i>';
-                } else if (problem.user_status === 'Attempted') {
-                    statusIcon = '<i class="fas fa-dot-circle" style="color: #f39c12; margin-right: 8px;" title="Attempted"></i>';
-                }
-
-                const row = document.createElement('tr');
-                row.className = 'problem-row';
-                row.innerHTML = `
-                    <td class="col-num">${problem.id}</td>
-                    <td class="col-title">
-                        ${statusIcon}
-                        <a href="ProblemsDetail.html?id=${problem.id}">${problem.title}</a>
-                    </td>
-                    <td class="col-difficulty"><span class="difficulty ${difficultyClass}">${problem.difficulty}</span></td>
-                    <td class="col-timelimit">${problem.time_limit}s</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Filter problems based on search, difficulty, and time limit
-        function filterProblems() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-            const difficultyFilter = document.getElementById('difficultyFilter').value;
-            const timeLimitFilter = document.getElementById('timeLimitFilter').value;
-
-            const filtered = allProblems.filter(problem => {
-                const matchesSearch = problem.title.toLowerCase().includes(searchTerm);
-                const matchesDifficulty = difficultyFilter === 'all' || problem.difficulty === difficultyFilter;
-                const matchesTimeLimit = timeLimitFilter === 'all' || problem.time_limit === parseInt(timeLimitFilter);
-
-                return matchesSearch && matchesDifficulty && matchesTimeLimit;
-            });
-
-            displayProblems(filtered);
-        }
-
-        // Event listeners for filters
-        document.getElementById('searchInput').addEventListener('input', filterProblems);
-        document.getElementById('difficultyFilter').addEventListener('change', filterProblems);
-        document.getElementById('timeLimitFilter').addEventListener('change', filterProblems);
-
-        // Load problems when page loads
-        document.addEventListener('DOMContentLoaded', fetchProblems);
-    </script>
+    <script src="Information.js"></script>
 </body>
 
 </html>

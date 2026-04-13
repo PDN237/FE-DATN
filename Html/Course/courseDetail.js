@@ -39,6 +39,19 @@ console.log('Fetching course:', courseId);
     document.getElementById('title').textContent = course.Title || 'Untitled Course';
     document.getElementById('desc').textContent = course.Description || 'No description available';
     
+    // Debug: Log course data to check UserID field
+    console.log('Course data:', course);
+    console.log('UserID:', course.UserID, 'userid:', course.userid);
+    
+    // Load instructor information
+    const instructorId = course.UserID || course.userid;
+    if (instructorId) {
+      loadInstructorInfo(instructorId);
+    } else {
+      console.warn('No UserID found in course data');
+      document.getElementById('instructorName').textContent = 'Không có thông tin';
+    }
+    
     // 2. Load modules + lessons with progress
     const userId = getLoggedUser();
     console.log('Fetching modules/lessons for:', courseId, 'userId:', userId);
@@ -198,6 +211,33 @@ async function loadCourseProgress(courseId, userId) {
   } catch (error) {
     console.error('Failed to load course progress:', error);
     return null;
+  }
+}
+
+async function loadInstructorInfo(instructorId) {
+  console.log('Loading instructor info for ID:', instructorId);
+  try {
+    const res = await window.apiFetch(`/api/information/${instructorId}`);
+    console.log('Instructor API response:', res);
+    
+    if (res.success && res.data.instructor) {
+      const instructor = res.data.instructor;
+      const instructorLink = document.getElementById('instructorName');
+      instructorLink.textContent = instructor.FullName || 'Giảng viên';
+      instructorLink.href = `../Instructor/Information.html?id=${instructorId}`;
+      console.log('Instructor name set to:', instructor.FullName);
+    } else {
+      console.warn('Invalid instructor response:', res);
+      document.getElementById('instructorName').textContent = 'Giảng viên';
+    }
+  } catch (error) {
+    console.error('Failed to load instructor info:', error);
+    // Fallback: show generic instructor name without link
+    const instructorLink = document.getElementById('instructorName');
+    instructorLink.textContent = 'Giảng viên';
+    instructorLink.href = '#';
+    instructorLink.style.pointerEvents = 'none';
+    instructorLink.style.color = '#9ca3af';
   }
 }
 
