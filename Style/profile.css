@@ -1,22 +1,40 @@
 /* ================================================
    PROFILE PAGE — Teen Lab Design System Extension
-   Follows style.css variables & components
+   Open layout, frameless, with tabbed navigation
    ================================================ */
+
+/* -------- CRITICAL: Override global main styles from style.css -------- */
+.profile-main {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 40px 48px 56px;
+    /* Reset invasive global main styles */
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+    display: block !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    align-items: initial !important;
+    justify-content: initial !important;
+}
 
 /* -------- PROFILE HERO -------- */
 .profile-hero {
     position: relative;
     background: var(--bg-secondary);
     border-bottom: 1px solid #e2e8f0;
-    padding: var(--spacing-xl) 0;
+    padding: 36px 0 32px;
     overflow: hidden;
 }
 
 .profile-hero-bg {
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #e3f2fd 0%, #f8f0ff 50%, #fff3e0 100%);
-    opacity: 0.6;
+    background: linear-gradient(135deg, #dbeafe 0%, #f0e6ff 55%, #fef3c7 100%);
+    opacity: 0.5;
 }
 
 .profile-hero-content {
@@ -24,13 +42,13 @@
     z-index: 1;
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 var(--spacing-xl);
+    padding: 0 48px;
     display: flex;
     align-items: center;
-    gap: var(--spacing-xl);
+    gap: 32px;
 }
 
-/* Avatar */
+/* -------- AVATAR -------- */
 .profile-avatar-wrapper {
     position: relative;
     flex-shrink: 0;
@@ -38,26 +56,26 @@
 }
 
 .profile-avatar-large {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
     border-radius: 50%;
     object-fit: cover;
     border: 4px solid white;
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.14);
     transition: all var(--transition-base);
     display: block;
 }
 
 .profile-avatar-wrapper:hover .profile-avatar-large {
     opacity: 0.75;
-    transform: scale(1.03);
+    transform: scale(1.04);
 }
 
 .avatar-overlay {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    background: rgba(91, 123, 232, 0.6);
+    background: rgba(91, 123, 232, 0.58);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -75,29 +93,35 @@
     opacity: 1;
 }
 
-/* Hero info */
+/* -------- HERO INFO -------- */
 .profile-hero-info {
     flex: 1;
+    min-width: 0;
 }
 
 .profile-hero-name {
-    font-size: 2.25rem;
+    font-size: 2rem;
     font-weight: 900;
     color: var(--text-primary);
-    letter-spacing: -0.02em;
-    margin-bottom: 0.25rem;
+    letter-spacing: -0.025em;
+    margin-bottom: 4px;
+    line-height: 1.15;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-hero-email {
-    font-size: 1rem;
+    font-size: 0.975rem;
     color: var(--text-muted);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: 20px;
+    font-weight: 400;
 }
 
 .profile-hero-stats {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xl);
+    gap: 36px;
 }
 
 .hero-stat {
@@ -105,120 +129,229 @@
 }
 
 .hero-stat-number {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     font-weight: 900;
     color: var(--color-primary);
     line-height: 1;
 }
 
 .hero-stat-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    margin-top: 4px;
+    margin-top: 5px;
 }
 
 .hero-stat-divider {
     width: 2px;
-    height: 48px;
+    height: 44px;
     background: #e2e8f0;
     flex-shrink: 0;
 }
 
-/* -------- MAIN LAYOUT -------- */
-.profile-main {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: var(--spacing-xl);
-}
-
+/* ================================================================
+   MAIN GRID LAYOUT
+   ================================================================ */
 .profile-grid {
     display: grid;
-    grid-template-columns: 420px 1fr;
-    gap: var(--spacing-xl);
+    grid-template-columns: 440px 1fr;
+    gap: 48px;
     align-items: start;
 }
 
-/* -------- PROFILE CARD -------- */
-.pf-card {
-    background: var(--bg-secondary);
-    border: 1px solid #e2e8f0;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-    transition: box-shadow var(--transition-base);
+/* ================================================================
+   OPEN SECTIONS — frameless, clean dividers only
+   ================================================================ */
+.pf-section {
+    margin-bottom: 40px;
 }
 
-.pf-card:hover {
-    box-shadow: var(--shadow-md);
+.pf-section:last-child {
+    margin-bottom: 0;
 }
 
-.pf-card-header {
-    padding: var(--spacing-lg) var(--spacing-lg) 0;
+.pf-section-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 22px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid #e2e8f0;
 }
 
-.pf-card-title {
-    font-size: 1.1rem;
-    font-weight: 700;
+.pf-section-title {
+    font-size: 1.15rem;
+    font-weight: 800;
     color: var(--text-primary);
     display: flex;
     align-items: center;
-    gap: var(--spacing-sm);
+    gap: 10px;
+    letter-spacing: -0.01em;
 }
 
-.pf-card-title svg {
-    width: 20px;
-    height: 20px;
+.pf-section-title svg {
+    width: 22px;
+    height: 22px;
     color: var(--color-primary);
     flex-shrink: 0;
 }
 
 .pf-see-all {
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-weight: 600;
     color: var(--color-accent);
     text-decoration: none;
     transition: color var(--transition-fast);
+    white-space: nowrap;
 }
 
 .pf-see-all:hover {
     color: var(--color-primary);
 }
 
-.pf-card-body {
-    padding: var(--spacing-md) var(--spacing-lg) var(--spacing-lg);
+/* ================================================================
+   TAB NAVIGATION — prominent pill toggle
+   ================================================================ */
+.pf-tab-nav {
+    display: flex;
+    gap: 4px;
+    background: var(--bg-tertiary, #f1f5f9);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 36px;
+    position: relative;
+    z-index: 2;
 }
 
-/* -------- FORM -------- */
+.pf-tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 14px 24px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    white-space: nowrap;
+}
+
+.pf-tab-btn svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.pf-tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255,255,255,0.6);
+}
+
+.pf-tab-btn.active {
+    background: var(--bg-secondary, #ffffff);
+    color: var(--color-primary);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-weight: 700;
+}
+
+/* Tab content panels */
+.pf-tab-content {
+    display: none;
+    animation: tabFadeIn 0.3s ease;
+}
+
+.pf-tab-content.active {
+    display: block;
+}
+
+@keyframes tabFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Tab placeholder (future Các khóa học tab) */
+.pf-tab-placeholder {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.pf-tab-placeholder-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e0e7ff, #f0e6ff);
+    margin-bottom: 20px;
+}
+
+.pf-tab-placeholder-icon svg {
+    width: 36px;
+    height: 36px;
+    color: var(--color-primary);
+}
+
+.pf-tab-placeholder-title {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+}
+
+.pf-tab-placeholder-text {
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+/* ================================================================
+   FORM — open layout, no card frame
+   ================================================================ */
+.pf-form-open {
+    margin-top: 4px;
+}
+
 .pf-form-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-md);
+    gap: 16px;
 }
 
 .pf-form-group {
-    margin-bottom: var(--spacing-md);
+    margin-bottom: 16px;
 }
 
 .pf-label {
     display: block;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.09em;
     color: var(--text-secondary);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 7px;
 }
 
 .pf-input {
     width: 100%;
-    padding: 0.75rem 1rem;
+    padding: 11px 14px;
     background: var(--bg-primary);
     border: 2px solid #e2e8f0;
     border-radius: var(--radius-md);
@@ -227,16 +360,17 @@
     color: var(--text-primary);
     transition: all var(--transition-base);
     outline: none;
+    line-height: 1.5;
 }
 
 .pf-input:focus {
     border-color: var(--color-accent);
     background: white;
-    box-shadow: 0 0 0 3px rgba(59, 165, 232, 0.15);
+    box-shadow: 0 0 0 3px rgba(59, 165, 232, 0.13);
 }
 
 .pf-input:hover:not(:focus):not(.pf-input-readonly) {
-    border-color: #cbd5e0;
+    border-color: #c0cfe0;
 }
 
 .pf-input-readonly {
@@ -262,11 +396,11 @@
     resize: vertical;
     min-height: 130px;
     line-height: 1.7;
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
 }
 
 .pf-char-counter {
-    margin-top: 6px;
+    margin-top: 5px;
     font-size: 0.78rem;
     color: var(--text-muted);
     text-align: right;
@@ -278,9 +412,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--spacing-sm);
+    gap: 9px;
     width: 100%;
-    padding: 0.875rem var(--spacing-lg);
+    padding: 13px 24px;
     background: var(--color-primary);
     color: white;
     border: none;
@@ -290,7 +424,7 @@
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     transition: all var(--transition-base);
-    margin-top: var(--spacing-md);
+    margin-top: 6px;
     letter-spacing: 0.02em;
 }
 
@@ -302,7 +436,7 @@
 .pf-btn-primary:hover {
     background: #4a6ad9;
     transform: translateY(-2px);
-    box-shadow: var(--shadow-lg);
+    box-shadow: 0 8px 20px rgba(91, 123, 232, 0.32);
 }
 
 .pf-btn-primary:active {
@@ -316,66 +450,68 @@
     box-shadow: none;
 }
 
-/* -------- PROGRESS OVERVIEW -------- */
-.progress-overview-grid {
+/* ================================================================
+   PROGRESS OVERVIEW — open stats row
+   ================================================================ */
+.pov-stats-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--spacing-md);
+    gap: 20px;
 }
 
-.pov-card {
+.pov-stat-item {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
+    gap: 16px;
+    padding: 22px 20px;
     border-radius: var(--radius-lg);
-    border: 2px solid transparent;
     transition: all var(--transition-base);
+    border-left: 4px solid transparent;
 }
 
-.pov-card--problems {
+.pov-stat--problems {
     background: linear-gradient(135deg, #e3f2fd, #f0f8ff);
-    border-color: #bbdefb;
+    border-left-color: #42a5f5;
 }
 
-.pov-card--courses {
+.pov-stat--courses {
     background: linear-gradient(135deg, #f3e8ff, #fdf4ff);
-    border-color: #e9d5ff;
+    border-left-color: #ab47bc;
 }
 
-.pov-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+.pov-stat-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 22px rgba(0,0,0,0.09);
 }
 
-.pov-icon {
+.pov-stat-icon {
     font-size: 2.5rem;
     line-height: 1;
     flex-shrink: 0;
 }
 
-.pov-number {
+.pov-stat-number {
     font-size: 2.5rem;
     font-weight: 900;
     color: var(--text-primary);
     line-height: 1;
 }
 
-.pov-label {
-    font-size: 0.8rem;
+.pov-stat-label {
+    font-size: 0.76rem;
     color: var(--text-muted);
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-top: 4px;
+    letter-spacing: 0.09em;
+    margin-top: 5px;
 }
 
 /* -------- COURSE CARDS -------- */
 .pf-course-card {
-    padding: var(--spacing-md);
+    padding: 18px;
     border: 1px solid #e2e8f0;
-    border-radius: var(--radius-md);
-    margin-bottom: var(--spacing-md);
+    border-radius: 13px;
+    margin-bottom: 14px;
     transition: all var(--transition-base);
     background: var(--bg-primary);
 }
@@ -386,7 +522,7 @@
 
 .pf-course-card:hover {
     border-color: var(--color-accent);
-    box-shadow: var(--shadow-sm);
+    box-shadow: 0 4px 14px rgba(59, 165, 232, 0.1);
     transform: translateX(4px);
 }
 
@@ -394,8 +530,8 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: var(--spacing-sm);
-    gap: var(--spacing-sm);
+    margin-bottom: 9px;
+    gap: 10px;
 }
 
 .pf-course-title {
@@ -406,9 +542,9 @@
 }
 
 .pf-badge {
-    padding: 0.2rem 0.6rem;
+    padding: 3px 11px;
     border-radius: var(--radius-full);
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     font-weight: 700;
     white-space: nowrap;
     flex-shrink: 0;
@@ -427,14 +563,15 @@
 }
 
 .pf-course-progress-text {
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     color: var(--text-muted);
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: 9px;
+    font-weight: 500;
 }
 
 .pf-progress-bar-container {
     width: 100%;
-    height: 6px;
+    height: 7px;
     background: #e2e8f0;
     border-radius: var(--radius-full);
     overflow: hidden;
@@ -444,7 +581,7 @@
     height: 100%;
     border-radius: var(--radius-full);
     background: linear-gradient(90deg, var(--color-accent), var(--color-primary));
-    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* -------- PROBLEM ROW -------- */
@@ -452,25 +589,26 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: var(--spacing-md) 0;
+    padding: 15px 4px;
     border-bottom: 1px solid #f1f5f9;
     transition: background var(--transition-fast);
-    gap: var(--spacing-md);
+    gap: 14px;
 }
 
 .pf-problem-row:last-child {
     border-bottom: none;
-    padding-bottom: 0;
+    padding-bottom: 2px;
 }
 
 .pf-problem-title {
     font-weight: 600;
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     color: var(--color-accent);
     text-decoration: none;
     transition: color var(--transition-fast);
     display: block;
-    margin-bottom: 2px;
+    margin-bottom: 3px;
+    line-height: 1.4;
 }
 
 .pf-problem-title:hover {
@@ -478,32 +616,33 @@
 }
 
 .pf-problem-date {
-    font-size: 0.78rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
+    font-weight: 400;
 }
 
 .pf-diff-badge {
-    padding: 0.2rem 0.65rem;
+    padding: 3px 11px;
     border-radius: var(--radius-full);
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     font-weight: 700;
     flex-shrink: 0;
 }
 
-/* -------- LOADING -------- */
+/* -------- LOADING / EMPTY -------- */
 .pf-loading {
     display: flex;
     align-items: center;
-    gap: var(--spacing-md);
-    padding: var(--spacing-lg);
+    gap: 14px;
+    padding: 28px 16px;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
 }
 
 .pf-spinner {
-    width: 20px;
-    height: 20px;
-    border: 2px solid #e2e8f0;
+    width: 22px;
+    height: 22px;
+    border: 3px solid #e2e8f0;
     border-top-color: var(--color-accent);
     border-radius: 50%;
     animation: pfSpin 0.7s linear infinite;
@@ -515,32 +654,34 @@
 }
 
 .pf-empty {
-    padding: var(--spacing-lg);
+    padding: 28px 16px;
     text-align: center;
     color: var(--text-muted);
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     font-style: italic;
+    line-height: 1.6;
 }
 
 /* -------- TOAST -------- */
 .pf-toast {
     position: fixed;
-    bottom: var(--spacing-xl);
-    right: var(--spacing-xl);
-    min-width: 260px;
-    max-width: 380px;
-    padding: var(--spacing-md) var(--spacing-lg);
+    bottom: 36px;
+    right: 36px;
+    min-width: 270px;
+    max-width: 400px;
+    padding: 16px 22px;
     background: var(--text-primary);
     color: white;
     border-radius: var(--radius-md);
-    font-size: 0.9rem;
+    font-size: 0.9375rem;
     font-weight: 600;
-    box-shadow: var(--shadow-lg);
-    transform: translateY(120%);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+    transform: translateY(130%);
     opacity: 0;
     transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 9999;
     pointer-events: none;
+    line-height: 1.5;
 }
 
 .pf-toast.show {
@@ -552,37 +693,76 @@
 .pf-toast.error   { background: var(--color-danger); }
 
 /* -------- RESPONSIVE -------- */
-@media (max-width: 1100px) {
+@media (max-width: 1200px) {
+    .profile-grid {
+        grid-template-columns: 400px 1fr;
+        gap: 36px;
+    }
+}
+
+@media (max-width: 1024px) {
     .profile-grid {
         grid-template-columns: 1fr;
     }
-    .profile-left {
-        order: 1;
+    .profile-left  { order: 1; }
+    .profile-right { order: 2; }
+    .profile-main {
+        padding: 32px 32px 48px !important;
     }
-    .profile-right {
-        order: 2;
+    .profile-hero-content {
+        padding: 0 32px;
     }
 }
 
 @media (max-width: 768px) {
+    .profile-hero {
+        padding: 28px 0 24px;
+    }
     .profile-hero-content {
         flex-direction: column;
         text-align: center;
-        padding: 0 var(--spacing-lg);
+        padding: 0 20px;
+        gap: 20px;
+    }
+    .profile-avatar-large {
+        width: 96px;
+        height: 96px;
     }
     .profile-hero-stats {
         justify-content: center;
+        gap: 24px;
     }
     .profile-hero-name {
-        font-size: 1.75rem;
+        font-size: 1.65rem;
+        white-space: normal;
     }
+    .hero-stat-number { font-size: 1.9rem; }
     .profile-main {
-        padding: var(--spacing-lg);
+        padding: 24px 16px 40px !important;
     }
-    .pf-form-row {
-        grid-template-columns: 1fr;
+    .pf-section-header { padding-bottom: 10px; }
+    .pf-form-row    { grid-template-columns: 1fr; gap: 0; }
+    .pov-stats-row  { grid-template-columns: 1fr; }
+    .profile-grid { gap: 20px; }
+
+    .pf-tab-btn {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+        gap: 6px;
     }
-    .progress-overview-grid {
-        grid-template-columns: 1fr;
+    .pf-tab-btn svg {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-hero-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+    .hero-stat-divider {
+        width: 40px;
+        height: 2px;
     }
 }

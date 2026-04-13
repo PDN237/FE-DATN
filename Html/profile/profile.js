@@ -11,6 +11,31 @@ document.addEventListener("DOMContentLoaded", () => {
         toast._timer = setTimeout(() => { toast.className = 'pf-toast'; }, 3200);
     }
 
+    // ======== TAB SWITCHING ========
+    const tabBtns = document.querySelectorAll('.pf-tab-btn');
+    const tabContents = {
+        userInfo: document.getElementById('tabContentUserInfo'),
+        courses: document.getElementById('tabContentCourses')
+    };
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.dataset.tab;
+
+            // Update button states
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Update content visibility
+            Object.values(tabContents).forEach(tc => {
+                if (tc) tc.classList.remove('active');
+            });
+            if (tabContents[targetTab]) {
+                tabContents[targetTab].classList.add('active');
+            }
+        });
+    });
+
     // 1. Fetch user ID from localStorage (giả sử có lưu user ID lúa login)
     let userStr = localStorage.getItem("user");
     let userId = 1; // Default
@@ -29,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const response = await fetch(`https://be-datn-6gb6.onrender.com/api/profile?userId=${userId}`);
             
             if (!response.ok) {
-                document.getElementById("sidebarName").textContent = "Không thể kết nối đến máy chủ";
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             
@@ -130,7 +154,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             } else {
                 console.error("Lỗi tải profile:", data.message);
-                document.getElementById("sidebarName").textContent = "Không tìm thấy user";
             }
         } catch (error) {
             console.error("Lỗi:", error);

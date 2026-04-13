@@ -58,14 +58,7 @@
                     </svg>
                     AI Coach
                 </a>
-                <a href="#" class="nav-link active" id="profileNavLink">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
-                            fill="currentColor" />
-                    </svg>
-                    Profile
-                </a>
+
             </nav>
 
             <div class="header-actions">
@@ -123,13 +116,12 @@
     <main class="profile-main">
         <div class="profile-grid">
 
-            <!-- ===== LEFT COLUMN ===== -->
+            <!-- ===== LEFT COLUMN — Personal Info (no card frame) ===== -->
             <div class="profile-left">
 
-                <!-- Personal Info Card -->
-                <div class="pf-card" id="personalInfoCard">
-                    <div class="pf-card-header">
-                        <h2 class="pf-card-title">
+                <div class="pf-section" id="personalInfoCard">
+                    <div class="pf-section-header">
+                        <h2 class="pf-section-title">
                             <svg viewBox="0 0 24 24" fill="none">
                                 <path
                                     d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
@@ -138,132 +130,149 @@
                             Thông tin cá nhân
                         </h2>
                     </div>
-                    <div class="pf-card-body">
-                        <form id="profileForm">
-                            <div class="pf-form-row">
-                                <div class="pf-form-group">
-                                    <label class="pf-label" for="inputName">Họ và tên</label>
-                                    <input type="text" class="pf-input" id="inputName" placeholder="Nhập họ và tên" />
-                                </div>
-                                <div class="pf-form-group">
-                                    <label class="pf-label" for="inputPhone">Số điện thoại</label>
-                                    <input type="tel" class="pf-input" id="inputPhone"
-                                        placeholder="Nhập số điện thoại" />
-                                </div>
-                            </div>
-
+                    <form id="profileForm" class="pf-form-open">
+                        <div class="pf-form-row">
                             <div class="pf-form-group">
-                                <label class="pf-label" for="inputEmail">Email</label>
-                                <input type="email" class="pf-input pf-input-readonly" id="inputEmail" readonly />
+                                <label class="pf-label" for="inputName">Họ và tên</label>
+                                <input type="text" class="pf-input" id="inputName" placeholder="Nhập họ và tên" />
                             </div>
-
-                            <div class="pf-form-row">
-                                <div class="pf-form-group">
-                                    <label class="pf-label" for="inputGender">Giới tính</label>
-                                    <select class="pf-input pf-select" id="inputGender">
-                                        <option value="">Chọn giới tính</option>
-                                        <option value="Nam">Nam</option>
-                                        <option value="Nữ">Nữ</option>
-                                        <option value="Khác">Khác</option>
-                                    </select>
-                                </div>
-                                <div class="pf-form-group">
-                                    <label class="pf-label" for="inputBirthYear">Năm sinh</label>
-                                    <input type="number" class="pf-input" id="inputBirthYear" min="1950" max="2020"
-                                        placeholder="VD: 2000" />
-                                </div>
-                            </div>
-
                             <div class="pf-form-group">
-                                <label class="pf-label" for="inputLocation">
-                                    <svg viewBox="0 0 24 24" fill="none"
-                                        style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;">
-                                        <path
-                                            d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
-                                            fill="currentColor" />
-                                    </svg>
-                                    Địa chỉ
-                                </label>
-                                <input type="text" class="pf-input" id="inputLocation"
-                                    placeholder="Nhập địa chỉ của bạn" />
+                                <label class="pf-label" for="inputPhone">Số điện thoại</label>
+                                <input type="tel" class="pf-input" id="inputPhone"
+                                    placeholder="Nhập số điện thoại" />
                             </div>
+                        </div>
 
-                            <!-- BIO / DESCRIBE - NEW LARGE INPUT -->
+                        <div class="pf-form-group">
+                            <label class="pf-label" for="inputEmail">Email</label>
+                            <input type="email" class="pf-input pf-input-readonly" id="inputEmail" readonly />
+                        </div>
+
+                        <div class="pf-form-row">
                             <div class="pf-form-group">
-                                <label class="pf-label" for="inputDescribe">
-                                    <svg viewBox="0 0 24 24" fill="none"
-                                        style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;">
-                                        <path d="M3 5h18v2H3V5zm0 4h18v2H3V9zm0 4h12v2H3v-2z" fill="currentColor" />
-                                    </svg>
-                                    Giới thiệu bản thân
-                                </label>
-                                <textarea class="pf-input pf-textarea" id="inputDescribe" rows="5"
-                                    placeholder="Hãy chia sẻ về bản thân bạn: kinh nghiệm, sở thích lập trình, mục tiêu học tập... (Tối đa 5000 ký tự)"
-                                    maxlength="5000"></textarea>
-                                <div class="pf-char-counter"><span id="describeCharCount">0</span> / 5000 ký tự</div>
+                                <label class="pf-label" for="inputGender">Giới tính</label>
+                                <select class="pf-input pf-select" id="inputGender">
+                                    <option value="">Chọn giới tính</option>
+                                    <option value="Nam">Nam</option>
+                                    <option value="Nữ">Nữ</option>
+                                    <option value="Khác">Khác</option>
+                                </select>
                             </div>
+                            <div class="pf-form-group">
+                                <label class="pf-label" for="inputBirthYear">Năm sinh</label>
+                                <input type="number" class="pf-input" id="inputBirthYear" min="1950" max="2020"
+                                    placeholder="VD: 2000" />
+                            </div>
+                        </div>
 
-                            <button type="submit" class="pf-btn-primary" id="updateBtn">
-                                <svg viewBox="0 0 24 24" fill="none">
-                                    <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2"
-                                        stroke-linecap="round" stroke-linejoin="round" />
+                        <div class="pf-form-group">
+                            <label class="pf-label" for="inputLocation">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                    style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;">
+                                    <path
+                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                                        fill="currentColor" />
                                 </svg>
-                                Cập nhật thông tin
-                            </button>
-                        </form>
-                    </div>
+                                Địa chỉ
+                            </label>
+                            <input type="text" class="pf-input" id="inputLocation"
+                                placeholder="Nhập địa chỉ của bạn" />
+                        </div>
+
+                        <!-- BIO / DESCRIBE - NEW LARGE INPUT -->
+                        <div class="pf-form-group">
+                            <label class="pf-label" for="inputDescribe">
+                                <svg viewBox="0 0 24 24" fill="none"
+                                    style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;">
+                                    <path d="M3 5h18v2H3V5zm0 4h18v2H3V9zm0 4h12v2H3v-2z" fill="currentColor" />
+                                </svg>
+                                Giới thiệu bản thân
+                            </label>
+                            <textarea class="pf-input pf-textarea" id="inputDescribe" rows="5"
+                                placeholder="Hãy chia sẻ về bản thân bạn: kinh nghiệm, sở thích lập trình, mục tiêu học tập... (Tối đa 5000 ký tự)"
+                                maxlength="5000"></textarea>
+                            <div class="pf-char-counter"><span id="describeCharCount">0</span> / 5000 ký tự</div>
+                        </div>
+
+                        <button type="submit" class="pf-btn-primary" id="updateBtn">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                            Cập nhật thông tin
+                        </button>
+                    </form>
                 </div>
 
             </div>
 
-            <!-- ===== RIGHT COLUMN ===== -->
+            <!-- ===== RIGHT COLUMN — Tabs ===== -->
             <div class="profile-right">
 
-                <!-- Progress Overview -->
-                <div class="pf-card">
-                    <div class="pf-card-header">
-                        <h2 class="pf-card-title">
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path
-                                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                                    stroke="currentColor" stroke-width="2" />
-                            </svg>
-                            Tiến độ học tập
-                        </h2>
-                    </div>
-                    <div class="pf-card-body">
-                        <div class="progress-overview-grid">
-                            <div class="pov-card pov-card--problems">
-                                <div class="pov-icon">💻</div>
-                                <div class="pov-data">
-                                    <div class="pov-number" id="overviewProblems">0</div>
-                                    <div class="pov-label">Bài tập đã giải</div>
+                <!-- Tab Navigation -->
+                <div class="pf-tab-nav" id="profileTabNav">
+                    <button class="pf-tab-btn active" data-tab="userInfo" id="tabUserInfo">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                stroke="currentColor" stroke-width="2" />
+                        </svg>
+                        Thông tin user
+                    </button>
+                    <button class="pf-tab-btn" data-tab="courses" id="tabCourses">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
+                                stroke-width="2" />
+                        </svg>
+                        Các khóa học
+                    </button>
+                </div>
+
+                <!-- ===== Tab Content: Thông tin user ===== -->
+                <div class="pf-tab-content active" id="tabContentUserInfo">
+
+                    <!-- Progress Overview -->
+                    <div class="pf-section">
+                        <div class="pf-section-header">
+                            <h2 class="pf-section-title">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path
+                                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                                        stroke="currentColor" stroke-width="2" />
+                                </svg>
+                                Tiến độ học tập
+                            </h2>
+                        </div>
+                        <div class="pov-stats-row">
+                            <div class="pov-stat-item pov-stat--problems">
+                                <div class="pov-stat-icon">💻</div>
+                                <div class="pov-stat-info">
+                                    <div class="pov-stat-number" id="overviewProblems">0</div>
+                                    <div class="pov-stat-label">Bài tập đã giải</div>
                                 </div>
                             </div>
-                            <div class="pov-card pov-card--courses">
-                                <div class="pov-icon">📖</div>
-                                <div class="pov-data">
-                                    <div class="pov-number" id="overviewCourses">0</div>
-                                    <div class="pov-label">Khóa học hoàn thành</div>
+                            <div class="pov-stat-item pov-stat--courses">
+                                <div class="pov-stat-icon">📖</div>
+                                <div class="pov-stat-info">
+                                    <div class="pov-stat-number" id="overviewCourses">0</div>
+                                    <div class="pov-stat-label">Khóa học hoàn thành</div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Enrolled Courses -->
-                <div class="pf-card" style="margin-top: 1.5rem;">
-                    <div class="pf-card-header">
-                        <h2 class="pf-card-title">
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
-                                    stroke-width="2" />
-                            </svg>
-                            Các khóa học đã tham gia
-                        </h2>
-                        <a href="../Course/course.html" class="pf-see-all">Xem tất cả →</a>
-                    </div>
-                    <div class="pf-card-body">
+                    <!-- Enrolled Courses -->
+                    <div class="pf-section">
+                        <div class="pf-section-header">
+                            <h2 class="pf-section-title">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                                        stroke="currentColor" stroke-width="2" />
+                                </svg>
+                                Các khóa học đã tham gia
+                            </h2>
+                            <a href="../Course/course.html" class="pf-see-all">Xem tất cả →</a>
+                        </div>
                         <div id="coursesContainer">
                             <div class="pf-loading">
                                 <div class="pf-spinner"></div>
@@ -271,25 +280,41 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Solved Problems -->
-                <div class="pf-card" style="margin-top: 1.5rem;">
-                    <div class="pf-card-header">
-                        <h2 class="pf-card-title">
-                            <svg viewBox="0 0 24 24" fill="none">
-                                <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
-                            </svg>
-                            Bài tập đã giải
-                        </h2>
-                        <a href="../Practice/Problems.html" class="pf-see-all">Xem thêm →</a>
-                    </div>
-                    <div class="pf-card-body">
+                    <!-- Solved Problems -->
+                    <div class="pf-section">
+                        <div class="pf-section-header">
+                            <h2 class="pf-section-title">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z"
+                                        fill="currentColor" />
+                                </svg>
+                                Bài tập đã giải
+                            </h2>
+                            <a href="../Practice/Problems.html" class="pf-see-all">Xem thêm →</a>
+                        </div>
                         <div id="problemsContainer">
                             <div class="pf-loading">
                                 <div class="pf-spinner"></div>
                                 <span>Đang tải bài tập...</span>
                             </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ===== Tab Content: Các khóa học ===== -->
+                <div class="pf-tab-content" id="tabContentCourses">
+                    <div class="pf-section">
+                        <div class="pf-tab-placeholder">
+                            <div class="pf-tab-placeholder-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                                        stroke="currentColor" stroke-width="2" />
+                                </svg>
+                            </div>
+                            <h3 class="pf-tab-placeholder-title">Quản lý khóa học</h3>
+                            <p class="pf-tab-placeholder-text">Tính năng quản lý và tạo khóa học sẽ sớm được cập nhật tại đây.</p>
                         </div>
                     </div>
                 </div>
