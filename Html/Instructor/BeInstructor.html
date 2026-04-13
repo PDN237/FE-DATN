@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Teen Lab – Trở thành Giảng viên</title>
+    <meta name="description" content="Đăng ký trở thành giảng viên trên Teen Lab để chia sẻ kiến thức và tạo khóa học." />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="../../Style/style.css" />
+    <link rel="stylesheet" href="../../Style/BeInstructor.css" />
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header class="modern-header">
+        <div class="header-container">
+            <div class="brand" onclick="location.href='../../Index.html'">
+                <svg class="brand-icon" viewBox="0 0 24 24" fill="none">
+                    <path d="M3 4H21V6H3V4ZM9 11H21V13H9V11ZM3 18H21V20H3V18Z" fill="currentColor" />
+                </svg>
+                <span class="brand-name">Teen Lab</span>
+                <span class="brand-badge">Pro</span>
+            </div>
+
+            <nav class="main-nav">
+                <a href="../../Index.html" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"
+                            fill="currentColor" />
+                    </svg> Home
+                </a>
+                <a href="../Course/course.html" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
+                            stroke-width="2" />
+                    </svg> Course
+                </a>
+                <a href="../profile/profile.html" class="nav-link">
+                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+                        <path
+                            d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
+                            fill="currentColor" />
+                    </svg> Profile
+                </a>
+            </nav>
+            <div class="header-actions">
+                <a href="../profile/profile.html" class="profile-btn" id="headerAvatarBtn">
+                    <img id="headerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= WIZARD CONTAINER ================= -->
+    <main class="bi-wizard-main">
+        <div class="bi-wizard-container">
+            
+            <!-- Progress Bar -->
+            <div class="bi-stepper">
+                <div class="bi-stepper-progress" id="stepperProgress"></div>
+                <div class="bi-stepper-dots" id="stepperDots">
+                    <div class="bi-step-dot active"></div>
+                    <div class="bi-step-dot"></div>
+                    <div class="bi-step-dot"></div>
+                    <div class="bi-step-dot"></div>
+                    <div class="bi-step-dot"></div>
+                    <div class="bi-step-dot"></div>
+                    <div class="bi-step-dot"></div>
+                    <div class="bi-step-dot"></div>
+                </div>
+            </div>
+
+            <div class="bi-slides-wrapper" id="slidesWrapper">
+                
+                <!-- STEP 1: WELCOME & BENEFITS -->
+                <div class="bi-slide active" id="step1">
+                    <div class="bi-slide-content">
+                        <div class="bi-welcome-icon">🎓</div>
+                        <h1 class="bi-slide-title">Chào mừng đến với Teen Lab Instructor</h1>
+                        <p class="bi-slide-desc">Bạn đã sẵn sàng để truyền cảm hứng và chia sẻ kiến thức của mình với hàng ngàn học viên?</p>
+                        
+                        <div class="bi-benefits-grid-mini">
+                            <div class="bi-mini-card">
+                                <span>📚</span>
+                                <p>Tạo khóa học không giới hạn</p>
+                            </div>
+                            <div class="bi-mini-card">
+                                <span>🧠</span>
+                                <p>Thiết kế Quiz thông minh</p>
+                            </div>
+                            <div class="bi-mini-card">
+                                <span>🌍</span>
+                                <p>Tiếp cận cộng đồng lớn</p>
+                            </div>
+                            <div class="bi-mini-card">
+                                <span>📊</span>
+                                <p>Quản lý chuyên nghiệp</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 2: RESPONSIBILITIES -->
+                <div class="bi-slide" id="step2">
+                    <div class="bi-slide-content">
+                        <h2 class="bi-slide-title">Trách nhiệm của Giảng viên</h2>
+                        <p class="bi-slide-desc">Để duy trì chất lượng nền tảng, chúng tôi mong muốn các Instructor cam kết:</p>
+                        <ul class="bi-checklist">
+                            <li>
+                                <div class="bi-check-icon">✓</div>
+                                <span>Nội dung chính xác, mang lại giá trị thực tế cho học viên.</span>
+                            </li>
+                            <li>
+                                <div class="bi-check-icon">✓</div>
+                                <span>Tôn trọng bản quyền và các quy định của Teen Lab.</span>
+                            </li>
+                            <li>
+                                <div class="bi-check-icon">✓</div>
+                                <span>Cải thiện nội dung dựa trên feedback của Admin và học viên.</span>
+                            </li>
+                            <li>
+                                <div class="bi-check-icon">✓</div>
+                                <span>Hỗ trợ học viên trong quá trình học tập.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- STEP 3: QUIZ INTRO -->
+                <div class="bi-slide" id="step3">
+                    <div class="bi-slide-content bi-center">
+                        <div class="bi-quiz-icon">📝</div>
+                        <h2 class="bi-slide-title">Kiểm tra nhanh kiến thức</h2>
+                        <p class="bi-slide-desc">Hãy hoàn thành 5 câu hỏi trắc nghiệm dưới đây để xác nhận bạn đã nắm rõ quy trình làm việc.</p>
+                        <div class="bi-info-badge">Bạn cần trả lời đúng 100% để tiếp tục</div>
+                    </div>
+                </div>
+
+                <!-- STEP 4: Q1 -->
+                <div class="bi-slide quiz-slide" id="step4" data-q="1">
+                    <div class="bi-slide-content">
+                        <div class="bi-q-label">Câu hỏi 1 / 5</div>
+                        <h3 class="bi-q-text">Instructor có thể tự xuất bản khóa học mà không cần Admin duyệt?</h3>
+                        <div class="bi-options-layout">
+                            <label class="bi-opt">
+                                <input type="radio" name="q1" value="wrong" />
+                                <div class="bi-opt-box">Có, Instructor được tự do xuất bản bất kỳ lúc nào</div>
+                            </label>
+                            <label class="bi-opt">
+                                <input type="radio" name="q1" value="correct" />
+                                <div class="bi-opt-box">Không, khóa học phải được Admin phê duyệt trước khi công khai</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 5: Q2 -->
+                <div class="bi-slide quiz-slide" id="step5" data-q="2">
+                    <div class="bi-slide-content">
+                        <div class="bi-q-label">Câu hỏi 2 / 5</div>
+                        <h3 class="bi-q-text">Khi Admin từ chối khóa học, Instructor nên làm gì?</h3>
+                        <div class="bi-options-layout">
+                            <label class="bi-opt">
+                                <input type="radio" name="q2" value="wrong1" />
+                                <div class="bi-opt-box">Tạo khóa học mới hoàn toàn và bỏ cái cũ</div>
+                            </label>
+                            <label class="bi-opt">
+                                <input type="radio" name="q2" value="correct" />
+                                <div class="bi-opt-box">Đọc feedback từ Admin, chỉnh sửa và gửi lại yêu cầu duyệt</div>
+                            </label>
+                            <label class="bi-opt">
+                                <input type="radio" name="q2" value="wrong2" />
+                                <div class="bi-opt-box">Gửi liên tục yêu cầu cho đến khi được duyệt</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 6: Q3 -->
+                <div class="bi-slide quiz-slide" id="step6" data-q="3">
+                    <div class="bi-slide-content">
+                        <div class="bi-q-label">Câu hỏi 3 / 5</div>
+                        <h3 class="bi-q-text">Một bài học chất lượng trên Teen Lab nên bao gồm gì?</h3>
+                        <div class="bi-options-layout">
+                            <label class="bi-opt">
+                                <input type="radio" name="q3" value="wrong" />
+                                <div class="bi-opt-box">Chỉ cần một đoạn mô tả ngắn</div>
+                            </label>
+                            <label class="bi-opt">
+                                <input type="radio" name="q3" value="correct" />
+                                <div class="bi-opt-box">Nội dung (video/đọc) và Quiz để kiểm tra kiến thức</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 7: Q4 -->
+                <div class="bi-slide quiz-slide" id="step7" data-q="4">
+                    <div class="bi-slide-content">
+                        <div class="bi-q-label">Câu hỏi 4 / 5</div>
+                        <h3 class="bi-q-text">Sử dụng tài liệu có bản quyền mà không ghi nguồn sẽ dẫn đến hậu quả gì?</h3>
+                        <div class="bi-options-layout">
+                            <label class="bi-opt">
+                                <input type="radio" name="q4" value="correct" />
+                                <div class="bi-opt-box">Khóa học bị gỡ bỏ và tài khoản Instructor bị cảnh cáo/khóa</div>
+                            </label>
+                            <label class="bi-opt">
+                                <input type="radio" name="q4" value="wrong" />
+                                <div class="bi-opt-box">Không có vấn đề gì nếu Admin không phát hiện</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 8: Q5 -->
+                <div class="bi-slide quiz-slide" id="step8" data-q="5">
+                    <div class="bi-slide-content">
+                        <div class="bi-q-label">Câu hỏi 5 / 5</div>
+                        <h3 class="bi-q-text">Bạn cam kết sẽ xây dựng nội dung sạch và hỗ trợ cộng đồng Teen Lab?</h3>
+                        <div class="bi-options-layout">
+                            <label class="bi-opt">
+                                <input type="radio" name="q5" value="correct" />
+                                <div class="bi-opt-box">Có, tôi cam kết và sẵn sàng bắt đầu!</div>
+                            </label>
+                            <label class="bi-opt">
+                                <input type="radio" name="q5" value="wrong" />
+                                <div class="bi-opt-box">Tôi chỉ tham gia cho vui thôi</div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 9: FINAL / SUCCESS -->
+                <div class="bi-slide" id="step9">
+                    <div class="bi-slide-content bi-center">
+                        <div class="bi-success-icon">🎉</div>
+                        <h2 class="bi-slide-title">Tuyệt vời! Bạn đã vượt qua bài bản kiểm tra</h2>
+                        <p class="bi-slide-desc">Bạn đã sẵn sàng gia nhập đội ngũ Giảng viên của Teen Lab Pro. Nhấn xác nhận bên dưới để hoàn tất.</p>
+                        
+                        <div class="bi-confirm-summary">
+                            <p><strong>Username:</strong> <span id="summaryName">...</span></p>
+                            <p><strong>Status:</strong> Ready for Instructor role</p>
+                        </div>
+
+                        <button class="bi-final-btn" id="btnSubmitRegistration">
+                            Xác nhận & Bắt đầu ngay
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="bi-controls">
+                <button class="bi-ctrl-btn bi-btn-prev" id="btnPrev" disabled>Quay lại</button>
+                <div class="bi-step-info">Bước <span id="currentStepNum">1</span> / 9</div>
+                <button class="bi-ctrl-btn bi-btn-next" id="btnNext">Tiếp tục</button>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="biToast" class="bi-toast"></div>
+
+    <script src="BeInstructor.js"></script>
+</body>
+
+</html>

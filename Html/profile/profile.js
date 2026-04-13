@@ -103,6 +103,33 @@ document.addEventListener("DOMContentLoaded", () => {
                     updateCharCount();
                 }
 
+                // ---- Role-based UI logic ----
+                const tabCoursesBtn = document.getElementById('tabCourses');
+                const instructorActionArea = document.getElementById('instructorActionArea');
+                const becomeInstructorArea = document.getElementById('becomeInstructorArea');
+
+                // RoleID 4 is Instructor, RoleID 3 is Student, RoleID 1 is Admin
+                if (user.RoleID === 4) {
+                    if (tabCoursesBtn) tabCoursesBtn.style.display = 'flex';
+                    if (instructorActionArea) instructorActionArea.style.display = 'block';
+                    if (becomeInstructorArea) becomeInstructorArea.style.display = 'none';
+                } else if (user.RoleID === 1) {
+                    // Admin might want to see courses but doesn't need "Become Instructor"
+                    if (tabCoursesBtn) tabCoursesBtn.style.display = 'flex';
+                    if (instructorActionArea) instructorActionArea.style.display = 'block';
+                    if (becomeInstructorArea) becomeInstructorArea.style.display = 'none';
+                    
+                    const actionTitle = document.getElementById('instrActionTitle');
+                    const actionDesc = document.getElementById('instrActionDesc');
+                    if (actionTitle) actionTitle.textContent = "Quản trị viên";
+                    if (actionDesc) actionDesc.textContent = "Bạn có quyền quản trị toàn bộ hệ thống.";
+                } else {
+                    // Student: hide courses tab, show "Become Instructor" invite
+                    if (tabCoursesBtn) tabCoursesBtn.style.display = 'none';
+                    if (instructorActionArea) instructorActionArea.style.display = 'none';
+                    if (becomeInstructorArea) becomeInstructorArea.style.display = 'block';
+                }
+
                 // Render Enrolled Courses
                 const coursesContainer = document.getElementById("coursesContainer");
                 coursesContainer.innerHTML = "";

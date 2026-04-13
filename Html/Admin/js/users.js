@@ -69,12 +69,12 @@ function filterUsers(query) {
 
 const roleMap = {
     'admin': 1,
-    'instructor': 2,
+    'instructor': 4,
     'student': 3
 };
 const reverseRoleMap = {
     1: 'admin',
-    2: 'instructor',
+    4: 'instructor',
     3: 'student'
 };
 
@@ -171,7 +171,7 @@ async function loadUserForEdit(userId) {
         document.getElementById('userName').value = user.FullName;
         document.getElementById('userEmail').value = user.Email;
         
-        const roleStr = reverseRoleMap[user.RoleID] || 'student';
+        const roleStr = reverseRoleMap[user.Role] || 'student';
         document.getElementById('userRole').value = roleStr;
         
         const statusStr = user.IsActive ? 'active' : 'inactive';

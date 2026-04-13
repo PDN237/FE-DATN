@@ -1298,3 +1298,41 @@
     color: #5d4037;
     font-weight: 500;
 }
+
+/* --- Instructor Registration/Action Areas --- */
+[id$="Area"] {
+    animation: slideUp 0.4s ease-out;
+}
+
+#instructorActionArea .pf-btn-primary {
+    margin-top: 5px;
+}
+
+.pf-btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 14px 24px;
+    background: white;
+    color: #5b7be8;
+    border: 2.5px solid #5b7be8;
+    border-radius: 12px;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+}
+
+.pf-btn-secondary:hover {
+    background: #f0f4ff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(91, 123, 232, 0.1);
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
