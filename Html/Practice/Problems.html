@@ -215,7 +215,7 @@
 
                 if (result.success) {
                     allProblems = result.data;
-                    displayProblems(allProblems);
+                    filterProblems(); // Use filterProblems to apply accept=true filter
                 } else {
                     console.error('Error:', result.message);
                 }
@@ -260,11 +260,12 @@
             const timeLimitFilter = document.getElementById('timeLimitFilter').value;
 
             const filtered = allProblems.filter(problem => {
+                const matchesAccept = problem.accept !== false; // Only show if accept is true or undefined
                 const matchesSearch = problem.title.toLowerCase().includes(searchTerm);
                 const matchesDifficulty = difficultyFilter === 'all' || problem.difficulty === difficultyFilter;
                 const matchesTimeLimit = timeLimitFilter === 'all' || problem.time_limit === parseInt(timeLimitFilter);
 
-                return matchesSearch && matchesDifficulty && matchesTimeLimit;
+                return matchesAccept && matchesSearch && matchesDifficulty && matchesTimeLimit;
             });
 
             displayProblems(filtered);

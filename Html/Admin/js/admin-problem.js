@@ -73,17 +73,18 @@ class AdminProblemManager {
   renderProblems(problems) {
     const tbody = document.getElementById('problemsTableBody');
     if (problems.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="6" class="text-center">No problems found</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="7" class="text-center">No problems found</td></tr>';
       return;
     }
 
     tbody.innerHTML = problems.map(problem => `
-      <tr data-problem-id="${problem.id}" class="problem-row" data-action="select" data-id="${problem.id}" style="cursor: pointer;" onmouseover="this.style.background=\'rgba(139, 92, 246, 0.1)\'" onmouseout="this.style.background=\'transparent\'">
+      <tr data-problem-id="${problem.id}" class="problem-row ${problem.accept === false ? 'problem-hidden' : ''}" data-action="select" data-id="${problem.id}" style="cursor: pointer;" onmouseover="this.style.background=\'rgba(139, 92, 246, 0.1)\'" onmouseout="this.style.background=\'transparent\'">
         <td>${escapeHtml(problem.title)}</td>
         <td><span class="difficulty-badge difficulty-${problem.difficulty.toLowerCase()}">${problem.difficulty}</span></td>
         <td>${problem.time_limit}ms</td>
         <td><span class="testcase-count ${this.getTestcaseStatusClass(problem.testcase_count)}">${problem.testcase_count}</span></td>
         <td><span class="count-badge">${problem.submission_count}</span></td>
+        <td><span class="accept-badge ${problem.accept ? 'accept-active' : 'accept-hidden'}">${problem.accept ? 'Active' : 'Hidden'}</span></td>
         <td class="actions">
           <button class="btn btn-edit btn-sm" data-action="edit" data-id="${problem.id}">
             <i class="fas fa-edit"></i>
@@ -136,10 +137,10 @@ class AdminProblemManager {
     const modal = document.getElementById('problemModal');
     const form = document.getElementById('problemForm');
     form.reset();
-    
+
     document.getElementById('problemModalTitle').textContent = problem ? 'Edit Problem' : 'Create New Problem';
     document.getElementById('problemId').value = problem ? problem.id : '';
-    
+
     if (problem) {
       document.getElementById('problemTitle').value = problem.title;
       document.getElementById('problemDifficulty').value = problem.difficulty;
@@ -147,8 +148,11 @@ class AdminProblemManager {
       document.getElementById('problemDescription').value = problem.description;
       document.getElementById('problemHints').value = problem.hints || '';
       document.getElementById('problemExamples').value = problem.examples || '';
+      document.getElementById('problemAccept').checked = problem.accept !== false;
+    } else {
+      document.getElementById('problemAccept').checked = true;
     }
-    
+
     modal.classList.add('active');
   }
 
@@ -170,7 +174,8 @@ class AdminProblemManager {
       difficulty: document.getElementById('problemDifficulty').value,
       time_limit: parseInt(document.getElementById('problemTimeLimit').value),
       hints: document.getElementById('problemHints').value,
-      examples: document.getElementById('problemExamples').value
+      examples: document.getElementById('problemExamples').value,
+      accept: document.getElementById('problemAccept').checked
     };
 
     try {
