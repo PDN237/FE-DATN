@@ -36,8 +36,10 @@
                                 <th>Name</th>
                                 <th>Email</th>
                                 <th>Role</th>
+                                <th>Score</th>
+                                <th>Title</th>
                                 <th>Status</th>
-                                <th>Joined</th>
+                                <th>Joined Date</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -84,8 +86,16 @@
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="userDescribe">Mô tả / Bio</label>
-                        <textarea id="userDescribe" rows="4" placeholder="Mô tả về người dùng này..." style="width:100%;padding:0.6rem 0.75rem;border:2px solid #cbd5e0;border-radius:8px;font-family:inherit;font-size:0.9rem;resize:vertical;"></textarea>
+                        <label for="userDescribe">Describe / Bio</label>
+                        <textarea id="userDescribe" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="userScore">Score</label>
+                        <input type="number" id="userScore" value="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="userTitle">Title (Danh hiệu)</label>
+                        <input type="text" id="userTitle" placeholder="Danh hiệu của người dùng">
                     </div>
                 </form>
             </div>

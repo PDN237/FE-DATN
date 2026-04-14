@@ -83,10 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (heroName) heroName.textContent = user.FullName || "Chưa có tên";
                 if (heroEmail) heroEmail.textContent = user.Email || "";
 
+                // Hero stats
                 document.getElementById("statProblems").textContent = stats.solvedProblems;
                 document.getElementById("statCourses").textContent = stats.completedCourses;
+
+                // Overview stats
                 document.getElementById("overviewProblems").textContent = stats.solvedProblems;
                 document.getElementById("overviewCourses").textContent = stats.completedCourses;
+                document.getElementById("overviewScore").textContent = user.score || 0;
+                document.getElementById("overviewTitle").textContent = user.title || '-';
 
                 // Form values
                 document.getElementById("inputName").value = user.FullName || "";
@@ -95,6 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("inputLocation").value = user.Location || "";
                 document.getElementById("inputGender").value = user.Gender || "";
                 document.getElementById("inputBirthYear").value = user.BirthYear || "";
+                document.getElementById("inputScore").value = user.score || 0;
+                document.getElementById("inputTitle").value = user.title || "";
 
                 // Describe / Bio field
                 const describeEl = document.getElementById("inputDescribe");
@@ -216,7 +223,8 @@ document.addEventListener("DOMContentLoaded", () => {
             Location: document.getElementById("inputLocation").value,
             Gender: document.getElementById("inputGender").value,
             BirthYear: document.getElementById("inputBirthYear").value,
-            Describe: (document.getElementById("inputDescribe") || {}).value || ''
+            Describe: (document.getElementById("inputDescribe") || {}).value || '',
+            title: document.getElementById("inputTitle").value || ''
         };
 
         const updateBtn = document.getElementById('updateBtn');
@@ -367,6 +375,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span class="mc-card-level" style="background:${lc.bg};color:${lc.color};border:1px solid ${lc.border};">${course.Level || 'Cơ bản'}</span>
                             <span class="mc-card-status ${statusClass}">${statusLabel}</span>
                             <span class="mc-card-modules">${course.moduleCount || 0} module</span>
+                        <span class="mc-card-score">Score: ${course.score || 0}</span>
                         </div>
                         <h3 class="mc-card-title">${course.Title}</h3>
                         <p class="mc-card-desc">${(course.Description || '').substring(0, 100)}${(course.Description || '').length > 100 ? '...' : ''}</p>
@@ -407,6 +416,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('myCourseDesc').value = editCourse.Description || '';
             document.getElementById('myCourseLevel').value = editCourse.Level || 'Cơ bản';
             thumbInput.value = editCourse.Thumbnail || '';
+            document.getElementById('myCourseScore').value = editCourse.score || 0;
             previewThumb();
         } else {
             modalTitle.textContent = 'Tạo khóa học mới';
@@ -451,7 +461,8 @@ document.addEventListener("DOMContentLoaded", () => {
             Title: document.getElementById('myCourseTitle').value.trim(),
             Description: document.getElementById('myCourseDesc').value.trim(),
             Level: document.getElementById('myCourseLevel').value,
-            Thumbnail: thumbInput.value.trim()
+            Thumbnail: thumbInput.value.trim(),
+            score: parseInt(document.getElementById('myCourseScore').value) || 0
         };
 
         const saveBtn = document.getElementById('saveMyCourse');

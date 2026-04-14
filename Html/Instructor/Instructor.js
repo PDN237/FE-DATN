@@ -253,6 +253,12 @@ document.addEventListener('DOMContentLoaded', () => {
                         <input type="number" class="ins-input" id="edOrder" value="${lesson.OrderIndex || 0}" min="0" />
                     </div>
                 </div>
+                <div class="ins-editor-row">
+                    <div class="ins-form-group">
+                        <label class="ins-label">Điểm số</label>
+                        <input type="number" class="ins-input" id="edScore" value="${lesson.score || 0}" min="0" />
+                    </div>
+                </div>
 
                 <!-- Content URL (hidden for quiz) -->
                 <div class="ins-form-group" id="urlGroup" style="display:${lesson.Type === 'quiz' ? 'none' : 'block'}">
@@ -337,7 +343,8 @@ document.addEventListener('DOMContentLoaded', () => {
             ContentUrl: document.getElementById('edContentUrl').value.trim(),
             ContentHtml: document.getElementById('edContentHtml')?.value || '',
             Describe: document.getElementById('edDescribe').value.trim(),
-            Summary: document.getElementById('edSummary').value.trim()
+            Summary: document.getElementById('edSummary').value.trim(),
+            score: parseInt(document.getElementById('edScore').value) || 0
         };
         if (!fd.Title) { showToast('Tiêu đề không được để trống', 'error'); return; }
 

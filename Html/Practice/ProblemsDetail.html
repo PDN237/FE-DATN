@@ -600,6 +600,57 @@
             document.getElementById('memoryValue').textContent = maxMemory + ' MB';
         }
 
+        function showPointsNotification(pointsEarned) {
+            // Remove existing notification
+            const existing = document.querySelector('.points-notification');
+            if (existing) existing.remove();
+
+            const notification = document.createElement('div');
+            notification.className = 'points-notification';
+            notification.innerHTML = `
+                <div style="
+                    position: fixed; top: 20px; right: 20px;
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white; padding: 20px 24px; border-radius: 12px;
+                    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+                    z-index: 10000; min-width: 300px; text-align: left;
+                    animation: slideInRight 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+                ">
+                    <div style="display: flex; align-items: center; gap: 12px;">
+                        <div style="font-size: 32px;">🎉</div>
+                        <div>
+                            <div style="font-size: 18px; font-weight: 700; margin-bottom: 4px;">Chúc mừng!</div>
+                            <div style="font-size: 14px; opacity: 0.95;">Bạn đã nhận được <strong>+${pointsEarned}</strong> điểm</div>
+                        </div>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        position: absolute; top: 8px; right: 8px;
+                        background: rgba(255,255,255,0.2); border: none;
+                        color: white; width: 24px; height: 24px;
+                        border-radius: 50%; cursor: pointer;
+                        font-size: 14px; display: flex; align-items: center;
+                        justify-content: center; transition: all 0.3s;
+                    " onmouseover="this.style.background='rgba(255,255,255,0.3)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">×</button>
+                </div>
+                <style>
+                    @keyframes slideInRight {
+                        from { opacity: 0; transform: translateX(100px); }
+                        to { opacity: 1; transform: translateX(0); }
+                    }
+                </style>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto-remove after 5 seconds
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.style.animation = 'slideInRight 0.5s cubic-bezier(0.25,0.46,0.45,0.94) reverse';
+                    setTimeout(() => notification.remove(), 500);
+                }
+            }, 5000);
+        }
+
         async function submitCode() {
             const code = document.getElementById('codeInput').value;
             const language = getSelectedLanguage();
@@ -632,6 +683,11 @@
                     
                     document.getElementById('runtimeValue').textContent = (data.data.runtime || 0) + ' ms';
                     document.getElementById('memoryValue').textContent = (data.data.memory || 0) + ' MB';
+                    
+                    // Show points notification if earned
+                    if (data.data.pointsEarned > 0) {
+                        showPointsNotification(data.data.pointsEarned);
+                    }
                     
                     let html = '<h3 style="color:white; margin: 15px 10px;">Test Cases (' + data.data.testcases.length + ')</h3><div style="display:flex; flex-wrap:wrap; gap:10px; padding: 10px;">';
                     data.data.testcases.forEach((tc, i) => {

@@ -599,17 +599,35 @@ async function completeLesson() {
         lessonId: currentLessonId
       })
     });
-    
+
+    // Update user score
+    try {
+      const scoreRes = await window.apiFetch('/api/profile/update-score', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          lessonId: currentLessonId
+        })
+      });
+
+      if (scoreRes.success && scoreRes.pointsEarned > 0) {
+        showScoreNotification(scoreRes.pointsEarned);
+      }
+    } catch (scoreError) {
+      console.error('Failed to update score:', scoreError);
+    }
+
     // Show success notification
     showCompletionNotification();
-    
+
     console.log('✅ Lesson marked complete:', currentLessonId, 'user:', userId);
-    
+
     // Refresh data from backend with userId
     const modulesRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/modules-lessons?userId=${userId}`);
     courseModules = modulesRes;
     updateLessonUI();
-    
+
     // Check if course is completed
     checkCourseCompletion();
   } catch (error) {
@@ -623,20 +641,54 @@ async function checkCourseCompletion() {
     const progressRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/progress?userId=${userId}`);
     
     if (progressRes.courseCompleted) {
-      showCourseCompletionNotification();
+      // Get course points and add to user account
+      try {
+        const pointsRes = await window.apiFetch('/api/profile/add-course-points', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            courseId: currentCourseId
+          })
+        });
+
+        if (pointsRes.success) {
+          showCourseCompletionNotification(pointsRes.pointsEarned);
+        } else {
+          showCourseCompletionNotification(0);
+        }
+      } catch (pointsError) {
+        console.error('Failed to add course points:', pointsError);
+        showCourseCompletionNotification(0);
+      }
     }
   } catch (error) {
     console.error('Error checking course completion:', error);
   }
 }
 
-function showCourseCompletionNotification() {
+function showCourseCompletionNotification(pointsEarned = 0) {
   // Remove existing notification
   const existing = document.querySelector('.course-completion-notification');
   if (existing) existing.remove();
 
   const notification = document.createElement('div');
   notification.className = 'course-completion-notification';
+  
+  let pointsMessage = '';
+  if (pointsEarned > 0) {
+    pointsMessage = `
+      <div style="
+        background: rgba(255, 255, 255, 0.2);
+        padding: 16px 24px; border-radius: 12px;
+        margin-bottom: 24px; display: inline-block;
+      ">
+        <div style="font-size: 36px; font-weight: 800; margin-bottom: 4px;">+${pointsEarned}</div>
+        <div style="font-size: 14px; opacity: 0.9;">điểm đã được cộng vào tài khoản của bạn</div>
+      </div>
+    `;
+  }
+
   notification.innerHTML = `
     <div style="
       position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -652,7 +704,8 @@ function showCourseCompletionNotification() {
         Bạn đã hoàn thành toàn bộ khóa học này.<br>
         Hãy tiếp tục nỗ lực để đạt được nhiều thành tựu hơn!
       </p>
-      <button onclick="window.location.href='course.html'" style="
+      ${pointsMessage}
+      <button onclick="window.location.href='../Course/course.html'" style="
         background: white; color: #0891b2; padding: 12px 32px;
         border: none; border-radius: 10px; font-size: 16px;
         font-weight: 700; cursor: pointer; transition: all 0.3s;
@@ -671,18 +724,58 @@ function showCourseCompletionNotification() {
   document.body.appendChild(notification);
 }
 
+function showScoreNotification(points) {
+  // Remove existing score notification
+  const existing = document.querySelector('.score-notification');
+  if (existing) existing.remove();
+
+  const notification = document.createElement('div');
+  notification.className = 'score-notification';
+  notification.innerHTML = `
+    <div style="
+      position: fixed; top: 20px; right: 20px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      color: white; padding: 16px 24px; border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(251, 191, 36, 0.4);
+      z-index: 10001; max-width: 350px;
+      font-weight: 600; font-size: 15px;
+      transform: translateX(400px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+      display: flex; align-items: center; gap: 10px;
+    ">
+      <span style="font-size: 24px;">⭐</span>
+      <div>
+        <div>+${points} điểm</div>
+        <small style="font-weight: 400; opacity: 0.9;">Đã cộng vào tài khoản của bạn</small>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  // Slide in animation
+  requestAnimationFrame(() => {
+    notification.style.transform = 'translateX(0)';
+  });
+
+  // Auto remove after 3s
+  setTimeout(() => {
+    notification.style.transform = 'translateX(400px)';
+    setTimeout(() => notification.remove(), 400);
+  }, 3000);
+}
+
 function showCompletionNotification(isSuccess = true, score = 0) {
   // Remove existing notification
   const existing = document.querySelector('.completion-notification');
   if (existing) existing.remove();
-  
+
   const notification = document.createElement('div');
   notification.className = 'completion-notification';
-  
+
   if (isSuccess) {
     notification.innerHTML = `
       <div style="
-        position: fixed; top: 100px; right: 20px; 
+        position: fixed; top: 100px; right: 20px;
         background: linear-gradient(135deg, #22c55e, #16a34a);
         color: white; padding: 16px 24px; border-radius: 12px;
         box-shadow: 0 10px 25px rgba(34,197,94,0.4);
@@ -697,7 +790,7 @@ function showCompletionNotification(isSuccess = true, score = 0) {
   } else {
     notification.innerHTML = `
       <div style="
-        position: fixed; top: 100px; right: 20px; 
+        position: fixed; top: 100px; right: 20px;
         background: linear-gradient(135deg, #f59e0b, #d97706);
         color: white; padding: 16px 24px; border-radius: 12px;
         box-shadow: 0 10px 25px rgba(245,158,11,0.4);
@@ -710,14 +803,14 @@ function showCompletionNotification(isSuccess = true, score = 0) {
       </div>
     `;
   }
-  
+
   document.body.appendChild(notification);
-  
+
   // Slide in animation
   requestAnimationFrame(() => {
     notification.style.transform = 'translateX(0)';
   });
-  
+
   // Auto remove after 4s
   setTimeout(() => {
     notification.style.transform = 'translateX(400px)';

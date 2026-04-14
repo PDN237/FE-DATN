@@ -163,6 +163,16 @@
                                 <input type="number" class="pf-input" id="inputBirthYear" min="1950" max="2020"
                                     placeholder="VD: 2000" />
                             </div>
+                            <div class="pf-form-group">
+                                <label class="pf-label" for="inputScore">Điểm số</label>
+                                <input type="number" class="pf-input" id="inputScore" min="0" readonly
+                                    placeholder="Điểm số của bạn" />
+                            </div>
+                            <div class="pf-form-group">
+                                <label class="pf-label" for="inputTitle">Danh hiệu</label>
+                                <input type="text" class="pf-input" id="inputTitle"
+                                    placeholder="Danh hiệu của bạn" />
+                            </div>
                         </div>
 
                         <div class="pf-form-group">
@@ -170,7 +180,7 @@
                                 <svg viewBox="0 0 24 24" fill="none"
                                     style="width:14px;height:14px;display:inline;vertical-align:middle;margin-right:4px;">
                                     <path
-                                        d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                                        d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"
                                         fill="currentColor" />
                                 </svg>
                                 Địa chỉ
@@ -204,21 +214,7 @@
                     </form>
                 </div>
 
-                <!-- Instructor Action Banner -->
-                <div id="instructorActionArea" style="display: none; margin-top: 24px;">
-                    <div class="pf-section" style="border: 2px solid #e2e8f0; background: linear-gradient(135deg, #f8fafc, #f1f5f9);">
-                        <div class="pf-section-header">
-                            <h2 class="pf-section-title" id="instrActionTitle">Quản lý nội dung</h2>
-                        </div>
-                        <p id="instrActionDesc" style="font-size: 0.88rem; color: #64748b; margin-bottom: 16px; line-height: 1.5;">
-                            Bạn đang là Giảng viên. Bạn có thể tạo và quản lý các khóa học của mình.
-                        </p>
-                        <a href="../Instructor/Instructor.html" id="instrActionBtn" class="pf-btn-primary" style="text-decoration: none; justify-content: center; background: linear-gradient(135deg, #5b7be8, #3ba5e8);">
-                            Đi đến trang Quản lý khóa học
-                        </a>
-                    </div>
-                </div>
-
+              
                 <div id="becomeInstructorArea" style="display: none; margin-top: 24px;">
                     <div class="pf-section" style="border: 2px dashed #cbd5e0; background: #f8fafc;">
                         <div class="pf-section-header">
@@ -250,8 +246,8 @@
                     </button>
                     <button class="pf-tab-btn" data-tab="courses" id="tabCourses">
                         <svg viewBox="0 0 24 24" fill="none">
-                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
-                                stroke-width="2" />
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
+                                stroke="currentColor" stroke-width="2" />
                         </svg>
                         Các khóa học
                     </button>
@@ -285,6 +281,20 @@
                                 <div class="pov-stat-info">
                                     <div class="pov-stat-number" id="overviewCourses">0</div>
                                     <div class="pov-stat-label">Khóa học hoàn thành</div>
+                                </div>
+                            </div>
+                            <div class="pov-stat-item pov-stat--score">
+                                <div class="pov-stat-icon">⭐</div>
+                                <div class="pov-stat-info">
+                                    <div class="pov-stat-number" id="overviewScore">0</div>
+                                    <div class="pov-stat-label">Điểm số</div>
+                                </div>
+                            </div>
+                            <div class="pov-stat-item pov-stat--title">
+                                <div class="pov-stat-icon">🏆</div>
+                                <div class="pov-stat-info">
+                                    <div class="pov-stat-number" id="overviewTitle">-</div>
+                                    <div class="pov-stat-label">Danh hiệu</div>
                                 </div>
                             </div>
                         </div>
@@ -405,6 +415,14 @@
                             placeholder="https://example.com/image.jpg" />
                     </div>
                 </div>
+
+                <div class="pf-form-group">
+                    <label class="pf-label" for="myCourseScore">Điểm số</label>
+                    <input type="number" class="pf-input" id="myCourseScore" min="0"
+                        placeholder="Điểm số của khóa học" />
+                </div>
+
+               
 
                 <div id="myCourseThumbnailPreview" class="mc-thumb-preview"></div>
             </form>

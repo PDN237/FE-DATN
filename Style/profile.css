@@ -479,6 +479,16 @@
     border-left-color: #ab47bc;
 }
 
+.pov-stat--score {
+    background: linear-gradient(135deg, #fff8e1, #ffecb3);
+    border-left-color: #ffa726;
+}
+
+.pov-stat--title {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+    border-left-color: #66bb6a;
+}
+
 .pov-stat-item:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 22px rgba(0,0,0,0.09);

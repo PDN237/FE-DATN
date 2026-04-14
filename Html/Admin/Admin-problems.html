@@ -54,9 +54,11 @@
                         <table class="admin-table problem-table" id="problemsTable">
                             <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Title</th>
                                     <th>Difficulty</th>
                                     <th>Time Limit (ms)</th>
+                                    <th>Score</th>
                                     <th>Test Cases</th>
                                     <th>Submissions</th>
                                     <th>Status</th>
@@ -65,7 +67,7 @@
                             </thead>
                             <tbody id="problemsTableBody">
                                 <tr>
-                                    <td colspan="7" class="text-center">Loading problems...</td>
+                                    <td colspan="9" class="text-center">Loading problems...</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -133,6 +135,10 @@
                             <option value="Medium">Medium</option>
                             <option value="Hard">Hard</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="problemScore">Score</label>
+                        <input type="number" id="problemScore" value="0" min="0" placeholder="Score (default: 0)">
                     </div>
                     <div class="form-group">
                         <label for="problemTimeLimit">Time Limit (ms) *</label>

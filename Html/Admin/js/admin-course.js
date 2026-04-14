@@ -144,6 +144,7 @@ function renderGrid() {
                     <p class="ac-card-desc">${escHtml(course.Description || '')}</p>
                     <div class="ac-card-meta">
                         <span class="ac-level-badge ${getLevelClass(course.Level)}">${escHtml(course.Level || 'Cơ bản')}</span>
+                        <span class="ac-card-score">Score: ${course.score || 0}</span>
                         <span class="ac-card-modules">📦 ${course.moduleCount || 0} module</span>
                         <span class="ac-card-date">${formatDate(course.CreatedAt)}</span>
                     </div>

@@ -45,6 +45,8 @@ function displayUsers(users) {
             <td>${user.FullName}</td>
             <td>${user.Email}</td>
             <td>${roleDisplay}</td>
+            <td>${user.score || 0}</td>
+            <td>${user.title || ''}</td>
             <td><span class="status-${status.toLowerCase()}">${status}</span></td>
             <td>${joinedDate}</td>
             <td>
@@ -127,7 +129,9 @@ async function saveUser() {
         Email: email,
         RoleID: roleId,
         IsActive: isActive,
-        Describe: document.getElementById('userDescribe') ? document.getElementById('userDescribe').value : ''
+        Describe: document.getElementById('userDescribe') ? document.getElementById('userDescribe').value : '',
+        score: parseInt(document.getElementById('userScore')?.value) || 0,
+        title: document.getElementById('userTitle')?.value || ''
     };
 
     if (password) userData.PassWord = password;
@@ -180,6 +184,13 @@ async function loadUserForEdit(userId) {
         // Load describe/bio
         if (document.getElementById('userDescribe')) {
             document.getElementById('userDescribe').value = user.Describe || '';
+        }
+        // Load score and title
+        if (document.getElementById('userScore')) {
+            document.getElementById('userScore').value = user.score || 0;
+        }
+        if (document.getElementById('userTitle')) {
+            document.getElementById('userTitle').value = user.title || '';
         }
         
         // Password remains empty for edit
