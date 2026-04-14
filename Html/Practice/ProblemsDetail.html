@@ -600,6 +600,61 @@
             document.getElementById('memoryValue').textContent = maxMemory + ' MB';
         }
 
+        function showProblemSolvedNotification(pointsEarned) {
+            // Remove existing notification
+            const existing = document.querySelector('.problem-solved-notification');
+            if (existing) existing.remove();
+
+            const notification = document.createElement('div');
+            notification.className = 'problem-solved-notification';
+            notification.innerHTML = `
+                <div style="
+                    position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    color: white; padding: 40px 48px; border-radius: 20px;
+                    box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
+                    z-index: 10000; max-width: 500px; text-align: center;
+                    animation: slideIn 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+                ">
+                    <div style="font-size: 64px; margin-bottom: 16px;">🎉</div>
+                    <h2 style="font-size: 28px; font-weight: 800; margin-bottom: 12px;">Chúc mừng!</h2>
+                    <p style="font-size: 16px; opacity: 0.95; line-height: 1.6; margin-bottom: 24px;">
+                        Bạn đã giải quyết thành công bài toán này.<br>
+                        Tiếp tục cố gắng để đạt được nhiều thành tựu hơn!
+                    </p>
+                    <div style="
+                        background: rgba(255, 255, 255, 0.2);
+                        padding: 16px 24px; border-radius: 12px;
+                        margin-bottom: 24px; display: inline-block;
+                    ">
+                        <div style="font-size: 36px; font-weight: 800; margin-bottom: 4px;">+${pointsEarned}</div>
+                        <div style="font-size: 14px; opacity: 0.9;">điểm đã được cộng vào tài khoản của bạn</div>
+                    </div>
+                    <button onclick="this.closest('.problem-solved-notification').remove()" style="
+                        background: white; color: #10b981; padding: 12px 32px;
+                        border: none; border-radius: 10px; font-size: 16px;
+                        font-weight: 700; cursor: pointer; transition: all 0.3s;
+                    " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                        Tiếp tục
+                    </button>
+                </div>
+                <style>
+                    @keyframes slideIn {
+                        from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+                        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                    }
+                </style>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                const notif = document.querySelector('.problem-solved-notification');
+                if (notif) notif.remove();
+            }, 5000);
+        }
+
         async function submitCode() {
             const code = document.getElementById('codeInput').value;
             const language = getSelectedLanguage();
@@ -629,9 +684,14 @@
                     const statusClass = status === 'Accepted' ? 'accepted' : 'rejected';
                     badge.className = 'status-badge ' + statusClass;
                     badge.innerHTML = status === 'Accepted' ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> ' + status;
-                    
+
                     document.getElementById('runtimeValue').textContent = (data.data.runtime || 0) + ' ms';
                     document.getElementById('memoryValue').textContent = (data.data.memory || 0) + ' MB';
+
+                    // Show points notification if problem was solved and points were earned
+                    if (status === 'Accepted' && data.data.pointsEarned > 0) {
+                        showProblemSolvedNotification(data.data.pointsEarned);
+                    }
                     
                     let html = '<h3 style="color:white; margin: 15px 10px;">Test Cases (' + data.data.testcases.length + ')</h3><div style="display:flex; flex-wrap:wrap; gap:10px; padding: 10px;">';
                     data.data.testcases.forEach((tc, i) => {
