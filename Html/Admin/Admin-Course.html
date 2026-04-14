@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quản lý khóa học – Admin | Teen Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="/FrondEnd/Style/style.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/admin.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/Admin-Course.css">
+</head>
+
+<body>
+    <div class="app-container admin-app">
+        <div class="top-section">
+
+            <!-- Sidebar -->
+            <aside class="admin-sidebar">
+                <div class="sidebar-header">
+                    <h1>Admin Panel</h1>
+                </div>
+                <nav class="admin-nav">
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html">📊 Dashboard</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html" class="active">📚 Courses</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html">👥 Users</a>
+                </nav>
+            </aside>
+
+            <!-- Main -->
+            <main class="admin-main ac-main">
+
+                <!-- Header -->
+                <div class="ac-page-header">
+                    <div class="ac-page-header-left">
+                        <h1 class="ac-page-title">Quản lý khóa học</h1>
+                        <p class="ac-page-subtitle">Phê duyệt và quản lý khóa học từ giảng viên</p>
+                    </div>
+                    <div class="ac-page-header-right">
+                        <div class="ac-stat-chip ac-stat-chip--pending">
+                            <span class="ac-stat-chip-num" id="pendingCount">0</span>
+                            <span class="ac-stat-chip-label">Chờ duyệt</span>
+                        </div>
+                        <div class="ac-stat-chip ac-stat-chip--published">
+                            <span class="ac-stat-chip-num" id="publishedCount">0</span>
+                            <span class="ac-stat-chip-label">Đã xuất bản</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="ac-tabs">
+                    <button class="ac-tab ac-tab--active" data-tab="pending" id="tabPending">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                            <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        Chờ phê duyệt
+                        <span class="ac-tab-count" id="tabPendingCount">0</span>
+                    </button>
+                    <button class="ac-tab" data-tab="published" id="tabPublished">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Đã xuất bản
+                        <span class="ac-tab-count" id="tabPublishedCount">0</span>
+                    </button>
+                </div>
+
+                <!-- Search -->
+                <div class="ac-toolbar">
+                    <div class="ac-search-wrap">
+                        <svg class="ac-search-icon" viewBox="0 0 24 24" fill="none">
+                            <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2" />
+                            <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                        </svg>
+                        <input type="search" class="ac-search" id="courseSearch" placeholder="Tìm kiếm khóa học..." />
+                    </div>
+                </div>
+
+                <!-- Course Grid -->
+                <div class="ac-grid" id="coursesGrid">
+                    <div class="ac-loading">
+                        <div class="ac-spinner"></div>
+                        <span>Đang tải khóa học...</span>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div class="ac-pagination" id="pagination" style="display:none;">
+                    <button class="ac-page-btn" id="prevPage" disabled>
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                    <span class="ac-page-info" id="pageInfo">Trang 1 / 1</span>
+                    <button class="ac-page-btn" id="nextPage" disabled>
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                        </svg>
+                    </button>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ================= REJECT MODAL (with feedback) ================= -->
+    <div class="ac-modal-backdrop" id="rejectModal">
+        <div class="ac-modal">
+            <div class="ac-modal-header ac-modal-header--danger">
+                <h3>Từ chối khóa học</h3>
+                <button class="ac-modal-close"
+                    onclick="document.getElementById('rejectModal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="ac-modal-body">
+                <p style="font-size:0.92rem;color:#475569;margin-bottom:14px;">
+                    Khóa học: <strong id="rejectCourseName" style="color:#1e293b;">—</strong>
+                </p>
+                <div class="ac-fg">
+                    <label class="ac-label">Lý do từ chối (feedback cho giảng viên) *</label>
+                    <textarea class="ac-input ac-textarea" id="rejectFeedback" rows="4"
+                        placeholder="VD: Nội dung chưa đầy đủ, cần bổ sung thêm quiz cho bài 3..."></textarea>
+                </div>
+            </div>
+            <div class="ac-modal-footer">
+                <button class="ac-modal-cancel"
+                    onclick="document.getElementById('rejectModal').classList.remove('active')">Hủy</button>
+                <button class="ac-btn ac-btn--danger" id="confirmReject">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    Từ chối & gửi feedback
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= APPROVE CONFIRM MODAL ================= -->
+    <div class="ac-modal-backdrop" id="approveModal">
+        <div class="ac-modal ac-modal--sm">
+            <div class="ac-modal-header">
+                <h3 style="color:#2e7d32;">Phê duyệt khóa học</h3>
+                <button class="ac-modal-close"
+                    onclick="document.getElementById('approveModal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="ac-modal-body">
+                <p style="font-size:0.92rem;color:#475569;line-height:1.7;">
+                    Bạn có chắc chắn muốn phê duyệt khóa học
+                    <strong id="approveCourseName" style="color:#2e7d32;">—</strong>?
+                </p>
+                <p style="font-size:0.82rem;color:#94a3b8;margin-top:8px;">
+                    Khóa học sẽ được xuất bản công khai cho học viên.
+                </p>
+            </div>
+            <div class="ac-modal-footer">
+                <button class="ac-modal-cancel"
+                    onclick="document.getElementById('approveModal').classList.remove('active')">Hủy</button>
+                <button class="ac-btn ac-btn--approve" id="confirmApprove">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Phê duyệt xuất bản
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="acToast" class="ac-toast"></div>
+
+    <script type="module" src="js/admin-api.js"></script>
+    <script type="module" src="js/admin-course.js"></script>
+</body>
+
+</html>

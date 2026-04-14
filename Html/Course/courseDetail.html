@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Detail</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/FrondEnd/Style/course.css">
+</head>
+
+<body class="detail-page">
+
+    <button class="back-btn" onclick="back()">← Quay lại</button>
+
+    <div class="course-hero">
+
+        <div class="hero-left">
+            <h1 id="title"></h1>
+            <p id="desc"></p>
+
+            <button class="start-btn" onclick="startCourse()">
+                📘 Vào bài học
+            </button>
+        </div>
+
+    </div>
+
+
+    <div class="course-info">
+
+        <div class="info-box">
+            <h3>⭐ 4.8</h3>
+            <p>Đánh giá</p>
+        </div>
+
+        <div class="info-box">
+            <h3>4 giờ</h3>
+            <p>Thời lượng</p>
+        </div>
+
+        <div class="info-box">
+            <h3>10 bài</h3>
+            <p>Nội dung</p>
+        </div>
+
+        <div class="info-box">
+            <h3>Online</h3>
+            <p>Học mọi lúc</p>
+        </div>
+
+    </div>
+
+
+    <div class="course-content">
+
+        <div class="overall-progress-card">
+
+            <h3>📊 Tiến độ khóa học</h3>
+
+            <div class="progress-bar-wrapper">
+                <div class="progress-bar-fill"
+                     id="courseProgressBar"
+                     style="width: 50%">
+                </div>
+            </div>
+
+            <div class="progress-stats">
+                <span id="completedLessons">2/4 bài hoàn thành</span>
+                <span id="courseProgressPercent">50%</span>
+            </div>
+
+        </div>
+
+
+        <h2>Nội dung khóa học</h2>
+
+        <ul id="lessonList"></ul>
+
+    </div>
+
+
+    <div class="comments-section">
+
+        <h2>💬 Nhận xét bài học</h2>
+
+        <div class="stars" id="starRating">
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+            <span class="star">★</span>
+        </div>
+
+        <div class="comment-form">
+
+            <input id="username" placeholder="Tên của bạn">
+
+            <textarea id="commentText"
+                      placeholder="Viết nhận xét...">
+            </textarea>
+
+            <button>Gửi nhận xét</button>
+
+        </div>
+
+        <div id="commentList"></div>
+
+    </div>
+
+    <script src="lms-config.js"></script>
+    <script src="courseDetail.js"></script>
+
+</body>
+
+</html>
+

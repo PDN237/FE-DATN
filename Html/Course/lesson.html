@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa học Thuật toán Sắp xếp</title>
+<link rel="stylesheet" href="/FrondEnd/Style/Lesson.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-title">
+                <div class="logo">COURSES</div>
+                <span class="separator">/</span>
+                <span class="course-name">Thuật toán Sắp xếp</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Nội dung khóa học</h2>
+                <p>15 bài học • 1h 30p</p>
+            </div>
+            <div id="modulesList"></div>
+        </aside>
+
+        <!-- Content Area -->
+        <main class="content-area">
+            <!-- Video Section -->
+            <div id="videoSection" class="video-section">
+                <div class="video-container">
+                    <div class="video-player" onclick="togglePlay()">
+                        <div class="video-placeholder">
+                            <div class="play-button">
+                                <svg class="play-icon" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M8 5v14l11-7z"/>
+                                </svg>
+                            </div>
+                            <p style="color: #64748b;">Video: Tổng quan về khóa học</p>
+                        </div>
+                        <div class="video-controls">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <div class="controls-row">
+                                <div class="controls-left">
+                                    <button class="control-btn">
+                                        <svg fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                    </button>
+                                    <span class="video-time">0:03 / 3:07</span>
+                                </div>
+                                <div class="controls-right">
+                                    <button class="control-btn">
+                                        <svg fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/>
+                                        </svg>
+                                    </button>
+                                    <button class="control-btn">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        </svg>
+                                    </button>
+                                    <button class="control-btn">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="lesson-header">
+                        <h1 id="lessonTitle">Tổng quan về khóa học: Thuật toán Sắp xếp</h1>
+                        <p class="lesson-description" id="lessonDescription">
+                            Chào mừng bạn đến với khóa học về các thuật toán sắp xếp. Trong video này, chúng ta sẽ tìm hiểu tổng quan về nội dung khóa học.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('describe')">Mô tả chi tiết</button>
+                    <button class="tab-btn" onclick="switchTab('summary')">Tóm tắt nội dung</button>
+                    <button class="tab-btn" onclick="switchTab('quiz')">Câu hỏi</button>
+                </div>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <div id="describeTab" class="tab-panel active">
+                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Mô tả chi tiết</h2>
+                    <div id="describeContent" style="color: #475569; line-height: 1.8;"></div>
+                </div>
+                <div id="summaryTab" class="tab-panel">
+                    <h2 style="font-size: 20px; font-weight: 600; margin-bottom: 16px;">Tóm tắt nội dung</h2>
+                    <div id="summaryContent" style="color: #475569; line-height: 1.8;"></div>
+                </div>
+                <div id="quizTab" class="tab-panel">
+                    <!-- Quiz Section -->
+                    <div id="quizSection" class="quiz-container">
+                <div class="quiz-content">
+                    <div id="quizMain">
+                        <div class="quiz-header">
+                            <div class="quiz-title-row">
+                                <h2 class="quiz-title">Bài kiểm tra thuật toán</h2>
+                                <span class="quiz-progress-text" id="quizProgress">Câu 1/5</span>
+                            </div>
+                            <div class="quiz-progress-bar">
+                                <div class="quiz-progress-fill" id="quizProgressBar" style="width: 20%"></div>
+                            </div>
+                        </div>
+
+                        <div class="question-card">
+                            <h3 class="question-text" id="questionText"></h3>
+                            <div class="options" id="optionsContainer"></div>
+                            <div id="explanationContainer" class="hidden"></div>
+                        </div>
+
+                        <div class="quiz-nav">
+                            <button class="btn btn-secondary" id="prevBtn" onclick="prevQuestion()">Câu trước</button>
+                            <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()">Câu tiếp theo</button>
+                        </div>
+                    </div>
+
+                    <div id="resultsSection" class="results-container hidden">
+                        <div class="results-card">
+                            <h2 class="results-title">Kết quả bài kiểm tra</h2>
+                            <div class="score-circle">
+                                <svg width="192" height="192">
+                                    <circle cx="96" cy="96" r="88" stroke="#e2e8f0" stroke-width="12" fill="none"/>
+                                    <circle id="scoreCircle" cx="96" cy="96" r="88" stroke="#0891b2" stroke-width="12" fill="none" 
+                                        style="transform: rotate(-90deg); transform-origin: center; stroke-dasharray: 553; stroke-dashoffset: 414;"/>
+                                </svg>
+                                <div class="score-number" id="scoreNumber">0/5</div>
+                            </div>
+                            <div style="margin-top: -16px;">
+                                <p class="score-label">câu đúng</p>
+                            </div>
+                            <p class="score-percentage" id="scorePercentage">Điểm số: 0%</p>
+                            <p class="score-message" id="scoreMessage"></p>
+                        </div>
+
+                        <div class="review-section">
+                            <h3 class="review-title">Chi tiết các câu hỏi</h3>
+                            <div id="reviewContent"></div>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="retryQuiz()" style="display: flex; align-items: center; gap: 8px; margin: 0 auto;">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                            </svg>
+                            Làm lại
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- end quizTab -->
+    </div> <!-- end tab-content -->
+        </main>
+    </div>
+
+<script src="lms-config.js"></script>
+<script src="lesson.js"></script>
+</body>
+</html>
