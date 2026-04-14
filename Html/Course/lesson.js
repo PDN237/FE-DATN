@@ -26,9 +26,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.querySelector('.sidebar-header p').textContent = 'Loading...';
   
   try {
-    // 1. Load course structure for sidebar
-    const modulesRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/modules-lessons`);
+    // Get logged user ID
+    const userId = getLoggedUser();
+    console.log('Loading course for user:', userId);
+    
+    // 1. Load course structure for sidebar with user completion data
+    const modulesRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/modules-lessons?userId=${userId}`);
     courseModules = modulesRes;
+    
+    // Log completion data for verification
+    console.log('Course modules loaded:', courseModules);
+    courseModules.forEach((module, mIdx) => {
+      module.lessons.forEach((lesson, lIdx) => {
+        if (lesson.completed) {
+          console.log(`✅ Completed: Module ${mIdx}, Lesson ${lIdx} - ${lesson.title || lesson.Title}`);
+        }
+      });
+    });
     
     // Update sidebar header
     const totalLessons = courseModules.reduce((sum, m) => sum + m.lessons.length, 0);
@@ -52,35 +66,44 @@ function updateLessonUI() {
     const moduleDiv = document.createElement('div');
     moduleDiv.className = 'module';
     
-    const isExpanded = expandedModules.includes(module.id);
-    const hasActiveLesson = module.lessons.some(l => l.id == currentLessonId);
+    // Handle different field naming conventions from API
+    const moduleId = module.id || module.ModuleID || module.moduleid;
+    const isExpanded = expandedModules.includes(moduleId);
+    const hasActiveLesson = module.lessons.some(l => {
+      const lessonId = l.id || l.LessonID || l.lessonid;
+      return lessonId == currentLessonId;
+    });
     
     moduleDiv.innerHTML = `
-      <button class="module-header ${hasActiveLesson ? 'active' : ''} ${module.lessons.every(l => l.completed) ? 'completed-module' : ''}" onclick="toggleModule(${module.id})">
-        <span style="${module.lessons.length > 0 && module.lessons.every(l => l.completed) ? 'text-decoration: line-through; opacity: 0.7;' : ''}">${module.title}</span>
+      <button class="module-header ${hasActiveLesson ? 'active' : ''} ${module.lessons.every(l => l.completed) ? 'completed-module' : ''}" onclick="toggleModule(${moduleId})">
+        <span style="${module.lessons.length > 0 && module.lessons.every(l => l.completed) ? 'text-decoration: line-through; opacity: 0.7;' : ''}">${module.title || module.Title}</span>
         <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" class="module-arrow" style="transform: rotate(${isExpanded ? '180deg' : '0deg'});">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
         </svg>
       </button>
       <div class="module-lessons ${isExpanded ? 'active' : ''}">
-        ${module.lessons.map(lesson => `
-          <button class="lesson-item ${lesson.id == currentLessonId ? 'active' : ''} ${lesson.completed ? 'completed' : ''}" 
-                  onclick="loadLesson(${lesson.id})" 
-                  title="${lesson.status}">
-            <div class="lesson-icon ${lesson.completed ? 'completed' : lesson.type}">
+        ${module.lessons.map(lesson => {
+          const lessonId = lesson.id || lesson.LessonID || lesson.lessonid;
+          return `
+          <button class="lesson-item ${lessonId == currentLessonId ? 'active' : ''} ${lesson.completed ? 'completed' : ''}" 
+                  onclick="loadLesson(${lessonId})" 
+                  title="${lesson.status || ''}">
+            <div class="lesson-icon ${lesson.completed ? 'completed' : (lesson.type || lesson.Type)}">
               ${lesson.completed ? '✓' : 
-                lesson.type === 'video' ? '▶' : 
-                lesson.type === 'reading' ? '📄' : '❓'}
+                (lesson.type || lesson.Type) === 'video' ? '▶' : 
+                (lesson.type || lesson.Type) === 'reading' ? '📄' : '❓'}
             </div>
             <div class="lesson-info">
-              <p class="lesson-title">${lesson.title}</p>
+              <p class="lesson-title">${lesson.title || lesson.Title}</p>
               <p class="lesson-meta">
-                ${lesson.type === 'video' ? 'Video •' : lesson.type === 'reading' ? 'Đọc •' : 'Quiz •'} 
-                ${lesson.duration || 'N/A'}
+                ${(lesson.type || lesson.Type) === 'video' ? 'Video •' : 
+                  (lesson.type || lesson.Type) === 'reading' ? 'Đọc •' : 'Quiz •'} 
+                ${lesson.duration || lesson.Duration || 'N/A'}
               </p>
             </div>
           </button>
-        `).join('')}
+          `;
+        }).join('')}
       </div>
     `;
     
@@ -214,27 +237,57 @@ async function renderMediaContent(lesson) {
       }
     }
     
-    // Reading/PDF handling with scroll tracking
+    // Reading/PDF handling with smart display
     if (lesson.Type === 'reading') {
-      const parts = [];
-      if (lesson.ContentHtml) {
-        parts.push(`<div class="reading-container" style="padding:2rem;height:auto;background:white;border-radius:8px;margin-bottom:20px;box-shadow:0 1px 3px rgba(0,0,0,0.1);">
-          <div style="font-size:1.1em;line-height:1.7;">${lesson.ContentHtml}</div>
-        </div>`);
-      }
-      if (lesson.ContentUrl) {
-        if (lesson.ContentUrl.includes('.pdf')) {
-          parts.push(safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được'));
-        } else {
-          parts.push(safeRenderIframe(lesson.ContentUrl, 'Tài liệu không khả dụng'));
-        }
-      }
-      if (parts.length === 0) {
-        parts.push('<div style="padding:2rem;text-align:center;">Chưa có nội dung</div>');
+      let contentHtml = '';
+      
+      // Check if both content types exist
+      const hasHtml = lesson.ContentHtml && lesson.ContentHtml.trim();
+      const hasUrl = lesson.ContentUrl && lesson.ContentUrl.trim;
+      
+      if (hasHtml && hasUrl) {
+        // Both exist - show tabbed interface
+        contentHtml = `
+          <div class="reading-tabs">
+            <div class="reading-tab-buttons">
+              <button class="reading-tab-btn active" onclick="switchReadingTab('html')">Nội dung HTML</button>
+              <button class="reading-tab-btn" onclick="switchReadingTab('url')">Tài liệu (${lesson.ContentUrl.split('/').pop()})</button>
+            </div>
+            <div class="reading-tab-content">
+              <div id="readingHtmlTab" class="reading-tab-panel active">
+                <div class="reading-container">
+                  <div class="reading-content">${lesson.ContentHtml}</div>
+                </div>
+              </div>
+              <div id="readingUrlTab" class="reading-tab-panel">
+                ${lesson.ContentUrl.includes('.pdf') 
+                  ? safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được')
+                  : safeRenderIframe(lesson.ContentUrl, 'Tài liệu không khả dụng')}
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (hasHtml) {
+        // Only HTML content
+        contentHtml = `
+          <div class="reading-container">
+            <div class="reading-content">${lesson.ContentHtml}</div>
+          </div>
+        `;
+      } else if (hasUrl) {
+        // Only URL content
+        contentHtml = lesson.ContentUrl.includes('.pdf') 
+          ? safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được')
+          : safeRenderIframe(lesson.ContentUrl, 'Tài liệu không khả dụng');
+      } else {
+        // No content
+        contentHtml = '<div class="no-content"><p>Chưa có nội dung cho bài học này.</p></div>';
       }
       
-      player.innerHTML = `<div style="display:flex; flex-direction:column; width:100%; height:100%; overflow-y:auto; padding:10px;">${parts.join('')}</div>`;
-      trackReadingProgress(player.querySelector('div'));
+      player.innerHTML = `<div class="reading-wrapper">${contentHtml}</div>`;
+      
+      // Track progress on the wrapper
+      trackReadingProgress(player.querySelector('.reading-wrapper'));
     }
     
     // Transcript and other legacy content removal
@@ -342,11 +395,18 @@ function prevQuestion() {
 async function submitQuiz() {
   quizSubmitted = true;
   
-  // Mark quiz as completed (100% since finished)
-  await completeLesson();
-  
   const score = selectedAnswers.filter((ans, idx) => ans === quizData.questions[idx].correctAnswer).length;
-  console.log('Quiz score:', Math.round((score / quizData.questions.length) * 100) + '%');
+  const percentage = Math.round((score / quizData.questions.length) * 100);
+  
+  console.log('Quiz score:', percentage + '%');
+  
+  // Only mark lesson as complete if score >= 70%
+  if (percentage >= 70) {
+    await completeLesson();
+  } else {
+    // Show message that they need to retake the quiz
+    showCompletionNotification(false, percentage);
+  }
   
   renderQuestion();
 }
@@ -361,9 +421,37 @@ function showResults() {
   document.getElementById('scoreNumber').textContent = `${score}/${quizData.questions.length}`;
   document.getElementById('scorePercentage').textContent = `Điểm: ${percentage}%`;
   
-  let message = percentage >= 80 ? '🎉 Xuất sắc!' : 
-                percentage >= 60 ? '👍 Tốt!' : '📚 Cần ôn lại!';
+  // Check if passed (>= 70%)
+  const passed = percentage >= 70;
+  let message;
+  if (passed) {
+    message = percentage >= 90 ? '🎉 Xuất sắc!' : 
+              percentage >= 80 ? '👍 Tốt!' : '✅ Đạt yêu cầu!';
+  } else {
+    message = '📚 Cần đạt 70% để hoàn thành bài học';
+  }
   document.getElementById('scoreMessage').textContent = message;
+  
+  // Show completion badge
+  const completionBadge = document.getElementById('completionBadge');
+  const completionBadgeText = document.getElementById('completionBadgeText');
+  completionBadge.classList.remove('hidden');
+  completionBadge.classList.remove('passed', 'failed');
+  if (passed) {
+    completionBadge.classList.add('passed');
+    completionBadgeText.textContent = '✓ Hoàn thành bài học';
+  } else {
+    completionBadge.classList.add('failed');
+    completionBadgeText.textContent = '⚠️ Chưa hoàn thành';
+  }
+  
+  // Update circle color based on pass/fail
+  const scoreCircle = document.getElementById('scoreCircle');
+  if (passed) {
+    scoreCircle.style.stroke = '#22c55e';
+  } else {
+    scoreCircle.style.stroke = '#f59e0b';
+  }
   
   // Circle animation
   const circumference = 2 * Math.PI * 88;
@@ -422,6 +510,21 @@ function switchTab(tabId, targetBtn = event?.target) {
   if (targetPanel) targetPanel.classList.add('active');
 }
 
+function switchReadingTab(tabType) {
+  // Update reading tab buttons
+  document.querySelectorAll('.reading-tab-btn').forEach(btn => btn.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  // Update reading tab panels
+  document.querySelectorAll('.reading-tab-panel').forEach(panel => panel.classList.remove('active'));
+  
+  if (tabType === 'html') {
+    document.getElementById('readingHtmlTab').classList.add('active');
+  } else if (tabType === 'url') {
+    document.getElementById('readingUrlTab').classList.add('active');
+  }
+}
+
 
 
 function trackVideoProgress(iframe) {
@@ -463,9 +566,24 @@ function trackReadingProgress(container) {
 
 function getLoggedUser() {
   try {
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
-    return user.id || parseInt(localStorage.getItem('userId')) || 1;
-  } catch {
+    // Try to get user from localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      // Handle different user ID field names
+      return user.id || user.UserID || user.userid || user.userId || 
+             parseInt(localStorage.getItem('userId')) || 1;
+    }
+    // Fallback to userId in localStorage
+    const userId = localStorage.getItem('userId');
+    if (userId) {
+      return parseInt(userId);
+    }
+    // Default to user ID 1 for testing
+    console.warn('No user ID found, using default ID 1');
+    return 1;
+  } catch (error) {
+    console.error('Error getting logged user:', error);
     return 1;
   }
 }
@@ -491,32 +609,107 @@ async function completeLesson() {
     const modulesRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/modules-lessons?userId=${userId}`);
     courseModules = modulesRes;
     updateLessonUI();
+    
+    // Check if course is completed
+    checkCourseCompletion();
   } catch (error) {
     console.error('❌ Failed to mark complete:', error);
   }
 }
 
-function showCompletionNotification() {
+async function checkCourseCompletion() {
+  try {
+    const userId = getLoggedUser();
+    const progressRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/progress?userId=${userId}`);
+    
+    if (progressRes.courseCompleted) {
+      showCourseCompletionNotification();
+    }
+  } catch (error) {
+    console.error('Error checking course completion:', error);
+  }
+}
+
+function showCourseCompletionNotification() {
+  // Remove existing notification
+  const existing = document.querySelector('.course-completion-notification');
+  if (existing) existing.remove();
+
+  const notification = document.createElement('div');
+  notification.className = 'course-completion-notification';
+  notification.innerHTML = `
+    <div style="
+      position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #0891b2, #06b6d4);
+      color: white; padding: 40px 48px; border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(8, 145, 178, 0.4);
+      z-index: 10000; max-width: 500px; text-align: center;
+      animation: slideIn 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
+    ">
+      <div style="font-size: 64px; margin-bottom: 16px;">🏆</div>
+      <h2 style="font-size: 28px; font-weight: 800; margin-bottom: 12px;">Chúc mừng!</h2>
+      <p style="font-size: 16px; opacity: 0.95; line-height: 1.6; margin-bottom: 24px;">
+        Bạn đã hoàn thành toàn bộ khóa học này.<br>
+        Hãy tiếp tục nỗ lực để đạt được nhiều thành tựu hơn!
+      </p>
+      <button onclick="window.location.href='course.html'" style="
+        background: white; color: #0891b2; padding: 12px 32px;
+        border: none; border-radius: 10px; font-size: 16px;
+        font-weight: 700; cursor: pointer; transition: all 0.3s;
+      " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        Quay về trang khóa học
+      </button>
+    </div>
+    <style>
+      @keyframes slideIn {
+        from { opacity: 0; transform: translate(-50%, -50%) scale(0.8); }
+        to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      }
+    </style>
+  `;
+
+  document.body.appendChild(notification);
+}
+
+function showCompletionNotification(isSuccess = true, score = 0) {
   // Remove existing notification
   const existing = document.querySelector('.completion-notification');
   if (existing) existing.remove();
   
   const notification = document.createElement('div');
   notification.className = 'completion-notification';
-  notification.innerHTML = `
-    <div style="
-      position: fixed; top: 100px; right: 20px; 
-      background: linear-gradient(135deg, #22c55e, #16a34a);
-      color: white; padding: 16px 24px; border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(34,197,94,0.4);
-      z-index: 10000; max-width: 350px;
-      font-weight: 600; font-size: 15px;
-      transform: translateX(400px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
-    ">
-      🎉 Hoàn thành bài học!<br>
-      <small style="font-weight: 400; opacity: 0.9;">Đã cập nhật tiến độ học tập</small>
-    </div>
-  `;
+  
+  if (isSuccess) {
+    notification.innerHTML = `
+      <div style="
+        position: fixed; top: 100px; right: 20px; 
+        background: linear-gradient(135deg, #22c55e, #16a34a);
+        color: white; padding: 16px 24px; border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(34,197,94,0.4);
+        z-index: 10000; max-width: 350px;
+        font-weight: 600; font-size: 15px;
+        transform: translateX(400px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+      ">
+        🎉 Hoàn thành bài học!<br>
+        <small style="font-weight: 400; opacity: 0.9;">Đã cập nhật tiến độ học tập</small>
+      </div>
+    `;
+  } else {
+    notification.innerHTML = `
+      <div style="
+        position: fixed; top: 100px; right: 20px; 
+        background: linear-gradient(135deg, #f59e0b, #d97706);
+        color: white; padding: 16px 24px; border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(245,158,11,0.4);
+        z-index: 10000; max-width: 350px;
+        font-weight: 600; font-size: 15px;
+        transform: translateX(400px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+      ">
+        ⚠️ Chưa hoàn thành bài học<br>
+        <small style="font-weight: 400; opacity: 0.9;">Điểm: ${score}% - Cần đạt 70% để hoàn thành</small>
+      </div>
+    `;
+  }
   
   document.body.appendChild(notification);
   

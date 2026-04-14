@@ -1,6 +1,21 @@
 // LMS Course List - Fixed version with API + hardcoded fallback
 // Prioritizes API data, falls back to demo courses if empty (no DB needed)
 
+function getLoggedUser() {
+  try {
+    const userStr = localStorage.getItem('user');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.UserID || user.userId || user.id || 1;
+    }
+    const userId = localStorage.getItem('userId');
+    return userId ? parseInt(userId) : 1;
+  } catch (error) {
+    console.error('Error getting logged user:', error);
+    return 1;
+  }
+}
+
 document.addEventListener('DOMContentLoaded', async function () {
   const courseGrid = document.querySelector('.course-grid');
   const progressBarFill = document.getElementById('progressBarFill');
@@ -65,6 +80,21 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     courseGrid.innerHTML = '';
 
+    // Get user ID for progress tracking
+    const userId = getLoggedUser();
+
+    // Fetch progress for all courses
+    const courseProgressMap = new Map();
+    for (const course of courses) {
+      try {
+        const progressRes = await window.apiFetch(`/api/courses/courses/${course.CourseID}/progress?userId=${userId}`);
+        courseProgressMap.set(course.CourseID, progressRes);
+      } catch (error) {
+        console.error(`Error fetching progress for course ${course.CourseID}:`, error);
+        courseProgressMap.set(course.CourseID, { progress: 0, completedLessons: 0, totalLessons: 0 });
+      }
+    }
+
     courses.forEach(course => {
       const card = document.createElement('div');
       card.className = 'course-card';
@@ -73,13 +103,14 @@ document.addEventListener('DOMContentLoaded', async function () {
       const levelBadge = course.Level === 'Cơ bản' ? 'Cơ bản' :
         course.Level === 'Trung cấp' ? 'Trung cấp' : 'Nâng cao';
 
-      // Demo progress for all (backend doesn't provide per-course yet)
-      const demoProgress = Math.floor(Math.random() * 51); // 0-50%
-      const progressText = demoProgress > 0 ?
-        `${demoProgress}% hoàn thành` : 'Chưa bắt đầu';
+      // Get real progress from backend
+      const progressData = courseProgressMap.get(course.CourseID) || { progress: 0, completedLessons: 0, totalLessons: 0 };
+      const progress = progressData.progress || 0;
+      const progressText = progress > 0 ?
+        `${progress}% hoàn thành` : 'Chưa bắt đầu';
 
       card.innerHTML = `
-        <img class="course-img" src="${course.Thumbnail || '/FrondEnd/Image/course-placeholder.jpg'}" 
+        <img class="course-img" src="${course.Thumbnail || '/FrondEnd/Image/course-placeholder.jpg'}"
              alt="${course.Title}" onerror="this.src='/FrondEnd/Image/course-placeholder.jpg'">
         <h3>${course.Title}</h3>
         <p>${course.Description || 'Khóa học chất lượng cao'}</p>
@@ -87,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         <div class="course-card-progress">
           <div class="course-card-progress-text">${progressText}</div>
           <div class="course-card-progress-bar">
-            <div class="course-card-progress-fill" style="width: ${demoProgress}%"></div>
+            <div class="course-card-progress-fill" style="width: ${progress}%"></div>
           </div>
         </div>
       `;

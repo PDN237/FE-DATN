@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         container.innerHTML = modulesData.map((mod, idx) => {
             const lessonsHtml = (mod.lessons || []).map(lesson => {
-                const icon = lesson.Type === 'video' ? '📹' : '📖';
+                const icon = lesson.Type === 'video' ? '📹' : lesson.Type === 'reading' ? '📖' : '🧠';
                 const isActive = activeLesson && activeLesson.LessonID === lesson.LessonID;
                 return `
                     <div class="ins-lesson-node ${isActive ? 'active' : ''}" data-lid="${lesson.LessonID}">
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById('lessonEditorContent');
         el.style.display = 'block';
 
-        const icon = lesson.Type === 'video' ? '📹' : '📖';
+        const icon = lesson.Type === 'video' ? '📹' : lesson.Type === 'reading' ? '📖' : '🧠';
 
         el.innerHTML = `
             <div class="ins-editor-header">
@@ -237,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         <select class="ins-input ins-select" id="edType">
                             <option value="video" ${lesson.Type === 'video' ? 'selected' : ''}>📹 Video</option>
                             <option value="reading" ${lesson.Type === 'reading' ? 'selected' : ''}>📖 Bài đọc</option>
+                            <option value="quiz" ${lesson.Type === 'quiz' ? 'selected' : ''}>🧠 Quiz</option>
                         </select>
                     </div>
                 </div>
@@ -253,17 +254,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 </div>
 
-                <!-- Content URL -->
-                <div class="ins-form-group">
+                <!-- Content URL (hidden for quiz) -->
+                <div class="ins-form-group" id="urlGroup" style="display:${lesson.Type === 'quiz' ? 'none' : 'block'}">
                     <label class="ins-label">🔗 URL nội dung (YouTube / PDF / Google Drive)</label>
                     <input type="url" class="ins-input" id="edContentUrl" value="${escHtml(lesson.ContentUrl)}"
                         placeholder="https://youtube.com/watch?v=... hoặc link PDF" />
                 </div>
 
-                <!-- Preview -->
-                <div class="ins-preview-box" id="previewBox">${getPreview(lesson)}</div>
+                <!-- Preview (hidden for quiz) -->
+                <div class="ins-preview-box" id="previewBox" style="display:${lesson.Type === 'quiz' ? 'none' : 'block'}">${getPreview(lesson)}</div>
 
-                <!-- Content HTML (reading) -->
+                <!-- Content HTML (reading only) -->
                 <div class="ins-form-group" id="htmlGroup" style="display:${lesson.Type === 'reading' ? 'block' : 'none'}">
                     <label class="ins-label">📝 Nội dung HTML (dùng khi không có URL)</label>
                     <textarea class="ins-input ins-textarea" id="edContentHtml" rows="5" placeholder="<h3>Tiêu đề</h3><p>Nội dung...</p>">${escHtml(lesson.ContentHtml)}</textarea>
@@ -299,7 +300,13 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('edTitleDisplay').textContent = this.value || 'Bài học';
         };
         document.getElementById('edType').onchange = function () {
-            document.getElementById('htmlGroup').style.display = this.value === 'reading' ? 'block' : 'none';
+            const type = this.value;
+            document.getElementById('urlGroup').style.display = type === 'quiz' ? 'none' : 'block';
+            document.getElementById('previewBox').style.display = type === 'quiz' ? 'none' : 'block';
+            document.getElementById('htmlGroup').style.display = type === 'reading' ? 'block' : 'none';
+            // Update icon
+            const icon = type === 'video' ? '📹' : type === 'reading' ? '📖' : '🧠';
+            document.querySelector('.ins-editor-header h2').innerHTML = `${icon} <span id="edTitleDisplay">${document.getElementById('edTitle').value || 'Bài học'}</span>`;
         };
         document.getElementById('edContentUrl').oninput = function () {
             document.getElementById('previewBox').innerHTML = getPreview({
