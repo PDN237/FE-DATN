@@ -82,15 +82,17 @@
     opacity: 0;
     transition: opacity var(--transition-base);
     color: white;
+    pointer-events: none;
+}
+
+.profile-avatar-wrapper:hover .avatar-overlay {
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .avatar-overlay svg {
     width: 32px;
     height: 32px;
-}
-
-.profile-avatar-wrapper:hover .avatar-overlay {
-    opacity: 1;
 }
 
 /* -------- HERO INFO -------- */
@@ -1072,6 +1074,10 @@
     max-width: 440px;
 }
 
+.mc-modal--lg {
+    max-width: 800px;
+}
+
 .mc-modal-header {
     display: flex;
     align-items: center;
@@ -1345,4 +1351,81 @@
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
+}
+
+/* ================================================================
+   AVATAR SELECTION MODAL STYLES
+   ================================================================ */
+
+.avatar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 16px;
+    padding: 8px;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.avatar-item {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all var(--transition-base);
+    background: var(--bg-primary);
+}
+
+.avatar-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-color: var(--color-accent);
+}
+
+.avatar-item--selected {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(91, 123, 232, 0.2);
+}
+
+.avatar-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+    background: white;
+}
+
+.avatar-item-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(91, 123, 232, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition-base);
+}
+
+.avatar-item--selected .avatar-item-overlay {
+    opacity: 1;
+}
+
+.avatar-item-overlay svg {
+    width: 32px;
+    height: 32px;
+    color: white;
+    stroke-width: 3;
+}
+
+.avatar-loading {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 40px;
+    color: var(--text-muted);
 }

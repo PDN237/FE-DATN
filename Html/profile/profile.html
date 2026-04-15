@@ -80,10 +80,9 @@
     <section class="profile-hero">
         <div class="profile-hero-bg"></div>
         <div class="profile-hero-content">
-            <div class="profile-avatar-wrapper">
+            <div class="profile-avatar-wrapper" onclick="openAvatarSelection()" title="Nhấn để thay đổi ảnh đại diện">
                 <img id="avatarPreview" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix"
-                    class="profile-avatar-large" onclick="document.getElementById('avatarInput').click()"
-                    title="Nhấn để thay đổi ảnh đại diện" />
+                    class="profile-avatar-large" />
                 <div class="avatar-overlay">
                     <svg viewBox="0 0 24 24" fill="none">
                         <path
@@ -92,7 +91,6 @@
                         <circle cx="12" cy="13" r="3" stroke="currentColor" stroke-width="2" />
                     </svg>
                 </div>
-                <input type="file" id="avatarInput" accept="image/*" hidden>
             </div>
             <div class="profile-hero-info">
                 <h1 id="heroName" class="profile-hero-name">Đang tải...</h1>
@@ -471,6 +469,34 @@
     <!-- ================= TOAST NOTIFICATION ================= -->
     <div id="toastNotif" class="pf-toast" aria-live="polite"></div>
 
+    <!-- ================= AVATAR SELECTION MODAL ================= -->
+    <div class="mc-modal-backdrop" id="avatarSelectionModal">
+        <div class="mc-modal mc-modal--lg">
+            <div class="mc-modal-header">
+                <h3>Chọn Avatar</h3>
+                <button class="mc-modal-close" id="closeAvatarModal">&times;</button>
+            </div>
+            <div class="mc-modal-body">
+                <div id="avatarGrid" class="avatar-grid">
+                    <div class="avatar-loading">
+                        <div class="pf-spinner"></div>
+                        <span>Đang tải avatar...</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mc-modal-footer">
+                <button type="button" class="mc-btn-cancel" id="cancelAvatarSelection">Hủy</button>
+                <button type="button" class="mc-btn-save" id="confirmAvatarSelection" disabled>
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Cập nhật Avatar
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- ================= FOOTER ================= -->
     <footer class="modern-footer">
         <div class="footer-container">
@@ -509,6 +535,7 @@
         </div>
     </footer>
 
+    <script src="../profile/avatar.js"></script>
     <script src="../profile/profile.js"></script>
 </body>
 
