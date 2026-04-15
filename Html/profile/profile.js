@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 1. Fetch user ID from localStorage
     let userStr = localStorage.getItem("user");
     let userId = 1;
+    let currentTitle = null; // Store current title to detect changes
     if (userStr) {
         try {
             const userObj = JSON.parse(userStr);
@@ -70,6 +71,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 const stats = data.data.stats;
                 const courses = data.data.courses;
 
+                // Check if title has changed and show congratulations
+                // Also show congratulations if title is newly achieved (not "Chưa có")
+                if (user.title && user.title !== 'Chưa có') {
+                    if (currentTitle !== null && currentTitle !== user.title) {
+                        showToast(`🎉 Chúc mừng! Bạn đã đạt danh hiệu ${user.title}!`, 'success');
+                    } else if (currentTitle === null) {
+                        // First time loading, show congratulations if user has a title
+                        showToast(`🎉 Danh hiệu của bạn: ${user.title}!`, 'success');
+                    }
+                }
+                currentTitle = user.title;
+
                 // Cập nhật DOM
                 const avatarUrl = user.AvatarUrl && user.AvatarUrl !== 'default-avatar.png'
                                   ? user.AvatarUrl : defaultAvatar;
@@ -80,8 +93,19 @@ document.addEventListener("DOMContentLoaded", () => {
                 // Hero info
                 const heroName = document.getElementById("heroName");
                 const heroEmail = document.getElementById("heroEmail");
+                const heroTitleBadge = document.getElementById("heroTitleBadge");
                 if (heroName) heroName.textContent = user.FullName || "Chưa có tên";
                 if (heroEmail) heroEmail.textContent = user.Email || "";
+                if (heroTitleBadge) {
+                    heroTitleBadge.textContent = user.title || "Chưa có";
+                    // Add title class based on title value for styling
+                    heroTitleBadge.className = 'title-badge';
+                    if (user.title === 'Kim Cương') heroTitleBadge.classList.add('title-diamond');
+                    else if (user.title === 'Bạch Kim') heroTitleBadge.classList.add('title-platinum');
+                    else if (user.title === 'Vàng') heroTitleBadge.classList.add('title-gold');
+                    else if (user.title === 'Bạc') heroTitleBadge.classList.add('title-silver');
+                    else if (user.title === 'Đồng') heroTitleBadge.classList.add('title-bronze');
+                }
 
                 // Hero stats
                 document.getElementById("statProblems").textContent = stats.solvedProblems;

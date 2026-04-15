@@ -105,12 +105,48 @@
     font-size: 2rem;
     font-weight: 900;
     color: var(--text-primary);
-    letter-spacing: -0.025em;
     margin-bottom: 4px;
-    line-height: 1.15;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+}
+
+.profile-hero-title {
+    margin-bottom: 6px;
+}
+
+.title-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #94a3b8, #64748b);
+    color: white;
+    box-shadow: 0 2px 8px rgba(100, 116, 139, 0.3);
+}
+
+.title-badge.title-bronze {
+    background: linear-gradient(135deg, #cd7f32, #a0522d);
+    box-shadow: 0 2px 8px rgba(205, 127, 50, 0.4);
+}
+
+.title-badge.title-silver {
+    background: linear-gradient(135deg, #c0c0c0, #a8a8a8);
+    box-shadow: 0 2px 8px rgba(192, 192, 192, 0.4);
+}
+
+.title-badge.title-gold {
+    background: linear-gradient(135deg, #ffd700, #ffb700);
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+}
+
+.title-badge.title-platinum {
+    background: linear-gradient(135deg, #e5e4e2, #d4d4d4);
+    box-shadow: 0 2px 8px rgba(229, 228, 226, 0.4);
+}
+
+.title-badge.title-diamond {
+    background: linear-gradient(135deg, #b9f2ff, #00d4ff);
+    box-shadow: 0 2px 8px rgba(0, 212, 255, 0.4);
 }
 
 .profile-hero-email {
