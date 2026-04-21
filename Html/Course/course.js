@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', async function () {
   const progressBarFill = document.getElementById('progressBarFill');
   const progressPercentage = document.getElementById('progressPercentage');
 
+  // Load user avatar
+  await loadUserAvatar();
+
   // Show loading
   courseGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 2rem;">⏳ Loading courses...</div>';
 
@@ -177,3 +180,22 @@ document.querySelector('.search-box input')?.addEventListener('input', function 
   });
 });
 
+// Load user avatar from backend
+async function loadUserAvatar() {
+  try {
+    const userId = getLoggedUser();
+    const API_BASE = 'https://be-datn-6gb6.onrender.com/api/profile';
+    
+    const response = await fetch(`${API_BASE}/avatar?userId=${userId}`);
+    const data = await response.json();
+    
+    if (data.success && data.avatarUrl) {
+      const headerAvatar = document.getElementById('headerAvatar');
+      if (headerAvatar) {
+        headerAvatar.src = data.avatarUrl;
+      }
+    }
+  } catch (error) {
+    console.error('Error loading avatar:', error);
+  }
+}

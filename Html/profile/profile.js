@@ -1,4 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
+    // Check if user is logged in
+    const currentUserId = localStorage.getItem('userId');
+    const authToken = localStorage.getItem('authToken');
+    
+    if (!currentUserId || currentUserId === 'null' || currentUserId === '' || !authToken) {
+        // Not logged in, redirect to login page
+        alert('Bạn cần đăng nhập để xem thông tin cá nhân!');
+        window.location.href = '/FrondEnd/Html/Login/login.html';
+        return;
+    }
+
     const defaultAvatar = "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix";
     const API_BASE = 'https://be-datn-6gb6.onrender.com/api/profile';
 
@@ -138,27 +149,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 const tabCoursesBtn = document.getElementById('tabCourses');
                 const instructorActionArea = document.getElementById('instructorActionArea');
                 const becomeInstructorArea = document.getElementById('becomeInstructorArea');
+                const myCoursesToolbar = document.querySelector('.mc-toolbar');
 
                 // RoleID 4 is Instructor, RoleID 3 is Student, RoleID 1 is Admin
                 if (user.RoleID === 4) {
+                    // Instructor: show courses tab, show instructor action area, show my courses toolbar
                     if (tabCoursesBtn) tabCoursesBtn.style.display = 'flex';
                     if (instructorActionArea) instructorActionArea.style.display = 'block';
                     if (becomeInstructorArea) becomeInstructorArea.style.display = 'none';
+                    if (myCoursesToolbar) myCoursesToolbar.style.display = 'flex';
                 } else if (user.RoleID === 1) {
-                    // Admin might want to see courses but doesn't need "Become Instructor"
-                    if (tabCoursesBtn) tabCoursesBtn.style.display = 'flex';
-                    if (instructorActionArea) instructorActionArea.style.display = 'block';
+                    // Admin: hide courses tab, hide instructor action area, hide "Become Instructor", hide my courses toolbar
+                    if (tabCoursesBtn) tabCoursesBtn.style.display = 'none';
+                    if (instructorActionArea) instructorActionArea.style.display = 'none';
                     if (becomeInstructorArea) becomeInstructorArea.style.display = 'none';
-                    
-                    const actionTitle = document.getElementById('instrActionTitle');
-                    const actionDesc = document.getElementById('instrActionDesc');
-                    if (actionTitle) actionTitle.textContent = "Quản trị viên";
-                    if (actionDesc) actionDesc.textContent = "Bạn có quyền quản trị toàn bộ hệ thống.";
+                    if (myCoursesToolbar) myCoursesToolbar.style.display = 'none';
                 } else {
-                    // Student: hide courses tab, show "Become Instructor" invite
+                    // Student: hide courses tab, hide instructor action area, show "Become Instructor" invite, hide my courses toolbar
                     if (tabCoursesBtn) tabCoursesBtn.style.display = 'none';
                     if (instructorActionArea) instructorActionArea.style.display = 'none';
                     if (becomeInstructorArea) becomeInstructorArea.style.display = 'block';
+                    if (myCoursesToolbar) myCoursesToolbar.style.display = 'none';
                 }
 
                 // Render Enrolled Courses

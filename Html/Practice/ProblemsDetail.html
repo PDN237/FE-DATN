@@ -25,22 +25,14 @@
             </div>
 
             <nav class="main-nav">
-                <a href="/FrondEnd/Index.html" class="nav-link">
+                <a href="../../Index.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor" />
                     </svg>
                     Home
                 </a>
 
-                <a href="Html/Tutor/index.html" class="nav-link">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
-                            stroke-width="2" />
-                    </svg>
-                    Tutor
-                </a>
-
-                <a href="Html/Course/index.html" class="nav-link">
+                <a href="../Course/course.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
                             stroke-width="2" />
@@ -48,21 +40,21 @@
                     Course
                 </a>
 
-                <a href="/FrondEnd/Html/Problems.html" class="nav-link active">
+                <a href="../Practice/Problems.html" class="nav-link active">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
                     </svg>
-                    Problems
+                    Problem
                 </a>
 
-                <a href="/FrondEnd/Html/Login/login.html" class="nav-link">
+                <a href="../AI/AICoach.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M10 17l5-5-5-5v10zm-6 2V5h2v14H4z" fill="currentColor" />
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor" />
                     </svg>
-                    Login
+                    AI Coach
                 </a>
 
-                <a href="/FrondEnd/Html/Admin/admin-dashboard.html" class="nav-link">
+                <a href="../Admin/admin-dashboard.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path
                             d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4l-2.1.7.3 2.2-2 1.2-1.6-1.5-2.1.9-.4 2.2h-2.2l-.4-2.2-2.1-.9-1.6 1.5-2-1.2.3-2.2L2 12l2.1-.7-.3-2.2 2-1.2 1.6 1.5 2.1-.9.4-2.2h2.2l.4 2.2 2.1.9 1.6-1.5 2 1.2-.3 2.2L20 12z"
@@ -80,9 +72,14 @@
                             stroke="currentColor" stroke-width="2" />
                     </svg>
                 </button>
-                <a href="/Html/profile/profile.html" class="profile-btn">
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
-                </a>
+                <div class="profile-dropdown">
+                    <button class="profile-btn" id="profileBtn">
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" id="headerAvatar" />
+                    </button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <!-- Dropdown menu items will be dynamically populated by JavaScript based on login state -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -740,7 +737,9 @@
             if(runBtn) runBtn.addEventListener('click', runCode);
             if(submitBtn) submitBtn.addEventListener('click', submitCode);
         });
+
     </script>
+    <script src="/FrondEnd/Js/header.js"></script>
 </body>
 
 </html>

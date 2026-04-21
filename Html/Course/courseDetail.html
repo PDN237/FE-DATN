@@ -47,11 +47,11 @@
                         Problem
                     </a>
 
-                    <a href="../Login/login.html" class="nav-link">
+                    <a href="../AI/AICoach.html" class="nav-link">
                         <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                            <path d="M10 17l5-5-5-5v10zm-6 2V5h2v14H4z" fill="currentColor" />
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor" />
                         </svg>
-                        Login
+                        AI Coach
                     </a>
 
                     <a href="../Admin/admin-dashboard.html" class="nav-link">
@@ -68,9 +68,14 @@
                             <path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" stroke="currentColor" stroke-width="2" />
                         </svg>
                     </button>
-                    <a href="../profile/profile.html" class="profile-btn">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
-                    </a>
+                    <div class="profile-dropdown">
+                        <button class="profile-btn" id="profileBtn">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" id="headerAvatar" />
+                        </button>
+                        <div class="dropdown-menu" id="dropdownMenu">
+                            <!-- Dropdown menu items will be dynamically populated by JavaScript based on login state -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
@@ -233,6 +238,6 @@
 
     <script src="lms-config.js"></script>
     <script src="courseDetail.js"></script>
+    <script src="../../Js/header.js"></script>
 </body>
 </html>
-

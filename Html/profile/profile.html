@@ -69,9 +69,14 @@
                             stroke="currentColor" stroke-width="2" />
                     </svg>
                 </button>
-                <a href="#" class="profile-btn" id="headerAvatarBtn">
-                    <img id="headerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
-                </a>
+                <div class="profile-dropdown">
+                    <button class="profile-btn" id="profileBtn">
+                        <img id="headerAvatar" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" />
+                    </button>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <!-- Dropdown menu items will be dynamically populated by JavaScript based on login state -->
+                    </div>
+                </div>
             </div>
         </div>
     </header>
@@ -540,6 +545,7 @@
 
     <script src="../profile/avatar.js"></script>
     <script src="../profile/profile.js"></script>
+    <script src="../../Js/header.js"></script>
 </body>
 
 </html>
