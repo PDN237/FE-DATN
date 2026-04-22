@@ -106,23 +106,31 @@
 
                 <div class="course-info">
                     <div class="info-box">
-                        <h3>⭐ 4.8</h3>
-                        <p>Đánh giá</p>
+                        <h3 id="averageRating">⭐ 0.0</h3>
+                        <p id="totalRatings">0 đánh giá</p>
                     </div>
 
                     <div class="info-box">
-                        <h3>4 giờ</h3>
-                        <p>Thời lượng</p>
-                    </div>
-
-                    <div class="info-box">
-                        <h3>10 bài</h3>
+                        <h3 id="totalLessons">0 bài</h3>
                         <p>Nội dung</p>
                     </div>
 
                     <div class="info-box">
-                        <h3>Online</h3>
-                        <p>Học mọi lúc</p>
+                        <h3 id="completedLessonsInfo">0/0</h3>
+                        <p>Hoàn thành</p>
+                    </div>
+
+                    <div class="info-box">
+                        <h3 id="courseProgressInfo">0%</h3>
+                        <p>Tiến độ</p>
+                    </div>
+                </div>
+
+                <!-- Testimonials Section -->
+                <div class="testimonials-section">
+                    <h2>💬 Đánh giá nổi bật</h2>
+                    <div id="testimonialsList" class="testimonials-grid">
+                        <!-- Top 3 reviews will be loaded here -->
                     </div>
                 </div>
 
@@ -149,27 +157,43 @@
                 </div>
 
                 <div class="comments-section">
-                    <h2>💬 Nhận xét bài học</h2>
+                    <h2>💬 Đánh giá khóa học</h2>
 
-                    <div class="stars" id="starRating">
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
-                        <span class="star">★</span>
+                    <div class="rating-form-card">
+                        <div class="rating-header">
+                            <h3>Chia sẻ trải nghiệm của bạn</h3>
+                            <p>Đánh giá của bạn sẽ giúp người khác lựa chọn khóa học phù hợp</p>
+                        </div>
+
+                        <div class="rating-stars-wrapper">
+                            <label class="rating-label">Đánh giá của bạn:</label>
+                            <div class="stars" id="starRating">
+                                <span class="star" data-rating="1">★</span>
+                                <span class="star" data-rating="2">★</span>
+                                <span class="star" data-rating="3">★</span>
+                                <span class="star" data-rating="4">★</span>
+                                <span class="star" data-rating="5">★</span>
+                            </div>
+                            <span class="rating-value" id="ratingValue">0/5</span>
+                        </div>
+
+                        <div class="comment-form">
+                            <textarea id="commentText"
+                                      placeholder="Viết nhận xét chi tiết về khóa học này... (Tùy chọn)"
+                                      rows="4">
+                            </textarea>
+
+                            <button id="submitCommentBtn" class="submit-rating-btn">
+                                <i class="fas fa-paper-plane"></i>
+                                Gửi đánh giá
+                            </button>
+                        </div>
                     </div>
 
-                    <div class="comment-form">
-                        <input id="username" placeholder="Tên của bạn">
-
-                        <textarea id="commentText"
-                                  placeholder="Viết nhận xét...">
-                        </textarea>
-
-                        <button>Gửi nhận xét</button>
+                    <h3 class="comments-list-title">Tất cả đánh giá</h3>
+                    <div id="allCommentsList" class="all-comments-list">
+                        <!-- All comments will be loaded here -->
                     </div>
-
-                    <div id="commentList"></div>
                 </div>
             </div>
         </div>

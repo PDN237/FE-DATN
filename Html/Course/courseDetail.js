@@ -120,20 +120,15 @@ console.log('Fetching course:', courseId);
         completedLessons.textContent = `${completedCount}/${totalLessons} bài`;
         courseProgressPercent.textContent = percent + '%';
     }
-    
-    // 3. Load comments (fallback)
-    const commentsRes = await window.apiFetch(`/api/comments/${courseId}`).catch(() => []);
-    const comments = Array.isArray(commentsRes) ? commentsRes : [];
-    
-    commentList.innerHTML = comments.length ? 
-      comments.map(c => `
-        <div style="background:#f8f9fa; padding:1rem; margin:1rem 0; border-radius:8px;">
-          <h4 style="margin:0 0 0.5rem 0;">User ${c.UserID} ⭐${'★'.repeat(c.Rating || 1)}</h4>
-          <p>${c.Content}</p>
-          <small>${new Date(c.CreatedAt).toLocaleString()}</small>
-        </div>
-      `).join('') : 
-      '<p style="text-align:center; color:#666;">Chưa có bình luận nào.</p>';
+
+    // Load course statistics
+    await loadCourseStatistics(courseId, userId);
+
+    // Load top 3 comments (testimonials)
+    await loadTopComments(courseId);
+
+    // Load all comments
+    await loadAllComments(courseId);
     
   } catch (error) {
     console.error('CourseDetail error:', error);
@@ -157,38 +152,54 @@ console.log('Fetching course:', courseId);
 // Comment form with proper error handling
 document.addEventListener('DOMContentLoaded', () => {
   const stars = document.querySelectorAll('.star');
-  const commentBtn = document.querySelector('.comment-form button');
-  const commentForm = document.querySelector('.comment-form');
-  
+  const commentBtn = document.getElementById('submitCommentBtn');
+  const commentText = document.getElementById('commentText');
+  const ratingValue = document.getElementById('ratingValue');
+
   if (!stars.length || !commentBtn) return;
-  
+
   let rating = 0;
-  
-  stars.forEach((star, i) => {
+
+  stars.forEach((star) => {
     star.onclick = () => {
-      rating = i + 1;
-      stars.forEach((s, idx) => s.classList.toggle('active', idx < rating));
+      rating = parseInt(star.dataset.rating);
+      stars.forEach((s) => {
+        const starRating = parseInt(s.dataset.rating);
+        s.classList.toggle('active', starRating <= rating);
+      });
+      // Update rating value display
+      if (ratingValue) {
+        ratingValue.textContent = `${rating}/5`;
+      }
     };
   });
-  
+
   commentBtn.onclick = async () => {
-    const content = document.getElementById('commentText')?.value?.trim();
-    const name = document.getElementById('username')?.value?.trim();
-    
-    if (!content || !name || !rating) {
-      alert('⭕ Vui lòng điền đầy đủ: Tên + Nội dung + Sao đánh giá!');
+    const content = commentText?.value?.trim();
+    const userId = getLoggedUser();
+
+    if (!rating) {
+      alert('⭕ Vui lòng chọn số sao đánh giá!');
       return;
     }
-    
+
     try {
       const courseId = new URLSearchParams(window.location.search).get('courseId');
       await window.apiFetch(`/api/comments/${courseId}`, {
         method: 'POST',
-        body: JSON.stringify({ content, rating })
+        body: JSON.stringify({ userId, content: content || '', rating })
       });
-      alert('✅ Comment đã gửi!');
-      commentForm.reset();
-      location.reload();
+      alert('✅ Đánh giá đã gửi thành công!');
+      commentText.value = '';
+      rating = 0;
+      stars.forEach(s => s.classList.remove('active'));
+      if (ratingValue) {
+        ratingValue.textContent = '0/5';
+      }
+      // Reload comments and statistics
+      await loadCourseStatistics(parseInt(courseId), userId);
+      await loadTopComments(parseInt(courseId));
+      await loadAllComments(parseInt(courseId));
     } catch (error) {
       alert('❌ Lỗi gửi: ' + error.message);
     }
@@ -219,7 +230,7 @@ async function loadInstructorInfo(instructorId) {
   try {
     const res = await window.apiFetch(`/api/information/${instructorId}`);
     console.log('Instructor API response:', res);
-    
+
     if (res.success && res.data.instructor) {
       const instructor = res.data.instructor;
       const instructorLink = document.getElementById('instructorName');
@@ -241,4 +252,102 @@ async function loadInstructorInfo(instructorId) {
   }
 }
 
+async function loadCourseStatistics(courseId, userId) {
+  try {
+    // Use existing course progress API that's already working
+    const progressRes = await window.apiFetch(`/api/courses/courses/${courseId}/progress?userId=${userId}`);
+    console.log('Course progress:', progressRes);
+
+    // Get rating statistics separately
+    const ratingStats = await window.apiFetch(`/api/comments/${courseId}/rating-stats`).catch(() => ({ totalRatings: 0, averageRating: 0 }));
+
+    // Update statistics display
+    document.getElementById('averageRating').textContent = `⭐ ${ratingStats.averageRating || 0}`;
+    document.getElementById('totalRatings').textContent = `${ratingStats.totalRatings || 0} đánh giá`;
+    document.getElementById('totalLessons').textContent = `${progressRes.totalLessons || 0} bài`;
+    document.getElementById('completedLessonsInfo').textContent = `${progressRes.completedLessons || 0}/${progressRes.totalLessons || 0}`;
+    document.getElementById('courseProgressInfo').textContent = `${progressRes.progress || 0}%`;
+
+    return { ...progressRes, ...ratingStats };
+  } catch (error) {
+    console.error('Failed to load course statistics:', error);
+    return null;
+  }
+}
+
+async function loadTopComments(courseId) {
+  try {
+    const res = await window.apiFetch(`/api/comments/${courseId}/top`);
+    const comments = Array.isArray(res) ? res : [];
+    console.log('Top comments:', comments);
+
+    const testimonialsList = document.getElementById('testimonialsList');
+    if (!testimonialsList) return;
+
+    if (comments.length === 0) {
+      testimonialsList.innerHTML = '<p style="text-align:center; color:#666;">Chưa có đánh giá nào.</p>';
+      return;
+    }
+
+    testimonialsList.innerHTML = comments.map(comment => `
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <img src="${comment.avatarUrl}" alt="${comment.userName}" class="testimonial-avatar">
+          <div class="testimonial-info">
+            <h4 class="testimonial-name">${comment.userName}</h4>
+            <div class="testimonial-rating">
+              ${'★'.repeat(comment.rating)}${'☆'.repeat(5 - comment.rating)}
+            </div>
+          </div>
+        </div>
+        <p class="testimonial-content">${comment.content}</p>
+        <small class="testimonial-date">${new Date(comment.createdAt).toLocaleDateString('vi-VN')}</small>
+      </div>
+    `).join('');
+  } catch (error) {
+    console.error('Failed to load top comments:', error);
+    const testimonialsList = document.getElementById('testimonialsList');
+    if (testimonialsList) {
+      testimonialsList.innerHTML = '<p style="text-align:center; color:#666;">Không thể tải đánh giá.</p>';
+    }
+  }
+}
+
+async function loadAllComments(courseId) {
+  try {
+    const res = await window.apiFetch(`/api/comments/${courseId}`);
+    const comments = Array.isArray(res) ? res : [];
+    console.log('All comments:', comments);
+
+    const allCommentsList = document.getElementById('allCommentsList');
+    console.log('allCommentsList element:', allCommentsList);
+
+    if (!allCommentsList) {
+      console.error('allCommentsList element not found');
+      return;
+    }
+
+    if (comments.length === 0) {
+      allCommentsList.innerHTML = '<p style="text-align:center; color:#666; padding:1rem;">Chưa có bình luận nào.</p>';
+      console.log('No comments to display');
+      return;
+    }
+
+    const commentsHTML = comments.map(comment => `
+      <div class="comment-item">
+        <div class="comment-header">
+          <span class="comment-user">${comment.userName || 'Người dùng'}</span>
+          <span class="comment-rating">${'★'.repeat(comment.rating || 1)}</span>
+        </div>
+        <p class="comment-text">${comment.content || ''}</p>
+        <small class="comment-date">${new Date(comment.createdAt).toLocaleString('vi-VN')}</small>
+      </div>
+    `).join('');
+
+    allCommentsList.innerHTML = commentsHTML;
+    console.log('Comments rendered successfully');
+  } catch (error) {
+    console.error('Failed to load all comments:', error);
+  }
+}
 
