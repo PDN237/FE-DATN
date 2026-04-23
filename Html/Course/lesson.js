@@ -17,23 +17,23 @@ document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
   currentCourseId = urlParams.get('courseId');
   currentLessonId = urlParams.get('lessonId');
-  
+
   if (!currentCourseId || !currentLessonId) {
     document.body.innerHTML = '<h1 style="text-align:center;padding:4rem">❌ Missing courseId or lessonId</h1>';
     return;
   }
-  
+
   document.querySelector('.sidebar-header p').textContent = 'Loading...';
-  
+
   try {
     // Get logged user ID
     const userId = getLoggedUser();
     console.log('Loading course for user:', userId);
-    
+
     // 1. Load course structure for sidebar with user completion data
     const modulesRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/modules-lessons?userId=${userId}`);
     courseModules = modulesRes;
-    
+
     // Log completion data for verification
     console.log('Course modules loaded:', courseModules);
     courseModules.forEach((module, mIdx) => {
@@ -43,15 +43,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
       });
     });
-    
+
     // Update sidebar header
     const totalLessons = courseModules.reduce((sum, m) => sum + m.lessons.length, 0);
     const totalDuration = courseModules.reduce((sum, m) => sum + (m.lessons.reduce((s, l) => s + parseFloat(l.duration || 0), 0)), 0);
-    document.querySelector('.sidebar-header p').textContent = `${totalLessons} bài học • ${Math.round(totalDuration/60)}h ${totalDuration%60}m`;
-    
+    document.querySelector('.sidebar-header p').textContent = `${totalLessons} bài học • ${Math.round(totalDuration / 60)}h ${totalDuration % 60}m`;
+
     updateLessonUI();
     loadLesson(currentLessonId);
-    
+
   } catch (error) {
     console.error('Error loading course:', error);
     document.getElementById('modulesList').innerHTML = `<p style="padding:1rem;color:#ef4444">❌ Lỗi tải khóa học: ${error.message}</p>`;
@@ -61,11 +61,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 function updateLessonUI() {
   const container = document.getElementById('modulesList');
   container.innerHTML = '';
-  
+
   courseModules.forEach(module => {
     const moduleDiv = document.createElement('div');
     moduleDiv.className = 'module';
-    
+
     // Handle different field naming conventions from API
     const moduleId = module.id || module.ModuleID || module.moduleid;
     const isExpanded = expandedModules.includes(moduleId);
@@ -73,7 +73,7 @@ function updateLessonUI() {
       const lessonId = l.id || l.LessonID || l.lessonid;
       return lessonId == currentLessonId;
     });
-    
+
     moduleDiv.innerHTML = `
       <button class="module-header ${hasActiveLesson ? 'active' : ''} ${module.lessons.every(l => l.completed) ? 'completed-module' : ''}" onclick="toggleModule(${moduleId})">
         <span style="${module.lessons.length > 0 && module.lessons.every(l => l.completed) ? 'text-decoration: line-through; opacity: 0.7;' : ''}">${module.title || module.Title}</span>
@@ -83,30 +83,30 @@ function updateLessonUI() {
       </button>
       <div class="module-lessons ${isExpanded ? 'active' : ''}">
         ${module.lessons.map(lesson => {
-          const lessonId = lesson.id || lesson.LessonID || lesson.lessonid;
-          return `
+      const lessonId = lesson.id || lesson.LessonID || lesson.lessonid;
+      return `
           <button class="lesson-item ${lessonId == currentLessonId ? 'active' : ''} ${lesson.completed ? 'completed' : ''}" 
                   onclick="loadLesson(${lessonId})" 
                   title="${lesson.status || ''}">
             <div class="lesson-icon ${lesson.completed ? 'completed' : (lesson.type || lesson.Type)}">
-              ${lesson.completed ? '✓' : 
-                (lesson.type || lesson.Type) === 'video' ? '▶' : 
-                (lesson.type || lesson.Type) === 'reading' ? '📄' : '❓'}
+              ${lesson.completed ? '✓' :
+          (lesson.type || lesson.Type) === 'video' ? '▶' :
+            (lesson.type || lesson.Type) === 'reading' ? '📄' : '❓'}
             </div>
             <div class="lesson-info">
               <p class="lesson-title">${lesson.title || lesson.Title}</p>
               <p class="lesson-meta">
-                ${(lesson.type || lesson.Type) === 'video' ? 'Video •' : 
-                  (lesson.type || lesson.Type) === 'reading' ? 'Đọc •' : 'Quiz •'} 
+                ${(lesson.type || lesson.Type) === 'video' ? 'Video •' :
+          (lesson.type || lesson.Type) === 'reading' ? 'Đọc •' : 'Quiz •'} 
                 ${lesson.duration || lesson.Duration || 'N/A'}
               </p>
             </div>
           </button>
           `;
-        }).join('')}
+    }).join('')}
       </div>
     `;
-    
+
     container.appendChild(moduleDiv);
   });
 }
@@ -123,38 +123,38 @@ function toggleModule(moduleId) {
 
 async function loadLesson(lessonId) {
   currentLessonId = lessonId;
-  
+
   // Update sidebar active state
   updateLessonUI();
-  
+
   try {
     // Load lesson details
     const lessonRes = await window.apiFetch(`/api/courses/lessons/${lessonId}`);
     const lesson = lessonRes;
-    
+
     // Safe header updates
     const courseNameEl = document.querySelector('.course-name');
     const lessonTitleEl = document.getElementById('lessonTitle');
     const lessonDescEl = document.getElementById('lessonDescription');
-    
+
     if (courseNameEl) courseNameEl.textContent = lesson.Title?.split(' - ')[0] || 'Lesson';
     if (lessonTitleEl) lessonTitleEl.textContent = lesson.Title || 'Loading...';
-    
+
     // Set Describe and Summary
     const descEl = document.getElementById('describeContent');
     if (descEl) descEl.innerHTML = lesson.Describe || '<p style="color:#94a3b8">Chưa có mô tả chi tiết.</p>';
-    
+
     const sumEl = document.getElementById('summaryContent');
     if (sumEl) sumEl.innerHTML = lesson.Summary || '<p style="color:#94a3b8">Chưa có tóm tắt nội dung.</p>';
-    
+
     // Always load quiz data (even for video/reading)
     await loadQuiz(lessonId);
-    
+
     // Handle lesson rendering
     document.getElementById('videoSection').classList.remove('hidden');
     renderMediaContent(lesson);
     switchTab('describe');
-    
+
   } catch (error) {
     console.error('Error loading lesson:', error);
     const lessonTitleEl = document.getElementById('lessonTitle');
@@ -165,13 +165,13 @@ async function loadLesson(lessonId) {
 async function loadQuiz(lessonId) {
   const res = await window.apiFetch(`/api/courses/quizzes/${lessonId}`);
   const quiz = res;
-  
+
   // Store for quiz logic
   quizData = quiz;
   currentQuestionIndex = 0;
   selectedAnswers = new Array(quiz.questions.length).fill(null);
   quizSubmitted = false;
-  
+
   showQuiz();
   renderQuestion();
 }
@@ -206,22 +206,22 @@ async function renderMediaContent(lesson) {
   try {
     videoProgressTracked = false;
     readingProgressTracked = false;
-    
+
     // Safe section toggles
     const videoSection = document.getElementById('videoSection');
     if (videoSection) videoSection.classList.remove('hidden');
-    
+
     const player = document.querySelector('.video-player');
     const placeholder = document.querySelector('.video-placeholder');
-    
+
     if (!player) {
       console.warn('Video player element not found');
       return;
     }
-    
+
     // Clear existing content
     player.innerHTML = '';
-    
+
     // Video handling with progress tracking
     if (lesson.Type === 'video' && lesson.embedUrl) {
       player.innerHTML = safeRenderIframe(lesson.embedUrl, 'Video không khả dụng');
@@ -236,15 +236,15 @@ async function renderMediaContent(lesson) {
         placeholder.innerHTML = '<div class="play-button"><svg class="play-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div><p style="color:#64748b;">Chưa có video</p>';
       }
     }
-    
+
     // Reading/PDF handling with smart display
     if (lesson.Type === 'reading') {
       let contentHtml = '';
-      
+
       // Check if both content types exist
       const hasHtml = lesson.ContentHtml && lesson.ContentHtml.trim();
       const hasUrl = lesson.ContentUrl && lesson.ContentUrl.trim;
-      
+
       if (hasHtml && hasUrl) {
         // Both exist - show tabbed interface
         contentHtml = `
@@ -260,9 +260,9 @@ async function renderMediaContent(lesson) {
                 </div>
               </div>
               <div id="readingUrlTab" class="reading-tab-panel">
-                ${lesson.ContentUrl.includes('.pdf') 
-                  ? safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được')
-                  : safeRenderIframe(lesson.ContentUrl, 'Tài liệu không khả dụng')}
+                ${lesson.ContentUrl.includes('.pdf')
+            ? safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được')
+            : safeRenderIframe(lesson.ContentUrl, 'Tài liệu không khả dụng')}
               </div>
             </div>
           </div>
@@ -276,22 +276,22 @@ async function renderMediaContent(lesson) {
         `;
       } else if (hasUrl) {
         // Only URL content
-        contentHtml = lesson.ContentUrl.includes('.pdf') 
+        contentHtml = lesson.ContentUrl.includes('.pdf')
           ? safeRenderIframe(lesson.ContentUrl + '#toolbar=0&navpanes=0', 'PDF không tải được')
           : safeRenderIframe(lesson.ContentUrl, 'Tài liệu không khả dụng');
       } else {
         // No content
         contentHtml = '<div class="no-content"><p>Chưa có nội dung cho bài học này.</p></div>';
       }
-      
+
       player.innerHTML = `<div class="reading-wrapper">${contentHtml}</div>`;
-      
+
       // Track progress on the wrapper
       trackReadingProgress(player.querySelector('.reading-wrapper'));
     }
-    
+
     // Transcript and other legacy content removal
-    
+
   } catch (error) {
     console.error('Error in renderMediaContent:', error);
     const player = document.querySelector('.video-player');
@@ -308,26 +308,26 @@ function showQuiz() {
 
 function renderQuestion() {
   if (!quizData || !quizData.questions[currentQuestionIndex]) return;
-  
+
   const question = quizData.questions[currentQuestionIndex];
-  
+
   document.getElementById('quizProgress').textContent = `Câu ${currentQuestionIndex + 1}/${quizData.questions.length}`;
   document.getElementById('quizProgressBar').style.width = `${((currentQuestionIndex + 1) / quizData.questions.length) * 100}%`;
   document.getElementById('questionText').textContent = question.question;
-  
+
   const optionsContainer = document.getElementById('optionsContainer');
   optionsContainer.innerHTML = question.options.map((optionText, optionIndex) => {
     const isSelected = selectedAnswers[currentQuestionIndex] === optionIndex;
     const isCorrect = optionIndex === question.correctAnswer;
     const showResult = quizSubmitted;
-    
+
     let className = 'option';
     if (showResult && isCorrect) className += ' correct';
     else if (showResult && isSelected && !isCorrect) className += ' wrong';
     else if (isSelected) className += ' selected';
-    
+
     if (showResult) className += ' disabled';
-    
+
     return `
       <div class="${className}" onclick="${showResult ? '' : `selectAnswer(${optionIndex})`}"> 
         <div class="option-radio">
@@ -337,7 +337,7 @@ function renderQuestion() {
       </div>
     `;
   }).join('');
-  
+
   // Explanation
   const explanationContainer = document.getElementById('explanationContainer');
   if (quizSubmitted && question.explanation) {
@@ -351,10 +351,10 @@ function renderQuestion() {
   } else {
     explanationContainer.classList.add('hidden');
   }
-  
+
   // Navigation buttons
   document.getElementById('prevBtn').disabled = currentQuestionIndex === 0;
-  
+
   const nextBtn = document.getElementById('nextBtn');
   if (currentQuestionIndex === quizData.questions.length - 1) {
     if (quizSubmitted) {
@@ -394,12 +394,12 @@ function prevQuestion() {
 
 async function submitQuiz() {
   quizSubmitted = true;
-  
+
   const score = selectedAnswers.filter((ans, idx) => ans === quizData.questions[idx].correctAnswer).length;
   const percentage = Math.round((score / quizData.questions.length) * 100);
-  
+
   console.log('Quiz score:', percentage + '%');
-  
+
   // Only mark lesson as complete if score >= 70%
   if (percentage >= 70) {
     await completeLesson();
@@ -407,31 +407,31 @@ async function submitQuiz() {
     // Show message that they need to retake the quiz
     showCompletionNotification(false, percentage);
   }
-  
+
   renderQuestion();
 }
 
 function showResults() {
   document.getElementById('quizMain').classList.add('hidden');
   document.getElementById('resultsSection').classList.remove('hidden');
-  
+
   const score = selectedAnswers.filter((ans, idx) => ans === quizData.questions[idx].correctAnswer).length;
   const percentage = Math.round((score / quizData.questions.length) * 100);
-  
+
   document.getElementById('scoreNumber').textContent = `${score}/${quizData.questions.length}`;
   document.getElementById('scorePercentage').textContent = `Điểm: ${percentage}%`;
-  
+
   // Check if passed (>= 70%)
   const passed = percentage >= 70;
   let message;
   if (passed) {
-    message = percentage >= 90 ? '🎉 Xuất sắc!' : 
-              percentage >= 80 ? '👍 Tốt!' : '✅ Đạt yêu cầu!';
+    message = percentage >= 90 ? '🎉 Xuất sắc!' :
+      percentage >= 80 ? '👍 Tốt!' : '✅ Đạt yêu cầu!';
   } else {
     message = '📚 Cần đạt 70% để hoàn thành bài học';
   }
   document.getElementById('scoreMessage').textContent = message;
-  
+
   // Show completion badge
   const completionBadge = document.getElementById('completionBadge');
   const completionBadgeText = document.getElementById('completionBadgeText');
@@ -444,19 +444,19 @@ function showResults() {
     completionBadge.classList.add('failed');
     completionBadgeText.textContent = '⚠️ Chưa hoàn thành';
   }
-  
+
   // Update circle color based on pass/fail
   const scoreCircle = document.getElementById('scoreCircle');
   if (passed) {
-    scoreCircle.style.stroke = '#22c55e';
+    scoreCircle.style.stroke = 'var(--success)';
   } else {
-    scoreCircle.style.stroke = '#f59e0b';
+    scoreCircle.style.stroke = 'var(--warning)';
   }
-  
+
   // Circle animation
   const circumference = 2 * Math.PI * 88;
   document.getElementById('scoreCircle').style.strokeDashoffset = circumference - (percentage / 100 * circumference);
-  
+
   // Review questions
   const reviewContent = document.getElementById('reviewContent');
   reviewContent.innerHTML = quizData.questions.map((q, idx) => {
@@ -468,7 +468,7 @@ function showResults() {
           <div class="review-icon ${isCorrect ? 'correct' : 'incorrect'}">
             ${isCorrect ? '✓' : '✗'}
           </div>
-          <p class="review-question">Q${idx+1}: ${q.question}</p>
+          <p class="review-question">Q${idx + 1}: ${q.question}</p>
         </div>
         ${!isCorrect ? `
           <p class="review-answer user">Bạn chọn: ${q.options[userAns]}</p>
@@ -491,7 +491,7 @@ function retryQuiz() {
 function switchTab(tabId, targetBtn = event?.target) {
   // Update tabs
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  
+
   if (targetBtn) {
     targetBtn.classList.add('active');
   } else {
@@ -504,7 +504,7 @@ function switchTab(tabId, targetBtn = event?.target) {
       }
     }
   }
-  
+
   document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
   const targetPanel = document.getElementById(tabId + 'Tab');
   if (targetPanel) targetPanel.classList.add('active');
@@ -514,10 +514,10 @@ function switchReadingTab(tabType) {
   // Update reading tab buttons
   document.querySelectorAll('.reading-tab-btn').forEach(btn => btn.classList.remove('active'));
   event.target.classList.add('active');
-  
+
   // Update reading tab panels
   document.querySelectorAll('.reading-tab-panel').forEach(panel => panel.classList.remove('active'));
-  
+
   if (tabType === 'html') {
     document.getElementById('readingHtmlTab').classList.add('active');
   } else if (tabType === 'url') {
@@ -529,17 +529,17 @@ function switchReadingTab(tabType) {
 
 function trackVideoProgress(iframe) {
   if (!iframe) return;
-  
+
   const handleMessage = (event) => {
     // Listen for YouTube/Vimeo/other player events
     if (event.data && (event.data.playerState || event.data.event === 'timeupdate')) {
       const percent = event.data.percent || (event.data.time / event.data.duration * 100) || 0;
       if (percent >= 70 && !videoProgressTracked) {
-    // Only track scroll, don't mark as complete (must complete quiz)
+        // Only track scroll, don't mark as complete (must complete quiz)
       }
     }
   };
-  
+
   window.addEventListener('message', handleMessage);
   // Cleanup after 30s
   setTimeout(() => window.removeEventListener('message', handleMessage), 30000);
@@ -547,22 +547,22 @@ function trackVideoProgress(iframe) {
 
 function trackReadingProgress(container) {
   if (!container) return;
-  
+
   let scrollProgress = 0;
   const handleScroll = () => {
     const { scrollTop, scrollHeight, clientHeight } = container;
     scrollProgress = ((scrollTop + clientHeight) / scrollHeight) * 100;
     if (scrollProgress >= 70 && !readingProgressTracked) {
-    // Only track scroll, don't mark as complete (must complete quiz)
+      // Only track scroll, don't mark as complete (must complete quiz)
     }
   };
-  
+
   container.addEventListener('scroll', handleScroll, { passive: true });
   // Cleanup on lesson change
   container.addEventListener('transitionend', () => container.removeEventListener('scroll', handleScroll));
 }
 
-  // Do not complete lesson on video end, must pass quiz
+// Do not complete lesson on video end, must pass quiz
 
 function getLoggedUser() {
   try {
@@ -571,8 +571,8 @@ function getLoggedUser() {
     if (userStr) {
       const user = JSON.parse(userStr);
       // Handle different user ID field names
-      return user.id || user.UserID || user.userid || user.userId || 
-             parseInt(localStorage.getItem('userId')) || 1;
+      return user.id || user.UserID || user.userid || user.userId ||
+        parseInt(localStorage.getItem('userId')) || 1;
     }
     // Fallback to userId in localStorage
     const userId = localStorage.getItem('userId');
@@ -639,7 +639,7 @@ async function checkCourseCompletion() {
   try {
     const userId = getLoggedUser();
     const progressRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/progress?userId=${userId}`);
-    
+
     if (progressRes.courseCompleted) {
       // Get course points and add to user account
       try {
@@ -674,7 +674,7 @@ function showCourseCompletionNotification(pointsEarned = 0) {
 
   const notification = document.createElement('div');
   notification.className = 'course-completion-notification';
-  
+
   let pointsMessage = '';
   if (pointsEarned > 0) {
     pointsMessage = `
@@ -699,17 +699,17 @@ function showCourseCompletionNotification(pointsEarned = 0) {
       animation: slideIn 0.5s cubic-bezier(0.25,0.46,0.45,0.94);
     ">
       <div style="font-size: 64px; margin-bottom: 16px;">🏆</div>
-      <h2 style="font-size: 28px; font-weight: 800; margin-bottom: 12px;">Chúc mừng!</h2>
+      <h2 style="font-family: 'Outfit', sans-serif; font-size: 28px; font-weight: 800; margin-bottom: 12px;">Chúc mừng!</h2>
       <p style="font-size: 16px; opacity: 0.95; line-height: 1.6; margin-bottom: 24px;">
         Bạn đã hoàn thành toàn bộ khóa học này.<br>
         Hãy tiếp tục nỗ lực để đạt được nhiều thành tựu hơn!
       </p>
       ${pointsMessage}
       <button onclick="window.location.href='../Course/course.html'" style="
-        background: white; color: #0891b2; padding: 12px 32px;
+        font-family: 'Inter', sans-serif; background: white; color: var(--primary); padding: 12px 32px;
         border: none; border-radius: 10px; font-size: 16px;
-        font-weight: 700; cursor: pointer; transition: all 0.3s;
-      " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      " onmouseover="this.style.transform='translateY(-2px)'" onmouseout="this.style.transform='translateY(0)'">
         Quay về trang khóa học
       </button>
     </div>
@@ -734,13 +734,13 @@ function showScoreNotification(points) {
   notification.innerHTML = `
     <div style="
       position: fixed; top: 20px; right: 20px;
-      background: linear-gradient(135deg, #fbbf24, #f59e0b);
-      color: white; padding: 16px 24px; border-radius: 12px;
-      box-shadow: 0 10px 25px rgba(251, 191, 36, 0.4);
+      background: linear-gradient(135deg, var(--warning), #D97706);
+      color: white; padding: 16px 24px; border-radius: var(--rad-md);
+      box-shadow: var(--shadow-lg);
       z-index: 10001; max-width: 350px;
-      font-weight: 600; font-size: 15px;
-      transform: translateX(400px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
-      display: flex; align-items: center; gap: 10px;
+      font-weight: 600; font-size: 15px; font-family: 'Inter', sans-serif;
+      transform: translateX(400px); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex; align-items: center; gap: 12px;
     ">
       <span style="font-size: 24px;">⭐</span>
       <div>
@@ -776,12 +776,12 @@ function showCompletionNotification(isSuccess = true, score = 0) {
     notification.innerHTML = `
       <div style="
         position: fixed; top: 100px; right: 20px;
-        background: linear-gradient(135deg, #22c55e, #16a34a);
-        color: white; padding: 16px 24px; border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(34,197,94,0.4);
+        background: linear-gradient(135deg, var(--success), #059669);
+        color: white; padding: 16px 24px; border-radius: var(--rad-md);
+        box-shadow: var(--shadow-lg);
         z-index: 10000; max-width: 350px;
-        font-weight: 600; font-size: 15px;
-        transform: translateX(400px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+        font-weight: 600; font-size: 15px; font-family: 'Inter', sans-serif;
+        transform: translateX(400px); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       ">
         🎉 Hoàn thành bài học!<br>
         <small style="font-weight: 400; opacity: 0.9;">Đã cập nhật tiến độ học tập</small>
@@ -791,12 +791,12 @@ function showCompletionNotification(isSuccess = true, score = 0) {
     notification.innerHTML = `
       <div style="
         position: fixed; top: 100px; right: 20px;
-        background: linear-gradient(135deg, #f59e0b, #d97706);
-        color: white; padding: 16px 24px; border-radius: 12px;
-        box-shadow: 0 10px 25px rgba(245,158,11,0.4);
+        background: linear-gradient(135deg, var(--warning), #D97706);
+        color: white; padding: 16px 24px; border-radius: var(--rad-md);
+        box-shadow: var(--shadow-lg);
         z-index: 10000; max-width: 350px;
-        font-weight: 600; font-size: 15px;
-        transform: translateX(400px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
+        font-weight: 600; font-size: 15px; font-family: 'Inter', sans-serif;
+        transform: translateX(400px); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
       ">
         ⚠️ Chưa hoàn thành bài học<br>
         <small style="font-weight: 400; opacity: 0.9;">Điểm: ${score}% - Cần đạt 70% để hoàn thành</small>

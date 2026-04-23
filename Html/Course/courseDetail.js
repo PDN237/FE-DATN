@@ -129,6 +129,12 @@ console.log('Fetching course:', courseId);
 
     // Load all comments
     await loadAllComments(courseId);
+
+    // Load user's existing review (if any)
+    await loadUserReview(courseId, userId);
+
+    // Check course completion and enable/disable review form
+    await checkReviewEligibility(courseId, userId);
     
   } catch (error) {
     console.error('CourseDetail error:', error);
@@ -185,21 +191,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       const courseId = new URLSearchParams(window.location.search).get('courseId');
-      await window.apiFetch(`/api/comments/${courseId}`, {
-        method: 'POST',
-        body: JSON.stringify({ userId, content: content || '', rating })
-      });
-      alert('✅ Đánh giá đã gửi thành công!');
+      const editingMode = commentBtn.dataset.isEditing === 'true';
+
+      if (editingMode) {
+        // Update existing comment
+        await window.apiFetch(`/api/comments/${courseId}`, {
+          method: 'PUT',
+          body: JSON.stringify({ userId, content: content || '', rating })
+        });
+        alert('✅ Đánh giá đã cập nhật thành công!');
+      } else {
+        // Create new comment
+        await window.apiFetch(`/api/comments/${courseId}`, {
+          method: 'POST',
+          body: JSON.stringify({ userId, content: content || '', rating })
+        });
+        alert('✅ Đánh giá đã gửi thành công!');
+      }
+
       commentText.value = '';
       rating = 0;
       stars.forEach(s => s.classList.remove('active'));
       if (ratingValue) {
         ratingValue.textContent = '0/5';
       }
+      commentBtn.dataset.isEditing = 'false';
+      commentBtn.textContent = 'Gửi đánh giá';
+
       // Reload comments and statistics
       await loadCourseStatistics(parseInt(courseId), userId);
       await loadTopComments(parseInt(courseId));
       await loadAllComments(parseInt(courseId));
+      await loadUserReview(parseInt(courseId), userId);
     } catch (error) {
       alert('❌ Lỗi gửi: ' + error.message);
     }
@@ -351,3 +374,68 @@ async function loadAllComments(courseId) {
   }
 }
 
+async function loadUserReview(courseId, userId) {
+  try {
+    const res = await window.apiFetch(`/api/comments/${courseId}/user?userId=${userId}`);
+    const userReview = res;
+
+    console.log('User review:', userReview);
+
+    if (userReview) {
+      // User has an existing review, populate the form
+      const commentText = document.getElementById('commentText');
+      const ratingValue = document.getElementById('ratingValue');
+      const commentBtn = document.getElementById('submitCommentBtn');
+      const stars = document.querySelectorAll('.star');
+
+      if (commentText) commentText.value = userReview.content || '';
+      if (ratingValue) ratingValue.textContent = `${userReview.rating}/5`;
+
+      // Set star rating
+      stars.forEach((s) => {
+        const starRating = parseInt(s.dataset.rating);
+        s.classList.toggle('active', starRating <= userReview.rating);
+      });
+
+      // Set editing mode
+      if (commentBtn) {
+        commentBtn.textContent = 'Cập nhật đánh giá';
+        commentBtn.dataset.isEditing = 'true';
+      }
+
+      // Store rating for form submission
+      window.currentRating = userReview.rating;
+    }
+  } catch (error) {
+    console.error('Failed to load user review:', error);
+  }
+}
+
+async function checkReviewEligibility(courseId, userId) {
+  try {
+    const progressRes = await window.apiFetch(`/api/courses/courses/${courseId}/progress?userId=${userId}`);
+    const ratingFormCard = document.querySelector('.rating-form-card');
+    const submitBtn = document.getElementById('submitCommentBtn');
+
+    if (!ratingFormCard) return;
+
+    if (!progressRes.courseCompleted) {
+      // Course not completed, disable review form
+      ratingFormCard.style.opacity = '0.5';
+      ratingFormCard.style.pointerEvents = 'none';
+
+      // Add message
+      const messageDiv = document.createElement('div');
+      messageDiv.style.cssText = 'background: #fef3c7; color: #92400e; padding: 1rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;';
+      messageDiv.innerHTML = `⚠️ Bạn cần hoàn thành khóa học (${progressRes.completedLessons}/${progressRes.totalLessons} bài) trước khi đánh giá.`;
+
+      ratingFormCard.insertBefore(messageDiv, ratingFormCard.firstChild);
+    } else {
+      // Course completed, enable review form
+      ratingFormCard.style.opacity = '1';
+      ratingFormCard.style.pointerEvents = 'auto';
+    }
+  } catch (error) {
+    console.error('Failed to check review eligibility:', error);
+  }
+}
