@@ -140,12 +140,18 @@ async function loadLesson(lessonId) {
     if (courseNameEl) courseNameEl.textContent = lesson.Title?.split(' - ')[0] || 'Lesson';
     if (lessonTitleEl) lessonTitleEl.textContent = lesson.Title || 'Loading...';
 
-    // Set Describe and Summary
+    // Set Describe and Summary (preserve line breaks)
     const descEl = document.getElementById('describeContent');
-    if (descEl) descEl.innerHTML = lesson.Describe || '<p style="color:#94a3b8">Chưa có mô tả chi tiết.</p>';
+    if (descEl) {
+      const describeText = lesson.Describe || 'Chưa có mô tả chi tiết.';
+      descEl.innerHTML = describeText.replace(/\n/g, '<br>') || '<p style="color:#94a3b8">Chưa có mô tả chi tiết.</p>';
+    }
 
     const sumEl = document.getElementById('summaryContent');
-    if (sumEl) sumEl.innerHTML = lesson.Summary || '<p style="color:#94a3b8">Chưa có tóm tắt nội dung.</p>';
+    if (sumEl) {
+      const summaryText = lesson.Summary || 'Chưa có tóm tắt nội dung.';
+      sumEl.innerHTML = summaryText.replace(/\n/g, '<br>') || '<p style="color:#94a3b8">Chưa có tóm tắt nội dung.</p>';
+    }
 
     // Always load quiz data (even for video/reading)
     await loadQuiz(lessonId);

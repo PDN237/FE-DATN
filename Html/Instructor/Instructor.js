@@ -279,13 +279,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 <!-- Describe -->
                 <div class="ins-form-group">
                     <label class="ins-label">📋 Mô tả chi tiết</label>
-                    <textarea class="ins-input ins-textarea" id="edDescribe" rows="3" placeholder="Mô tả chi tiết bài học...">${escHtml(lesson.Describe)}</textarea>
+                    <textarea class="ins-input ins-textarea" id="edDescribe" rows="10" placeholder="Mô tả chi tiết bài học...">${escHtml(lesson.Describe)}</textarea>
                 </div>
 
                 <!-- Summary -->
                 <div class="ins-form-group">
                     <label class="ins-label">📌 Tóm tắt nội dung</label>
-                    <textarea class="ins-input ins-textarea" id="edSummary" rows="3" placeholder="Tóm tắt ngắn gọn...">${escHtml(lesson.Summary)}</textarea>
+                    <textarea class="ins-input ins-textarea" id="edSummary" rows="6" placeholder="Tóm tắt ngắn gọn...">${escHtml(lesson.Summary)}</textarea>
                 </div>
 
                 <!-- Quiz Section -->
