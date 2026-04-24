@@ -15,6 +15,15 @@
 </head>
 
 <body>
+    <!-- ================= EMOJI BACKGROUND ================= -->
+    <div class="emoji-background">
+        <div class="floating-emoji" style="top: 10%; left: 5%;">🔢</div>
+        <div class="floating-emoji" style="top: 20%; left: 85%;">📊</div>
+        <div class="floating-emoji" style="top: 60%; left: 10%;">🎯</div>
+        <div class="floating-emoji" style="top: 70%; left: 80%;">🚀</div>
+        <div class="floating-emoji" style="top: 40%; left: 50%;">💡</div>
+    </div>
+
     <!-- ================= NAVBAR ================= -->
     <header class="modern-header">
         <div class="header-container">
@@ -140,6 +149,54 @@
         </div>
     </section>
 
+    <!-- ================= THUẬT TOÁN LÀ GÌ SECTION ================= -->
+    <section class="what-is-sorting-section">
+        <div class="what-container">
+            <h2 class="what-title">Thuật toán sắp xếp là gì?</h2>
+            <p class="what-description">
+                Thuật toán sắp xếp là phương pháp sắp xếp các phần tử trong danh sách theo thứ tự. Đây là<br>
+                một trong những thuật toán cơ bản nhất trong khoa học máy tính.
+            </p>
+
+            <div class="what-features-grid">
+                <div class="what-feature-card">
+                    <div class="what-feature-icon purple-bg">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <rect x="16" y="16" width="32" height="32" rx="8" fill="white" opacity="0.95"/>
+                        </svg>
+                    </div>
+                    <h3 class="what-feature-title">Tại sao cần sắp xếp?</h3>
+                    <p class="what-feature-desc">
+                        Dữ liệu được sắp xếp giúp tìm kiếm nhanh hơn, dễ phân tích và tối ưu hóa nhiều thuật toán khác.
+                    </p>
+                </div>
+
+                <div class="what-feature-card">
+                    <div class="what-feature-icon pink-bg">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <rect x="16" y="16" width="32" height="32" rx="8" fill="white" opacity="0.95"/>
+                        </svg>
+                    </div>
+                    <h3 class="what-feature-title">Độ phức tạp thời gian</h3>
+                    <p class="what-feature-desc">
+                        Mỗi thuật toán có độ phức tạp khác nhau. O(n²) cho dữ liệu nhỏ, O(n log n) tốt cho dữ liệu lớn.
+                    </p>
+                </div>
+
+                <div class="what-feature-card">
+                    <div class="what-feature-icon cyan-bg">
+                        <svg viewBox="0 0 64 64" fill="none">
+                            <rect x="16" y="16" width="32" height="32" rx="8" fill="white" opacity="0.95"/>
+                        </svg>
+                    </div>
+                    <h3 class="what-feature-title">Ứng dụng thực tế</h3>
+                    <p class="what-feature-desc">
+                        Sắp xếp được dùng trong: tìm kiếm, cơ sở dữ liệu, phân tích dữ liệu, AI và nhiều lĩnh vực khác.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <div class="app-container">
 
@@ -152,6 +209,39 @@
 
                 <div class="sidebar-header">
                     <h2>Controls</h2>
+                    <div class="help-icon-wrapper">
+                        <div class="help-icon">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                            </svg>
+                        </div>
+                        <div class="help-tooltip">
+                            <h4>Bảng Điều Khiển</h4>
+                            <ul>
+                                <li><strong>Elements:</strong> Số lượng phần tử cần sắp xếp (5-100)</li>
+                                <li><strong>Algorithm:</strong> Chọn thuật toán sắp xếp</li>
+                                <li><strong>Speed:</strong> Tốc độ animation (0.25x - 4x)</li>
+                                <li><strong>Visualization:</strong> Chế độ hiển thị</li>
+                                <li><strong>Sort:</strong> Bắt đầu sắp xếp</li>
+                                <li><strong>Randomize:</strong> Tạo dữ liệu mới</li>
+                            </ul>
+                            <div class="color-legend-mini">
+                                <h5>Ý nghĩa màu sắc:</h5>
+                                <div class="legend-item-mini">
+                                    <span class="color-dot comparing"></span>
+                                    <span>Đỏ: Đang so sánh</span>
+                                </div>
+                                <div class="legend-item-mini">
+                                    <span class="color-dot swapping"></span>
+                                    <span>Vàng: Đang hoán đổi</span>
+                                </div>
+                                <div class="legend-item-mini">
+                                    <span class="color-dot sorted"></span>
+                                    <span>Xanh: Đã sắp xếp</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="controls">
@@ -204,86 +294,141 @@
 
 
         <section id="algorithmDescription">
-            <h2>Algorithm Description</h2>
-            <p id="description"></p>
-
-            <div class="description-grid">
-                <div class="code-section">
-                    <h3>Code Implementations</h3>
-                    <div id="codeSnippets"></div>
-
-                    <h3>Code Editor</h3>
-                    <div class="code-editor-container">
-                        <textarea id="codeEditor" placeholder="Write your sorting algorithm here..."></textarea>
+            <div class="algorithm-info-container">
+                <!-- Algorithm Description -->
+                <div class="algorithm-description-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Mô tả thuật toán</h2>
+                    </div>
+                    <div class="description-content">
+                        <p id="description"></p>
                     </div>
                 </div>
 
-                <!-- ===== COMPLEXITY TABLE ===== -->
-                <aside class="complexity-table">
-                    <div class="complexity-header">
-                        <h3>Độ phức tạp thuật toán</h3>
+                <!-- Complexity Analysis -->
+                <div class="complexity-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Phân tích độ phức tạp</h2>
                     </div>
-                    <div class="complexity-content">
-                        <table class="algo-table">
+                    <div class="complexity-cards">
+                        <div class="complexity-card best-case">
+                            <h3>Best Case</h3>
+                            <p class="complexity-value" id="bestCase">O(n)</p>
+                            <p class="complexity-desc" id="bestCaseDesc">Tốt nhất</p>
+                        </div>
+                        <div class="complexity-card avg-case">
+                            <h3>Average Case</h3>
+                            <p class="complexity-value" id="avgCase">O(n²)</p>
+                            <p class="complexity-desc" id="avgCaseDesc">Trung bình</p>
+                        </div>
+                        <div class="complexity-card worst-case">
+                            <h3>Worst Case</h3>
+                            <p class="complexity-value" id="worstCase">O(n²)</p>
+                            <p class="complexity-desc" id="worstCaseDesc">Tệ nhất</p>
+                        </div>
+                        <div class="complexity-card space-case">
+                            <h3>Space</h3>
+                            <p class="complexity-value" id="spaceCase">O(1)</p>
+                            <p class="complexity-desc" id="spaceCaseDesc">Bộ nhớ</p>
+                        </div>
+                    </div>
+                    <div class="complexity-explanation">
+                        <h4>Giải thích ký hiệu Big O</h4>
+                        <div class="explanation-grid">
+                            <div class="explanation-item">
+                                <span class="explanation-symbol">O(1)</span>
+                                <p>Hằng số - Không phụ thuộc vào kích thước dữ liệu</p>
+                            </div>
+                            <div class="explanation-item">
+                                <span class="explanation-symbol">O(n)</span>
+                                <p>Tuyến tính - Tăng tỷ lệ thuận với dữ liệu</p>
+                            </div>
+                            <div class="explanation-item">
+                                <span class="explanation-symbol">O(n log n)</span>
+                                <p>Logarit tuyến tính - Hiệu quả cho dữ liệu lớn</p>
+                            </div>
+                            <div class="explanation-item">
+                                <span class="explanation-symbol">O(n²)</span>
+                                <p>Bậc hai - Chậm khi dữ liệu lớn</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Complexity Comparison Table -->
+                <div class="complexity-comparison-section">
+                    <div class="section-header">
+                        <h2 class="section-title">So sánh độ phức tạp giữa các thuật toán</h2>
+                    </div>
+                    <div class="comparison-table-wrapper">
+                        <table class="comparison-table">
                             <thead>
                                 <tr>
                                     <th>Thuật toán</th>
-                                    <th>Tốt nhất</th>
-                                    <th>Trung bình</th>
-                                    <th>Tệ nhất</th>
+                                    <th>Best Case</th>
+                                    <th>Average Case</th>
+                                    <th>Worst Case</th>
+                                    <th>Space</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td class="algo-name">Bubble Sort</td>
-                                    <td class="best">O(n)</td>
-                                    <td class="average">O(n²)</td>
-                                    <td class="worst">O(n²)</td>
+                                    <td class="complexity-good">O(n)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-good">O(1)</td>
                                 </tr>
                                 <tr>
                                     <td class="algo-name">Selection Sort</td>
-                                    <td class="best">O(n²)</td>
-                                    <td class="average">O(n²)</td>
-                                    <td class="worst">O(n²)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-good">O(1)</td>
                                 </tr>
                                 <tr>
                                     <td class="algo-name">Insertion Sort</td>
-                                    <td class="best">O(n)</td>
-                                    <td class="average">O(n²)</td>
-                                    <td class="worst">O(n²)</td>
+                                    <td class="complexity-good">O(n)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-good">O(1)</td>
                                 </tr>
                                 <tr>
                                     <td class="algo-name">Quick Sort</td>
-                                    <td class="best">O(n log n)</td>
-                                    <td class="average">O(n log n)</td>
-                                    <td class="worst">O(n²)</td>
+                                    <td class="complexity-excellent">O(n log n)</td>
+                                    <td class="complexity-excellent">O(n log n)</td>
+                                    <td class="complexity-bad">O(n²)</td>
+                                    <td class="complexity-good">O(log n)</td>
                                 </tr>
                                 <tr>
                                     <td class="algo-name">Merge Sort</td>
-                                    <td class="best">O(n log n)</td>
-                                    <td class="average">O(n log n)</td>
-                                    <td class="worst">O(n log n)</td>
+                                    <td class="complexity-excellent">O(n log n)</td>
+                                    <td class="complexity-excellent">O(n log n)</td>
+                                    <td class="complexity-excellent">O(n log n)</td>
+                                    <td class="complexity-bad">O(n)</td>
                                 </tr>
                             </tbody>
                         </table>
-
-                        <div class="complexity-legend">
-                            <h4>Giải thích ký hiệu</h4>
-                            <div class="legend-item">
-                                <span class="legend-symbol best">O(n)</span>
-                                <p>Tuyến tính - Tốc độ tăng tỷ lệ thuận với số phần tử</p>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-symbol good">O(n log n)</span>
-                                <p>Logarit tuyến tính - Hiệu quả cho dữ liệu lớn</p>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-symbol average">O(n²)</span>
-                                <p>Bậc hai - Tốc độ giảm nhanh khi dữ liệu tăng</p>
-                            </div>
-                        </div>
                     </div>
-                </aside>
+                </div>
+
+                <!-- Code Snippets -->
+                <div class="code-snippets-section">
+                    <div class="section-header">
+                        <h2 class="section-title">Code mẫu</h2>
+                    </div>
+                    <div class="language-tabs">
+                        <button class="lang-tab active" data-lang="cpp">C++</button>
+                        <button class="lang-tab" data-lang="java">Java</button>
+                        <button class="lang-tab" data-lang="python">Python</button>
+                        <button class="lang-tab" data-lang="javascript">JavaScript</button>
+                        <button class="lang-tab" data-lang="csharp">C#</button>
+                        <button class="lang-tab" data-lang="go">Go</button>
+                    </div>
+                    <div class="code-display">
+                        <pre class="code-block"><code id="codeContent" class="language-cpp"></code></pre>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -346,16 +491,17 @@
         </div>
 
         <div class="footer-bottom">
-            <p>© 2026 Sorting Visualizer | Interactive Learning Platform</p>
+            <p> 2026 Sorting Visualizer | Interactive Learning Platform</p>
         </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-cpp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-csharp.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-go.min.js"></script>
 
     <script src="app.js"></script>
     <script src="sort.js"></script>

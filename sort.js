@@ -6,99 +6,130 @@ class SortVisualizer {
         this.delay = delay;
         this.isSorting = false;
         this.stopped = false;
+        this.paused = false;
+        this.sortingPromise = Promise.resolve();
     }
 
     stop() {
         this.stopped = true;
+        this.paused = false;
+    }
+
+    pause() {
+        this.paused = true;
+    }
+
+    resume() {
+        this.paused = false;
     }
 
     async sleep() {
+        while (this.paused && !this.stopped) {
+            await new Promise(resolve => setTimeout(resolve, 50));
+        }
+        if (this.stopped) return;
         return new Promise(resolve => setTimeout(resolve, this.delay));
     }
 
     async bubbleSort() {
         this.isSorting = true;
-        const n = this.array.length;
-        for (let i = 0; i < n - 1; i++) {
-            for (let j = 0; j < n - i - 1; j++) {
-                if (this.stopped) return;
-                this.updateCallback(this.array, [j, j + 1], 'comparing');
-                await this.sleep();
-                
-                if (this.array[j] > this.array[j + 1]) {
-                    [this.array[j], this.array[j + 1]] = [this.array[j + 1], this.array[j]];
-                    this.updateCallback(this.array, [j, j + 1], 'swapping');
+        this.sortingPromise = (async () => {
+            const n = this.array.length;
+            for (let i = 0; i < n - 1; i++) {
+                for (let j = 0; j < n - i - 1; j++) {
+                    if (this.stopped) return;
+                    this.updateCallback(this.array, [j, j + 1], 'comparing');
                     await this.sleep();
+                    
+                    if (this.array[j] > this.array[j + 1]) {
+                        [this.array[j], this.array[j + 1]] = [this.array[j + 1], this.array[j]];
+                        this.updateCallback(this.array, [j, j + 1], 'swapping');
+                        await this.sleep();
+                    }
                 }
+                this.updateCallback(this.array, [n - i - 1], 'sorted');
             }
-            this.updateCallback(this.array, [n - i - 1], 'sorted');
-        }
-        this.updateCallback(this.array, [0], 'sorted');
-        this.isSorting = false;
+            this.updateCallback(this.array, [0], 'sorted');
+            this.isSorting = false;
+        })();
+        await this.sortingPromise;
     }
 
     async selectionSort() {
         this.isSorting = true;
-        const n = this.array.length;
-        for (let i = 0; i < n - 1; i++) {
-            let minIdx = i;
-            for (let j = i + 1; j < n; j++) {
-                if (this.stopped) return;
-                this.updateCallback(this.array, [minIdx, j], 'comparing');
-                await this.sleep();
-                
-                if (this.array[j] < this.array[minIdx]) {
-                    minIdx = j;
+        this.sortingPromise = (async () => {
+            const n = this.array.length;
+            for (let i = 0; i < n - 1; i++) {
+                let minIdx = i;
+                for (let j = i + 1; j < n; j++) {
+                    if (this.stopped) return;
+                    this.updateCallback(this.array, [minIdx, j], 'comparing');
+                    await this.sleep();
+                    
+                    if (this.array[j] < this.array[minIdx]) {
+                        minIdx = j;
+                    }
                 }
+                if (minIdx !== i) {
+                    [this.array[i], this.array[minIdx]] = [this.array[minIdx], this.array[i]];
+                    this.updateCallback(this.array, [i, minIdx], 'swapping');
+                    await this.sleep();
+                }
+                this.updateCallback(this.array, [i], 'sorted');
             }
-            if (minIdx !== i) {
-                [this.array[i], this.array[minIdx]] = [this.array[minIdx], this.array[i]];
-                this.updateCallback(this.array, [i, minIdx], 'swapping');
-                await this.sleep();
-            }
-            this.updateCallback(this.array, [i], 'sorted');
-        }
-        this.updateCallback(this.array, [n - 1], 'sorted');
-        this.isSorting = false;
+            this.updateCallback(this.array, [n - 1], 'sorted');
+            this.isSorting = false;
+        })();
+        await this.sortingPromise;
     }
 
     async insertionSort() {
         this.isSorting = true;
-        const n = this.array.length;
-        for (let i = 1; i < n; i++) {
-            let key = this.array[i];
-            let j = i - 1;
-            
-            while (j >= 0 && this.array[j] > key) {
-                if (this.stopped) return;
-                this.updateCallback(this.array, [j, j + 1], 'comparing');
-                await this.sleep();
+        this.sortingPromise = (async () => {
+            const n = this.array.length;
+            for (let i = 1; i < n; i++) {
+                let key = this.array[i];
+                let j = i - 1;
                 
-                this.array[j + 1] = this.array[j];
-                this.updateCallback(this.array, [j, j + 1], 'swapping');
-                await this.sleep();
-                j--;
+                while (j >= 0 && this.array[j] > key) {
+                    if (this.stopped) return;
+                    this.updateCallback(this.array, [j, j + 1], 'comparing');
+                    await this.sleep();
+                    
+                    this.array[j + 1] = this.array[j];
+                    this.updateCallback(this.array, [j, j + 1], 'swapping');
+                    await this.sleep();
+                    j--;
+                }
+                this.array[j + 1] = key;
+                this.updateCallback(this.array, [j + 1], 'sorted');
             }
-            this.array[j + 1] = key;
-            this.updateCallback(this.array, [j + 1], 'sorted');
-        }
-        this.isSorting = false;
+            this.isSorting = false;
+        })();
+        await this.sortingPromise;
     }
 
     async quickSort(left = 0, right = this.array.length - 1) {
-        if (left < right) {
-            let pivotIndex = await this.partition(left, right);
-            await this.quickSort(left, pivotIndex - 1);
-            await this.quickSort(pivotIndex + 1, right);
-        }
-        if (left === 0 && right === this.array.length - 1) {
-            this.isSorting = false;
-        }
+        this.sortingPromise = (async () => {
+            if (left < right) {
+                let pivotIndex = await this.partition(left, right);
+                await this.quickSort(left, pivotIndex - 1);
+                await this.quickSort(pivotIndex + 1, right);
+            }
+            if (left === 0 && right === this.array.length - 1) {
+                this.isSorting = false;
+            }
+        })();
+        await this.sortingPromise;
     }
 
     async partition(left, right) {
         let pivot = this.array[right];
         let i = left - 1;
+        
+        // Highlight pivot
+        this.updateCallback(this.array, [right], 'pivot');
+        await this.sleep();
         
         for (let j = left; j < right; j++) {
             if (this.stopped) return;
@@ -120,15 +151,18 @@ class SortVisualizer {
     }
 
     async mergeSort(left = 0, right = this.array.length - 1) {
-        if (left < right) {
-            const mid = Math.floor((left + right) / 2);
-            await this.mergeSort(left, mid);
-            await this.mergeSort(mid + 1, right);
-            await this.merge(left, mid, right);
-        }
-        if (left === 0 && right === this.array.length - 1) {
-            this.isSorting = false;
-        }
+        this.sortingPromise = (async () => {
+            if (left < right) {
+                const mid = Math.floor((left + right) / 2);
+                await this.mergeSort(left, mid);
+                await this.mergeSort(mid + 1, right);
+                await this.merge(left, mid, right);
+            }
+            if (left === 0 && right === this.array.length - 1) {
+                this.isSorting = false;
+            }
+        })();
+        await this.sortingPromise;
     }
 
     async merge(left, mid, right) {
