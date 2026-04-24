@@ -65,6 +65,18 @@ const algoDescriptions = {
   "Quick Sort": {
     desc: "Chọn một phần tử làm pivot, phân chia mảng, và sắp xếp các phần.",
     details: "• Độ phức tạp: O(n log n) trung bình, O(n²) tồi nhất\n• Sắp xếp tại chỗ, không ổn định\n• Rất nhanh trên thực tế\n• Thường nhanh hơn Merge Sort do sửa dụng bộ nhớ tốt hơn"
+  },
+  "Heap Sort": {
+    desc: "Xây dựng heap từ mảng và trích xuất phần tử lớn nhất/nhỏ nhất liên tục.",
+    details: "• Độ phức tạp: O(n log n) trong mọi trường hợp\n• Sắp xếp tại chỗ, không ổn định\n• Không yêu cầu thêm không gian\n• Hiệu quả cho tập dữ liệu lớn"
+  },
+  "Radix Sort": {
+    desc: "Sắp xếp theo từng chữ số, từ chữ số ít quan trọng nhất đến quan trọng nhất.",
+    details: "• Độ phức tạp: O(d × (n + k)) với d là số chữ số\n• Phi so sánh, ổn định\n• Phù hợp với số nguyên\n• Rất nhanh cho dữ liệu có giới hạn giá trị"
+  },
+  "Shell Sort": {
+    desc: "Cải tiến của Insertion Sort bằng cách sắp xếp các phần tử cách nhau một khoảng.",
+    details: "• Độ phức tạp: O(n log n) đến O(n²) tùy gap\n• Sắp xếp tại chỗ, không ổn định\n• Nhanh hơn Insertion Sort cho mảng lớn\n• Gap sequence ảnh hưởng đến hiệu suất"
   }
 };
 
@@ -113,6 +125,33 @@ const taskData = {
       "Gộp left + mid + right thành mảng đã sắp"
     ],
     fullSolution: "function quickSort(arr) {\n  if(arr.length <= 1) return arr;\n  let pivot = arr[Math.floor(arr.length/2)];\n  let left = arr.filter(x => x < pivot);\n  let mid = arr.filter(x => x === pivot);\n  let right = arr.filter(x => x > pivot);\n  return [...quickSort(left), ...mid, ...quickSort(right)];\n}"
+  },
+  "Heap Sort": {
+    hints: [
+      "Bạn cần xây dựng max-heap từ mảng",
+      "Triển khai hàm heapify để duy trì tính chất heap",
+      "Trích xuất phần tử lớn nhất và giảm kích thước heap",
+      "Lặp lại cho đến khi heap rỗng"
+    ],
+    fullSolution: "function heapSort(arr) {\n  let n = arr.length;\n  for(let i = Math.floor(n/2)-1; i >= 0; i--) heapify(arr, n, i);\n  for(let i = n-1; i > 0; i--) {\n    [arr[0], arr[i]] = [arr[i], arr[0]];\n    heapify(arr, i, 0);\n  }\n  return arr;\n}\nfunction heapify(arr, n, i) {\n  let largest = i, left = 2*i+1, right = 2*i+2;\n  if(left < n && arr[left] > arr[largest]) largest = left;\n  if(right < n && arr[right] > arr[largest]) largest = right;\n  if(largest !== i) {\n    [arr[i], arr[largest]] = [arr[largest], arr[i]];\n    heapify(arr, n, largest);\n  }\n}"
+  },
+  "Radix Sort": {
+    hints: [
+      "Bạn cần tìm số lớn nhất để xác định số chữ số",
+      "Sắp xếp theo từng chữ số (units, tens, hundreds...)",
+      "Sử dụng counting sort cho mỗi chữ số",
+      "Lặp lại cho đến khi xử lý hết tất cả chữ số"
+    ],
+    fullSolution: "function radixSort(arr) {\n  let max = Math.max(...arr);\n  for(let exp = 1; Math.floor(max/exp) > 0; exp *= 10) {\n    countingSort(arr, exp);\n  }\n  return arr;\n}\nfunction countingSort(arr, exp) {\n  let output = [], count = Array(10).fill(0);\n  for(let i = 0; i < arr.length; i++) count[Math.floor(arr[i]/exp)%10]++;\n  for(let i = 1; i < 10; i++) count[i] += count[i-1];\n  for(let i = arr.length-1; i >= 0; i--) {\n    output[count[Math.floor(arr[i]/exp)%10]-1] = arr[i];\n    count[Math.floor(arr[i]/exp)%10]--;\n  }\n  for(let i = 0; i < arr.length; i++) arr[i] = output[i];\n}"
+  },
+  "Shell Sort": {
+    hints: [
+      "Bạn cần chọn gap sequence (ví dụ: n/2, n/4, ...)",
+      "Sắp xếp các phần tử cách nhau gap",
+      "Giảm gap và lặp lại cho đến khi gap = 1",
+      "Khi gap = 1, nó giống insertion sort nhưng mảng đã gần sắp xếp"
+    ],
+    fullSolution: "function shellSort(arr) {\n  let n = arr.length;\n  for(let gap = Math.floor(n/2); gap > 0; gap = Math.floor(gap/2)) {\n    for(let i = gap; i < n; i++) {\n      let temp = arr[i];\n      let j;\n      for(j = i; j >= gap && arr[j-gap] > temp; j -= gap) {\n        arr[j] = arr[j-gap];\n      }\n      arr[j] = temp;\n    }\n  }\n  return arr;\n}"
   }
 };
 
@@ -168,7 +207,7 @@ function renderView() {
   }
 
   if (step === 2) {
-    const algos = ["Bubble Sort","Selection Sort","Insertion Sort","Merge Sort","Quick Sort"];
+    const algos = ["Bubble Sort","Selection Sort","Insertion Sort","Merge Sort","Quick Sort","Heap Sort","Radix Sort","Shell Sort"];
     viewContainer.innerHTML = `
       <div class="view-inner fade-in">
         <h2 class="title">Chọn thuật toán</h2>
@@ -196,7 +235,7 @@ function renderView() {
   }
 
   if (step === 4) {
-    const langs = ["JavaScript","C++","Python","Java"];
+    const langs = ["JavaScript","C++","Python","Java","C#","Go","Rust","PHP","Ruby","Swift","Kotlin","TypeScript"];
     viewContainer.innerHTML = `
       <div class="view-inner fade-in">
         <h2 class="title">Chọn ngôn ngữ</h2>
@@ -271,17 +310,17 @@ function renderView() {
           let hintsHTML = "";
           if (hints && Array.isArray(hints)) {
              hintsHTML = hints.map((h, i) => `
-               <div style="margin-bottom: 10px; padding: 12px; background: rgba(255, 184, 108, 0.1); border-left: 4px solid #ffb86c; border-radius: 4px; font-size: 0.95em; color: #f8f8f2;">
-                 <strong style="color: #ffb86c;">Gợi ý ${i + 1}:</strong> ${h}
+               <div class="hint-box hint-level-${i + 1}">
+                 <strong>Gợi ý ${i + 1}:</strong> ${h}
                </div>`).join("");
           } else if (hints) {
              hintsHTML = `
-               <div style="padding: 12px; background: rgba(255, 184, 108, 0.1); border-left: 4px solid #ffb86c; font-size: 0.95em; color: #f8f8f2;">
+               <div class="hint-box hint-level-1">
                  ${hints}
                </div>`;
           } else {
              hintsHTML = `
-               <div style="padding: 12px; background: rgba(255, 69, 58, 0.1); border-left: 4px solid #ff453a; font-size: 0.95em; color: #f8f8f2;">
+               <div class="hint-box hint-level-3">
                  Code chưa chính xác. Cố gắng tìm lỗi logic nhé!
                </div>`;
           }
@@ -357,7 +396,8 @@ async function submitCode() {
         code: userCode,
         input: inputCopy,
         expected: expectedOutput,
-        language: selectedLang
+        language: selectedLang,
+        algorithm: selectedAlgo
       })
     });
 
