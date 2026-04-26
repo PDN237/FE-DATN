@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
     <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
     <link rel="stylesheet" href="/FrondEnd/Style/Dashboard.css" />
@@ -38,65 +38,93 @@
                 <div class="dashboard-header">
                     <div>
                         <h1 class="admin-page-title">Admin Dashboard</h1>
-                        <p class="dashboard-subtitle">Tổng quan toàn diện về hoạt động của nền tảng</p>
+                        <p style="color: #9ca3af; font-size: 0.95rem;">Tổng quan toàn diện về hoạt động của nền tảng</p>
                     </div>
                     <div class="dashboard-actions">
-                        <button class="btn btn-primary" onclick="loadDashboardStats()">
-                            <i class="fas fa-sync-alt"></i> Làm mới
+                        <button class="btn btn-secondary btn-sm" onclick="window.location.reload()">
+                            <i class="fas fa-sync-alt"></i> Refresh
                         </button>
                     </div>
                 </div>
 
-                <!-- STATS GRID -->
-                <div class="stat-grid">
-                    <div class="stat-card stat-card-primary">
-                        <div class="stat-icon">
-                            <i class="fas fa-user-graduate"></i>
+                <!-- KPI CARDS GRID -->
+                <div class="kpi-grid">
+                    <div class="kpi-card kpi-primary">
+                        <div class="kpi-icon">
+                            <i class="fas fa-users"></i>
                         </div>
-                        <div class="stat-content">
+                        <div class="kpi-content">
                             <h3>Tổng Học Viên</h3>
                             <span class="value" id="statUsers">0</span>
-                            <div class="stat-trend" id="activeUsersBadge">
-                                <i class="fas fa-fire"></i> <span id="statActiveUsers">0</span> hoạt động
+                            <div class="kpi-trend">
+                                <span class="trend-value" id="activeUsers30Days">0</span>
+                                <span class="trend-label">hoạt động 30 ngày</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="stat-card stat-card-success">
-                        <div class="stat-icon">
+                    <div class="kpi-card kpi-success">
+                        <div class="kpi-icon">
                             <i class="fas fa-book-open"></i>
                         </div>
-                        <div class="stat-content">
+                        <div class="kpi-content">
                             <h3>Tổng Khóa Học</h3>
                             <span class="value" id="statCourses">0</span>
-                            <div class="stat-trend">
-                                <i class="fas fa-users"></i> <span id="statEnrollments">0</span> đăng ký
+                            <div class="kpi-trend">
+                                <span class="trend-label">Khóa học đang hoạt động</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="stat-card stat-card-warning">
-                        <div class="stat-icon">
+                    <div class="kpi-card kpi-warning">
+                        <div class="kpi-icon">
                             <i class="fas fa-laptop-code"></i>
                         </div>
-                        <div class="stat-content">
+                        <div class="kpi-content">
                             <h3>Bài Tập Hệ Thống</h3>
                             <span class="value" id="statProblems">0</span>
-                            <div class="stat-trend">
-                                <i class="fas fa-check-circle"></i> <span id="statSubmissions">0</span> nộp bài
+                            <div class="kpi-trend">
+                                <span class="trend-label">Bài tập coding</span>
                             </div>
                         </div>
                     </div>
 
-                    <div class="stat-card stat-card-info">
-                        <div class="stat-icon">
-                            <i class="fas fa-percentage"></i>
+                    <div class="kpi-card kpi-info">
+                        <div class="kpi-icon">
+                            <i class="fas fa-code-branch"></i>
                         </div>
-                        <div class="stat-content">
-                            <h3>Tỷ Lệ Hoàn Thành</h3>
-                            <span class="value" id="statCompletionRate">0%</span>
-                            <div class="stat-trend">
-                                <i class="fas fa-check-double"></i> <span id="statAcceptanceRate">0%</span> chấp nhận
+                        <div class="kpi-content">
+                            <h3>Lượt Nộp Bài</h3>
+                            <span class="value" id="statSubmissions">0</span>
+                            <div class="kpi-trend">
+                                <span class="trend-value" id="statSuccessRate">0%</span>
+                                <span class="trend-label">tỷ lệ thành công</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card kpi-purple">
+                        <div class="kpi-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Hoạt Động 7 Ngày</h3>
+                            <span class="value" id="statActive7Days">0</span>
+                            <div class="kpi-trend">
+                                <span class="trend-label">Học viên tích cực</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kpi-card kpi-orange">
+                        <div class="kpi-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="kpi-content">
+                            <h3>Hoạt Động 30 Ngày</h3>
+                            <span class="value" id="statActive30Days">0</span>
+                            <div class="kpi-trend">
+                                <span class="trend-label">Học viên tích cực</span>
                             </div>
                         </div>
                     </div>
@@ -106,52 +134,40 @@
                 <div class="charts-section">
                     <div class="chart-card">
                         <div class="chart-header">
-                            <h3><i class="fas fa-chart-bar"></i> Phân Phối Độ Khó Bài Tập</h3>
+                            <h3><i class="fas fa-chart-pie"></i> Phân Bố Độ Khó Bài Tập</h3>
                         </div>
                         <div class="chart-container">
                             <canvas id="difficultyChart"></canvas>
                         </div>
                     </div>
-
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3><i class="fas fa-chart-pie"></i> Thống Kê Nộp Bài</h3>
-                        </div>
-                        <div class="chart-container">
-                            <canvas id="submissionChart"></canvas>
-                        </div>
-                    </div>
                 </div>
 
-                <!-- TOP COURSES & COMPLETION -->
+                <!-- DATA TABLES SECTION -->
                 <div class="dashboard-tables">
                     <!-- Top Courses -->
                     <div class="activity-card">
                         <div class="activity-card-header">
                             <div class="activity-card-title">
-                                <i class="fas fa-trophy" style="color: #f59e0b;"></i> Khóa Học Phổ Biến Nhất
+                                <i class="fas fa-trophy" style="color: #fbbf24;"></i> Khóa Học Phổ Biến Nhất
                             </div>
                         </div>
-                        <div class="top-courses-list" id="topCoursesList">
-                            <div class="loading-state">Đang tải...</div>
-                        </div>
+                        <overflow-wrapper style="display: block; overflow-x: auto;">
+                            <table class="activity-table">
+                                <thead>
+                                    <tr>
+                                        <th>Khóa Học</th>
+                                        <th>Số Lượng Đăng Ký</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topCoursesTable">
+                                    <tr>
+                                        <td colspan="2" style="text-align: center; color: #6b7280;">Đang tải...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </overflow-wrapper>
                     </div>
 
-                    <!-- Course Completion Rates -->
-                    <div class="activity-card">
-                        <div class="activity-card-header">
-                            <div class="activity-card-title">
-                                <i class="fas fa-chart-line" style="color: #10b981;"></i> Tỷ Lệ Hoàn Thành Khóa Học
-                            </div>
-                        </div>
-                        <div class="completion-list" id="completionList">
-                            <div class="loading-state">Đang tải...</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- RECENT ACTIVITY -->
-                <div class="dashboard-tables">
                     <!-- Học viên mới nhất -->
                     <div class="activity-card">
                         <div class="activity-card-header">
@@ -163,9 +179,9 @@
                             <table class="activity-table">
                                 <thead>
                                     <tr>
-                                        <th>Học viên</th>
+                                        <th>Học Viên</th>
                                         <th>Email</th>
-                                        <th>Ngày tham gia</th>
+                                        <th>Ngày Tham Gia</th>
                                     </tr>
                                 </thead>
                                 <tbody id="recentUsersTable">
@@ -188,9 +204,9 @@
                             <table class="activity-table">
                                 <thead>
                                     <tr>
-                                        <th>Học viên</th>
-                                        <th>Bài tập</th>
-                                        <th>Kết quả</th>
+                                        <th>Học Viên</th>
+                                        <th>Bài Tập</th>
+                                        <th>Kết Quả</th>
                                     </tr>
                                 </thead>
                                 <tbody id="recentSubmissionsTable">
@@ -213,9 +229,7 @@
                 <div class="decoration-dot"></div>
                 <div class="decoration-line"></div>
             </div>
-            <div class="footer-text">
-                <p>Admin Dashboard · Built with MN-Team</p>
-            </div>
+            
             <div class="footer-decoration">
                 <div class="decoration-line"></div>
                 <div class="decoration-dot"></div>

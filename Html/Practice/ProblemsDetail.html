@@ -578,12 +578,9 @@
             const language = getSelectedLanguage();
             const problemId = getProblemId();
             
-            if (!code || !problemId || !window.currentTestCases || window.currentTestCases.length === 0) {
+            if (!code || !problemId) {
                 return;
             }
-            
-            const visibleCases = window.currentTestCases.filter(tc => !tc.is_hidden);
-            if (visibleCases.length === 0) return alert('No public test cases to run.');
 
             switchTab('results');
             const badge = document.getElementById('resultStatusBadge');
@@ -593,31 +590,26 @@
             const container = document.getElementById('testResultsContainer');
             container.innerHTML = '<div class="loading-message" style="color:white; padding: 20px;">Running test cases on server...</div>';
             
-            let html = '';
-            let allPassed = true;
-            let maxRuntime = 0;
-            let maxMemory = 0;
-
-            for (let i = 0; i < visibleCases.length; i++) {
-                const tc = visibleCases[i];
-                try {
-                    const res = await fetch(`https://be-datn-6gb6.onrender.com/api/submit/${problemId}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            code, language,
-                            testCaseId: tc.id,
-                            inputData: tc.input_data,
-                            expectedOutput: tc.expected_output
-                        })
-                    });
-                    const data = await res.json();
+            try {
+                const res = await fetch(`https://be-datn-6gb6.onrender.com/api/submit/run/${problemId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, language })
+                });
+                const data = await res.json();
+                
+                if (data.success && data.data) {
+                    const testcases = data.data.testcases;
+                    let allPassed = true;
+                    let maxRuntime = 0;
+                    let maxMemory = 0;
                     
-                    if (data.success && data.data) {
-                        const status = data.data.status;
+                    let html = '';
+                    testcases.forEach((tc, i) => {
+                        const status = tc.status;
                         if (status !== 'Accepted') allPassed = false;
-                        maxRuntime = Math.max(maxRuntime, data.data.runtime || 0);
-                        maxMemory = Math.max(maxMemory, data.data.memory || 0);
+                        maxRuntime = Math.max(maxRuntime, tc.executionTime || 0);
+                        maxMemory = Math.max(maxMemory, tc.memory || 0);
                         
                         const statusClass = status === 'Accepted' ? 'accepted' : 'rejected';
                         html += `
@@ -629,26 +621,29 @@
                                 <span class="test-case-badge" style="color: ${status === 'Accepted' ? '#10b981' : '#ef4444'}">${status}</span>
                             </div>
                             <div class="test-case-body">
-                                <div class="test-case-row"><span class="test-case-label">Input:</span><code class="test-case-value">${escapeHtml(tc.input_data)}</code></div>
-                                <div class="test-case-row"><span class="test-case-label">Expected:</span><code class="test-case-value">${escapeHtml(tc.expected_output)}</code></div>
-                                <div class="test-case-row"><span class="test-case-label">Actual:</span><code class="test-case-value">${escapeHtml(data.data.output || 'No output')}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Input:</span><code class="test-case-value">${escapeHtml(tc.input)}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Expected:</span><code class="test-case-value">${escapeHtml(tc.expectedOutput)}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Actual:</span><code class="test-case-value">${escapeHtml(tc.actualOutput || 'No output')}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Runtime:</span><code class="test-case-value">${tc.executionTime} ms</code></div>
                             </div>
                         </div>`;
-                    } else {
-                        allPassed = false;
-                        html += `<div style="color: #ef4444; padding: 10px;">Error on Sample ${i+1}: ${data.message}</div>`;
-                    }
-                } catch (e) {
-                    allPassed = false;
-                    html += `<div style="color: #ef4444; padding: 10px;">Network error on Sample ${i+1}</div>`;
+                    });
+                    
+                    container.innerHTML = html;
+                    badge.className = 'status-badge ' + (allPassed ? 'accepted' : 'rejected');
+                    badge.innerHTML = allPassed ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> Failed';
+                    document.getElementById('runtimeValue').textContent = maxRuntime + ' ms';
+                    document.getElementById('memoryValue').textContent = maxMemory + ' MB';
+                } else {
+                    badge.className = 'status-badge rejected';
+                    badge.innerHTML = 'Error';
+                    container.innerHTML = `<div style="color:#ef4444; padding: 20px;">${data.message || 'Unknown error'}</div>`;
                 }
+            } catch (e) {
+                badge.className = 'status-badge rejected';
+                badge.innerHTML = 'Network Error';
+                container.innerHTML = `<div style="color:#ef4444; padding: 20px;">Could not connect to server</div>`;
             }
-            
-            container.innerHTML = html;
-            badge.className = 'status-badge ' + (allPassed ? 'accepted' : 'rejected');
-            badge.innerHTML = allPassed ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> Failed';
-            document.getElementById('runtimeValue').textContent = maxRuntime + ' ms';
-            document.getElementById('memoryValue').textContent = maxMemory + ' MB';
         }
 
         function showProblemSolvedNotification(pointsEarned) {
