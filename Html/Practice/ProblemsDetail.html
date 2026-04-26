@@ -265,6 +265,28 @@
         const codeStorage = {};
         let currentTab = 'testCases';
         window.currentTestCases = [];
+        let isProblemSolved = false;
+
+        // localStorage functions for saving/loading code
+        function getStorageKey(problemId, language) {
+            return `problem_code_${problemId}_${language}`;
+        }
+
+        function saveCodeToStorage(problemId, language, code) {
+            if (isProblemSolved) return; // Don't save if problem is solved
+            const key = getStorageKey(problemId, language);
+            localStorage.setItem(key, code);
+        }
+
+        function loadCodeFromStorage(problemId, language) {
+            const key = getStorageKey(problemId, language);
+            return localStorage.getItem(key);
+        }
+
+        function clearCodeFromStorage(problemId, language) {
+            const key = getStorageKey(problemId, language);
+            localStorage.removeItem(key);
+        }
 
         function getProblemId() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -371,8 +393,12 @@
             let statusBadge = '';
             if (problem.user_status === 'Solved') {
                 statusBadge = '<span class="status-badge accepted" style="margin-left: 10px; font-size: 0.5em;"><i class="fas fa-check-circle"></i> Solved</span>';
+                isProblemSolved = true;
             } else if (problem.user_status === 'Attempted') {
                 statusBadge = '<span class="status-badge" style="margin-left: 10px; font-size: 0.5em; background-color: #f39c12;"><i class="fas fa-dot-circle"></i> Attempted</span>';
+                isProblemSolved = false;
+            } else {
+                isProblemSolved = false;
             }
 
             document.getElementById('problemTitle').innerHTML = problem.id + '. ' + problem.title + statusBadge;
@@ -493,6 +519,7 @@
         }
 
         function onLanguageChange() {
+            const problemId = getProblemId();
             const language = getSelectedLanguage();
             const codeInput = document.getElementById('codeInput');
             const problemTitle = document.getElementById('problemTitle').textContent;
@@ -506,16 +533,43 @@
             };
 
             codeInput.placeholder = placeholders[language] || 'Write your code here...';
-            const newTemplate = getCodeTemplateByLanguage(problemTitle, language);
-            codeInput.value = newTemplate;
+            
+            // Try to load saved code if problem is not solved
+            if (!isProblemSolved) {
+                const savedCode = loadCodeFromStorage(problemId, language);
+                if (savedCode) {
+                    codeInput.value = savedCode;
+                } else {
+                    const newTemplate = getCodeTemplateByLanguage(problemTitle, language);
+                    codeInput.value = newTemplate;
+                }
+            } else {
+                // If problem is solved, use template
+                const newTemplate = getCodeTemplateByLanguage(problemTitle, language);
+                codeInput.value = newTemplate;
+            }
             updateLineNumbers();
         }
 
         function initializeCodeEditor(title) {
+            const problemId = getProblemId();
             const language = getSelectedLanguage();
             const codeInput = document.getElementById('codeInput');
-            const template = getCodeTemplateByLanguage(title, language);
-            codeInput.value = template;
+            
+            // Try to load saved code if problem is not solved
+            if (!isProblemSolved) {
+                const savedCode = loadCodeFromStorage(problemId, language);
+                if (savedCode) {
+                    codeInput.value = savedCode;
+                } else {
+                    const template = getCodeTemplateByLanguage(title, language);
+                    codeInput.value = template;
+                }
+            } else {
+                // If problem is solved, use template
+                const template = getCodeTemplateByLanguage(title, language);
+                codeInput.value = template;
+            }
             updateLineNumbers();
         }
 
@@ -657,6 +711,7 @@
             const language = getSelectedLanguage();
             const problemId = getProblemId();
             const userId = localStorage.getItem('userId');
+            let status = '';
             
             if (!code || !problemId) return;
 
@@ -677,7 +732,7 @@
                 const data = await res.json();
                 
                 if (data.success && data.data) {
-                    const status = data.data.status;
+                    status = data.data.status;
                     const statusClass = status === 'Accepted' ? 'accepted' : 'rejected';
                     badge.className = 'status-badge ' + statusClass;
                     badge.innerHTML = status === 'Accepted' ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> ' + status;
@@ -710,13 +765,27 @@
                 badge.innerHTML = 'Network Error';
                 container.innerHTML = `<div style="color:#ef4444; padding: 20px;">Could not connect to server</div>`;
             }
+            
+            // Clear saved code if problem was just solved
+            if (status === 'Accepted') {
+                clearCodeFromStorage(problemId, language);
+                isProblemSolved = true;
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
             const codeInput = document.getElementById('codeInput');
             const lineNumbers = document.getElementById('lineNumbers');
 
-            codeInput.addEventListener('input', updateLineNumbers);
+            codeInput.addEventListener('input', function() {
+                updateLineNumbers();
+                // Auto-save code on input if problem is not solved
+                const problemId = getProblemId();
+                const language = getSelectedLanguage();
+                if (problemId && !isProblemSolved) {
+                    saveCodeToStorage(problemId, language, codeInput.value);
+                }
+            });
             codeInput.addEventListener('scroll', function () { lineNumbers.scrollTop = codeInput.scrollTop; });
             codeInput.addEventListener('keydown', function (e) {
                 if (e.key === 'Tab') {

@@ -60,7 +60,10 @@ console.log('Fetching course:', courseId);
     
     lessonList.innerHTML = '';
     let totalLessons = 0, completedCount = 0;
-    
+  
+    // Store all lessons for navigation
+    window.allCourseLessons = [];
+  
     if (modules.length === 0) {
       lessonList.innerHTML = '<li>Chưa có bài học nào cho khóa học này.</li>';
     } else {
@@ -85,11 +88,19 @@ console.log('Fetching course:', courseId);
           
           const status = lesson.status || 'locked';
           
+          // Store lesson data for navigation
+          window.allCourseLessons.push({
+            id: lesson.id,
+            title: lesson.title,
+            completed: isCompleted,
+            status: status
+          });
+          
           li.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem; cursor:pointer;">
               <span>${lesson.title || 'Untitled Lesson'}</span>
-              <span style="font-size:0.8rem; padding:0.2rem 0.5rem; background:#${isCompleted ? '22c55e' : 'ef4444'}; color:white; border-radius:12px;">
-                ${isCompleted ? '✓ Hoàn thành' : '🔒 Khóa'}
+              <span style="font-size:0.8rem; padding:0.2rem 0.5rem; background:#${isCompleted ? '22c55e' : '64748b'}; color:white; border-radius:12px;">
+                ${isCompleted ? '✓ Hoàn thành' : 'Chưa hoàn thành'}
               </span>
             </div>
           `; 
@@ -149,9 +160,24 @@ console.log('Fetching course:', courseId);
   // Global functions (safe)
   window.back = () => window.location.href = 'course.html';
   window.startCourse = () => {
-    const firstUnlocked = document.querySelector('[title*="open lesson"]');
-    if (firstUnlocked) firstUnlocked.click();
-    else alert('No unlocked lessons available');
+    // Find the first incomplete lesson (last studied) from stored data
+    const urlParams = new URLSearchParams(window.location.search);
+    const courseId = parseInt(urlParams.get('courseId'));
+    
+    if (window.allCourseLessons && window.allCourseLessons.length > 0) {
+      // Find first incomplete lesson
+      const targetLesson = window.allCourseLessons.find(lesson => !lesson.completed);
+      
+      if (targetLesson) {
+        window.location.href = `lesson.html?courseId=${courseId}&lessonId=${targetLesson.id}`;
+      } else {
+        // All lessons completed, go to first lesson
+        const firstLesson = window.allCourseLessons[0];
+        window.location.href = `lesson.html?courseId=${courseId}&lessonId=${firstLesson.id}`;
+      }
+    } else {
+      alert('Không có bài học nào');
+    }
   };
 });
 

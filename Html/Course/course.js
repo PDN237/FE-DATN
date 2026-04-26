@@ -98,6 +98,29 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     }
 
+    // Sort courses: in progress (0 < progress < 100) → not started (progress = 0) → completed (progress = 100)
+    courses.sort((a, b) => {
+      const progressA = (courseProgressMap.get(a.CourseID) || {}).progress || 0;
+      const progressB = (courseProgressMap.get(b.CourseID) || {}).progress || 0;
+
+      // Helper function to get sort priority
+      const getPriority = (progress) => {
+        if (progress > 0 && progress < 100) return 0; // In progress - highest priority
+        if (progress === 0) return 1; // Not started - medium priority
+        return 2; // Completed - lowest priority
+      };
+
+      const priorityA = getPriority(progressA);
+      const priorityB = getPriority(progressB);
+
+      if (priorityA !== priorityB) {
+        return priorityA - priorityB;
+      }
+
+      // Within same category, sort by progress descending (higher progress first)
+      return progressB - progressA;
+    });
+
     courses.forEach(course => {
       const card = document.createElement('div');
       card.className = 'course-card';
@@ -145,6 +168,25 @@ function renderDemoCourses(grid) {
     { id: 'Merge Sort', title: 'Merge Sort', desc: 'Chia để trị.', level: 'Trung cấp', img: 'https://images.unsplash.com/photo-1504639725590-34d0984388bd', progress: 0 },
     { id: 'Quick Sort', title: 'Quick Sort', desc: 'Sắp xếp nhanh.', level: 'Trung cấp', img: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4', progress: 0 },
   ];
+
+  // Sort courses: in progress (0 < progress < 100) → not started (progress = 0) → completed (progress = 100)
+  demoCourses.sort((a, b) => {
+    const getPriority = (progress) => {
+      if (progress > 0 && progress < 100) return 0; // In progress - highest priority
+      if (progress === 0) return 1; // Not started - medium priority
+      return 2; // Completed - lowest priority
+    };
+
+    const priorityA = getPriority(a.progress);
+    const priorityB = getPriority(b.progress);
+
+    if (priorityA !== priorityB) {
+      return priorityA - priorityB;
+    }
+
+    // Within same category, sort by progress descending
+    return b.progress - a.progress;
+  });
 
   grid.innerHTML = '';
   demoCourses.forEach(course => {

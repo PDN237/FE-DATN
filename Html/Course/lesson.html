@@ -138,7 +138,7 @@
                                     <div style="margin-top: -16px; margin-bottom: 24px;">
                                         <p class="score-label" style="color: var(--text-muted); font-size: 16px; font-weight: 500;">câu đúng</p>
                                     </div>
-                                    <p class="score-percentage" id="scorePercentage">Điểm số: 0%</p>
+                                    <p class="score-percentage" id="scorePercentage">Điểm: 0%</p>
                                     <p class="score-message" id="scoreMessage"></p>
                                 </div>
 
@@ -147,7 +147,11 @@
                                     <div id="reviewContent"></div>
                                 </div>
 
-                                <button class="btn btn-primary" onclick="retryQuiz()" style="display: flex; margin: 32px auto 0;">
+                                <div class="quiz-reminder" style="text-align: center; margin-top: 16px; color: #94a3b8; font-size: 13px; font-weight: 400;">
+                                    <span style="opacity: 0.7;">💡 Hoàn thành bài kiểm tra với điểm ≥70% để đánh dấu bài học đã hoàn thành</span>
+                                </div>
+
+                                <button class="btn btn-primary" onclick="retryQuiz()" style="display: flex; margin: 24px auto 0;">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                     </svg>

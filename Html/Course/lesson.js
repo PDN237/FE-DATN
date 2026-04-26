@@ -12,6 +12,42 @@ let quizSubmitted = false;
 let expandedModules = [];
 let videoProgressTracked = false;
 let readingProgressTracked = false;
+let progressMilestonesShown = { 30: false, 60: false, 90: false };
+
+// 30 motivational messages for course progress milestones
+const progressMotivationalMessages = [
+  "Tuyệt vời! Bạn đã hoàn thành 30% khóa học. Hãy tiếp tục!",
+  "Bạn đang làm rất tốt! 30% đã qua, đừng dừng lại!",
+  "Nỗ lực của bạn đang được đền đáp. Tiếp tục nhé!",
+  "30% - Một cột mốc quan trọng. Bạn đang đi đúng hướng!",
+  "Tuyệt vời! Bạn đã vượt qua 1/3 chặng đường!",
+  "Kiên trì là chìa khóa thành công. Bạn đã làm được 30%!",
+  "Mỗi bước đều quan trọng. 30% đã hoàn thành!",
+  "Bạn đang tiến bộ mỗi ngày. Cố lên!",
+  "30% đã qua, 70% còn lại đang chờ bạn chinh phục!",
+  "Tuyệt vời! Đừng bỏ cuộc, bạn đang làm rất tốt!",
+  "60% đã hoàn thành! Bạn đã đi được hơn nửa chặng đường!",
+  "Tuyệt vời! Chỉ còn 40% nữa là hoàn thành khóa học!",
+  "Bạn đang làm rất tốt! 60% là một thành tựu lớn!",
+  "Nửa chặng đường đã qua, nửa còn lại đang chờ bạn!",
+  "60% - Bạn đang tiến bộ vượt bậc. Cố lên!",
+  "Tuyệt vời! Bạn đã vượt qua khó khăn và đạt 60%!",
+  "Chỉ còn một chút nữa thôi. Bạn làm được!",
+  "60% đã qua, mục tiêu hoàn thành đang đến gần!",
+  "Bạn đang chứng minh bản lĩnh của mình. Tiếp tục!",
+  "Tuyệt vời! 60% - Bạn sắp hoàn thành rồi!",
+  "90% đã hoàn thành! Chỉ còn chút nữa thôi!",
+  "Tuyệt vời! Bạn sắp chạm đến đích rồi!",
+  "90% - Một thành tựu đáng tự hào. Hoàn thành ngay!",
+  "Chỉ còn 10% nữa. Bạn làm được!",
+  "Bạn đã đi được 90% chặng đường. Hoàn thành ngay!",
+  "Tuyệt vời! Đích đến đang ngay trước mắt!",
+  "90% đã qua, hãy hoàn thành nốt 10% còn lại!",
+  "Bạn đang rất gần mục tiêu. Đừng bỏ cuộc!",
+  "Tuyệt vời! 90% - Bạn sắp thành công rồi!",
+  "Chỉ còn một bước nhỏ nữa. Cố lên!",
+  "90% hoàn thành! Bạn là một chiến binh thực thụ!"
+];
 
 document.addEventListener('DOMContentLoaded', async () => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -48,6 +84,20 @@ document.addEventListener('DOMContentLoaded', async () => {
     const totalLessons = courseModules.reduce((sum, m) => sum + m.lessons.length, 0);
     const totalDuration = courseModules.reduce((sum, m) => sum + (m.lessons.reduce((s, l) => s + parseFloat(l.duration || 0), 0)), 0);
     document.querySelector('.sidebar-header p').textContent = `${totalLessons} bài học • ${Math.round(totalDuration / 60)}h ${totalDuration % 60}m`;
+
+    // Auto-expand the module containing the current lesson
+    courseModules.forEach(module => {
+      const hasActiveLesson = module.lessons.some(l => {
+        const lessonId = l.id || l.LessonID || l.lessonid;
+        return lessonId == currentLessonId;
+      });
+      if (hasActiveLesson) {
+        const moduleId = module.id || module.ModuleID || module.moduleid;
+        if (!expandedModules.includes(moduleId)) {
+          expandedModules.push(moduleId);
+        }
+      }
+    });
 
     updateLessonUI();
     loadLesson(currentLessonId);
@@ -153,13 +203,28 @@ async function loadLesson(lessonId) {
       sumEl.innerHTML = summaryText.replace(/\n/g, '<br>') || '<p style="color:#94a3b8">Chưa có tóm tắt nội dung.</p>';
     }
 
-    // Always load quiz data (even for video/reading)
-    await loadQuiz(lessonId);
+    // Check lesson type
+    const lessonType = lesson.Type || lesson.type || 'video';
 
-    // Handle lesson rendering
-    document.getElementById('videoSection').classList.remove('hidden');
-    renderMediaContent(lesson);
-    switchTab('describe');
+    if (lessonType === 'quiz') {
+      // For quiz lessons, only show quiz content - hide tabs and video
+      document.getElementById('videoSection').classList.add('hidden');
+      document.querySelector('.tabs-container').classList.add('hidden');
+      
+      // Hide all tab panels except quiz
+      document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+      document.getElementById('quizTab').classList.add('active');
+      
+      await loadQuiz(lessonId);
+      showQuiz();
+    } else {
+      // For video/reading lessons, show tabs and media content
+      document.querySelector('.tabs-container').classList.remove('hidden');
+      await loadQuiz(lessonId);
+      document.getElementById('videoSection').classList.remove('hidden');
+      renderMediaContent(lesson);
+      switchTab('describe');
+    }
 
   } catch (error) {
     console.error('Error loading lesson:', error);
@@ -256,7 +321,7 @@ async function renderMediaContent(lesson) {
         contentHtml = `
           <div class="reading-tabs">
             <div class="reading-tab-buttons">
-              <button class="reading-tab-btn active" onclick="switchReadingTab('html')">Nội dung HTML</button>
+              <button class="reading-tab-btn active" onclick="switchReadingTab('html')">Nội dung</button>
               <button class="reading-tab-btn" onclick="switchReadingTab('url')">Tài liệu (${lesson.ContentUrl.split('/').pop()})</button>
             </div>
             <div class="reading-tab-content">
@@ -425,7 +490,7 @@ function showResults() {
   const percentage = Math.round((score / quizData.questions.length) * 100);
 
   document.getElementById('scoreNumber').textContent = `${score}/${quizData.questions.length}`;
-  document.getElementById('scorePercentage').textContent = `Điểm: ${percentage}%`;
+  document.getElementById('scorePercentage').textContent = `${percentage}%`;
 
   // Check if passed (>= 70%)
   const passed = percentage >= 70;
@@ -634,6 +699,9 @@ async function completeLesson() {
     courseModules = modulesRes;
     updateLessonUI();
 
+    // Check progress milestones
+    await checkProgressMilestones(userId);
+
     // Check if course is completed
     checkCourseCompletion();
   } catch (error) {
@@ -671,6 +739,79 @@ async function checkCourseCompletion() {
   } catch (error) {
     console.error('Error checking course completion:', error);
   }
+}
+
+async function checkProgressMilestones(userId) {
+  try {
+    const progressRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/progress?userId=${userId}`);
+    const progress = progressRes.progress || 0;
+
+    // Check each milestone
+    const milestones = [30, 60, 90];
+    for (const milestone of milestones) {
+      if (progress >= milestone && !progressMilestonesShown[milestone]) {
+        // Show notification for this milestone
+        showProgressMilestoneNotification(milestone);
+        progressMilestonesShown[milestone] = true;
+      }
+    }
+  } catch (error) {
+    console.error('Error checking progress milestones:', error);
+  }
+}
+
+function showProgressMilestoneNotification(milestone) {
+  // Remove existing milestone notification
+  const existing = document.querySelector('.progress-milestone-notification');
+  if (existing) existing.remove();
+
+  // Select random motivational message
+  const messageIndex = Math.floor(Math.random() * progressMotivationalMessages.length);
+  const message = progressMotivationalMessages[messageIndex];
+
+  const notification = document.createElement('div');
+  notification.className = 'progress-milestone-notification';
+  notification.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(99, 102, 241, 0.3);
+      z-index: 10000;
+      max-width: 380px;
+      font-weight: 500;
+      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      transform: translateX(400px);
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    ">
+      <span style="font-size: 28px;">🎯</span>
+      <div>
+        <div style="font-weight: 700; font-size: 16px; margin-bottom: 4px;">${milestone}% hoàn thành!</div>
+        <div style="font-weight: 400; opacity: 0.95; font-size: 14px;">${message}</div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  // Slide in animation
+  requestAnimationFrame(() => {
+    notification.style.transform = 'translateX(0)';
+  });
+
+  // Auto remove after 5 seconds
+  setTimeout(() => {
+    notification.style.transform = 'translateX(400px)';
+    setTimeout(() => notification.remove(), 500);
+  }, 5000);
 }
 
 function showCourseCompletionNotification(pointsEarned = 0) {
