@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Quản lý khóa học – Admin | Teen Lab</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Course Management - Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/FrondEnd/Style/style.css">
-    <link rel="stylesheet" href="/FrondEnd/Style/admin.css">
-    <link rel="stylesheet" href="/FrondEnd/Style/Admin-Course.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/Admin-Course.css" />
 </head>
 
 <body>
@@ -24,9 +24,10 @@
                     <h1>Admin Panel</h1>
                 </div>
                 <nav class="admin-nav">
-                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html">📊 Dashboard</a>
-                    <a href="/FrondEnd/Html/Admin/Admin-Course.html" class="active">📚 Courses</a>
-                    <a href="/FrondEnd/Html/Admin/user-management.html">👥 Users</a>
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html"><i class="fas fa-chart-pie" style="width: 20px;"></i> Dashboard</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html" class="active"><i class="fas fa-book" style="width: 20px;"></i> Content (Courses)</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html"><i class="fas fa-users" style="width: 20px;"></i> Users</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-problems.html"><i class="fas fa-code" style="width: 20px;"></i> Problems</a>
                 </nav>
             </aside>
 
@@ -34,12 +35,12 @@
             <main class="admin-main ac-main">
 
                 <!-- Header -->
-                <div class="ac-page-header">
-                    <div class="ac-page-header-left">
-                        <h1 class="ac-page-title">Quản lý khóa học</h1>
-                        <p class="ac-page-subtitle">Phê duyệt và quản lý khóa học từ giảng viên</p>
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="admin-page-title">Quản lý khóa học</h1>
+                        <p style="color: #9ca3af; font-size: 0.95rem;">Phê duyệt và quản lý khóa học từ giảng viên</p>
                     </div>
-                    <div class="ac-page-header-right">
+                    <div class="dashboard-actions">
                         <div class="ac-stat-chip ac-stat-chip--pending">
                             <span class="ac-stat-chip-num" id="pendingCount">0</span>
                             <span class="ac-stat-chip-label">Chờ duyệt</span>
@@ -175,6 +176,22 @@
 
     <!-- Toast -->
     <div id="acToast" class="ac-toast"></div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
+            </div>
+
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
+            </div>
+        </div>
+    </footer>
 
     <script type="module" src="js/admin-api.js"></script>
     <script type="module" src="js/admin-course.js"></script>

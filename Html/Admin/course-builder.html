@@ -1,124 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Course Builder - Admin</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Course Preview - Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/FrondEnd/Style/style.css">
-    <link rel="stylesheet" href="/FrondEnd/Style/admin.css">
-    <style>
-        .builder-container { display: flex; height: calc(100vh - 120px); gap: 24px; }
-        .tree-panel { flex: 1; background: rgba(15, 23, 42, 0.9); border-radius: 12px; padding: 20px; overflow-y: auto; border: 1px solid rgba(139, 92, 246, 0.2); }
-        .content-panel { flex: 2; background: rgba(30, 41, 59, 0.9); border-radius: 12px; padding: 20px; border: 1px solid rgba(16, 185, 129, 0.2); }
-        .tree-node { padding: 12px; border-radius: 8px; margin-bottom: 4px; cursor: pointer; transition: all 0.2s; position: relative; display: flex; justify-content: space-between; align-items: center; }
-        .tree-node:hover { background: rgba(139, 92, 246, 0.1); }
-        .tree-node.active { background: rgba(16, 185, 129, 0.15); border-left: 3px solid #10b981; }
-        .tree-node-title { flex: 1; }
-        .tree-node-actions { display: flex; gap: 4px; opacity: 0.7; }
-        .tree-node:hover .tree-node-actions { opacity: 1; }
-        .add-btn { padding: 4px 8px; font-size: 11px; border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; }
-        .btn-primary { background: #3b82f6; color: white; }
-        .btn-secondary { background: #6b7280; color: white; }
-        .btn-danger { background: #ef4444; color: white; }
-        .tree-children { margin-left: 24px; margin-top: 8px; }
-        .course-header { text-align: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(148, 163, 184, 0.2); }
-        .modal-footer .btn { margin-left: 8px; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/course-builder.css" />
 </head>
+
 <body>
-    <script>
-      window.CourseBuilder = window.CourseBuilder || {
-        ready: false,
-        init: () => console.log('CourseBuilder ready (fallback)'),
-        showAddModal: () => alert('Loading...'),
-        editNode: () => {},
-        deleteNode: () => {},
-        loadCourse: () => {},
-        renderTree: () => {}
-      };
-    </script>
     <div class="app-container admin-app">
         <div class="top-section">
+            <!-- Sidebar -->
             <aside class="admin-sidebar">
                 <div class="sidebar-header">
                     <h1>Admin Panel</h1>
                 </div>
                 <nav class="admin-nav">
-                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html">Dashboard</a>
-                    <a href="/FrondEnd/Html/Admin/Admin-Course.html">Courses</a>
-                    <a href="/FrondEnd/Html/Admin/user-management.html">Users</a>
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html"><i class="fas fa-chart-pie" style="width: 20px;"></i> Dashboard</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html" class="active"><i class="fas fa-book" style="width: 20px;"></i> Content (Courses)</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html"><i class="fas fa-users" style="width: 20px;"></i> Users</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-problems.html"><i class="fas fa-code" style="width: 20px;"></i> Problems</a>
                 </nav>
             </aside>
-            <main class="admin-main">
-                <div class="admin-header">
-                    <h1 class="admin-page-title" id="courseTitleHeader">Course Builder</h1>
-                    <p class="admin-subtitle" id="courseSubtitle">Loading course...</p>
-                </div>
-                
-                <div class="admin-toolbar">
-                    <button class="btn btn-primary" id="addFirstModule">+ Add First Module</button>
-                    <button class="btn btn-secondary" id="saveAllChanges">💾 Save All Changes</button>
-                    <button class="btn btn-secondary" id="exportCourse">📥 Export Structure</button>
-                </div>
-                
-                <div class="builder-container">
-                    <div class="tree-panel">
-                        <div class="course-header">
-                            <h2 id="courseName">Loading...</h2>
-                            <small id="courseModulesCount">0 modules</small>
-                        </div>
-                        <div id="courseTree"></div>
+
+            <!-- Main -->
+            <main class="admin-main cb-main">
+
+                <!-- Header -->
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="admin-page-title" id="courseTitleHeader">Course Preview</h1>
+                        <p style="color: #9ca3af; font-size: 0.95rem;" id="courseSubtitle">Loading course...</p>
                     </div>
-                    <div class="content-panel" id="contentPanel">
-                        <div class="text-center" style="padding: 60px; color: #94a3b8;">
-                            <div style="font-size: 48px; margin-bottom: 16px;">📚</div>
-                            <h3>Select an item to edit</h3>
-                            <p>Click on modules, lessons, or quizzes in the tree to manage content</p>
+                    <div class="dashboard-actions">
+                        <button class="cb-btn cb-btn--secondary" onclick="window.location.href='/FrondEnd/Html/Admin/Admin-Course.html'">
+                            <i class="fas fa-arrow-left"></i> Quay lại
+                        </button>
+                        <div class="cb-action-buttons">
+                            <button class="cb-btn cb-btn--success" id="approveBtn" onclick="window.__approveCourse()">
+                                <i class="fas fa-check"></i> Xuất bản
+                            </button>
+                            <button class="cb-btn cb-btn--danger" id="rejectBtn" onclick="window.__rejectCourse()">
+                                <i class="fas fa-times"></i> Từ chối
+                            </button>
+                            <button class="cb-btn cb-btn--warning" id="unpublishBtn" onclick="window.__unpublishCourse()">
+                                <i class="fas fa-undo"></i> Hủy xuất bản
+                            </button>
                         </div>
                     </div>
                 </div>
+
+                <!-- Course Info Banner -->
+                <div class="cb-course-banner" id="courseBanner">
+                    <div class="cb-banner-content">
+                        <div class="cb-banner-left">
+                            <div class="cb-course-thumb" id="courseThumb">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <div class="cb-course-info">
+                                <h2 id="courseName">Loading...</h2>
+                                <div class="cb-course-meta">
+                                    <span class="cb-level-badge" id="courseLevel">—</span>
+                                    <span class="cb-module-count" id="moduleCount">0 module</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cb-banner-right">
+                            <div class="cb-status-badge" id="courseStatus">—</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Banner (if rejected) -->
+                <div class="cb-feedback-banner" id="feedbackBanner" style="display:none;">
+                    <div class="cb-feedback-content">
+                        <span class="cb-feedback-icon">⚠️</span>
+                        <div>
+                            <strong>Admin Feedback</strong>
+                            <p id="feedbackText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main Content Layout -->
+                <div class="cb-layout">
+                    <!-- Left: Module Tree -->
+                    <div class="cb-tree-panel">
+                        <div class="cb-panel-header">
+                            <h3><i class="fas fa-folder-tree"></i> Course Structure</h3>
+                        </div>
+                        <div id="moduleTree" class="cb-module-tree">
+                            <div class="cb-loading">
+                                <div class="cb-spinner"></div>
+                                <span>Đang tải...</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Content Preview -->
+                    <div class="cb-content-panel">
+                        <div class="cb-panel-header">
+                            <h3><i class="fas fa-eye"></i> Content Preview</h3>
+                        </div>
+                        <div id="contentPreview" class="cb-content-preview">
+                            <div class="cb-empty-state">
+                                <div class="cb-empty-icon">📖</div>
+                                <h3>Select a lesson to preview</h3>
+                                <p>Click on any lesson in the course structure to view its content</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </main>
         </div>
     </div>
 
-    <!-- Global Add Modal -->
-    <div class="modal-overlay" id="addModal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2 id="addModalTitle">Add Module</h2>
-                <button class="close-btn" id="closeAddModal">&times;</button>
+    <footer>
+        <div class="footer-content">
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
             </div>
-            <div class="modal-body">
-                <form id="addForm">
-                    <input type="hidden" id="parentId" name="parentId">
-                    <input type="hidden" id="parentType" name="parentType">
-                    <div class="form-group">
-                        <label for="itemTitle">Title *</label>
-                        <input type="text" id="itemTitle" required>
-                    </div>
-                    <div id="lessonTypeGroup" style="display: none;">
-                        <label for="lessonType">Type</label>
-                        <select id="lessonType">
-                            <option value="video">Video</option>
-                            <option value="reading">Reading</option>
-                        </select>
-                    </div>
-                </form>
+            
+            <div class="footer-decoration">
+                <div class="decoration-line"></div>
+                <div class="decoration-dot"></div>
+                <div class="decoration-line"></div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" id="cancelAdd">Cancel</button>
-                <button type="button" class="btn btn-primary" id="saveAdd">Add</button>
+        </div>
+    </footer>
+
+    <!-- ================= APPROVE MODAL ================= -->
+    <div class="cb-modal-backdrop" id="approveModal">
+        <div class="cb-modal cb-modal--sm">
+            <div class="cb-modal-header">
+                <h3>Xác nhận xuất bản</h3>
+                <button class="cb-modal-close"
+                    onclick="document.getElementById('approveModal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="cb-modal-body">
+                <p style="font-size:0.92rem;color:#475569;line-height:1.7;">
+                    Bạn có chắc chắn muốn phê duyệt và xuất bản khóa học
+                    <strong id="approveCourseName" style="color:#2e7d32;">—</strong>?
+                </p>
+                <p style="font-size:0.82rem;color:#94a3b8;margin-top:8px;">
+                    Khóa học sẽ được xuất bản công khai cho học viên.
+                </p>
+            </div>
+            <div class="cb-modal-footer">
+                <button class="cb-modal-cancel"
+                    onclick="document.getElementById('approveModal').classList.remove('active')">Hủy</button>
+                <button class="cb-btn cb-btn--success" id="confirmApprove">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Phê duyệt xuất bản
+                </button>
             </div>
         </div>
     </div>
 
-<script type="module" src="js/admin-api.js"></script>
-     <script type="module" src="js/course-builder-fixed.js"></script>
-     <script src="js/quiz-editor.js"></script>
-     <script src="js/lesson-editor.js"></script>
-</body>
-</html>
+    <!-- ================= REJECT MODAL ================= -->
+    <div class="cb-modal-backdrop" id="rejectModal">
+        <div class="cb-modal">
+            <div class="cb-modal-header cb-modal-header--danger">
+                <h3>Từ chối khóa học</h3>
+                <button class="cb-modal-close"
+                    onclick="document.getElementById('rejectModal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="cb-modal-body">
+                <p style="font-size:0.92rem;color:#475569;margin-bottom:14px;">
+                    Khóa học: <strong id="rejectCourseName" style="color:#1e293b;">—</strong>
+                </p>
+                <div class="cb-fg">
+                    <label class="cb-label">Lý do từ chối (feedback cho giảng viên) *</label>
+                    <textarea class="cb-input cb-textarea" id="rejectFeedback" rows="4"
+                        placeholder="VD: Nội dung chưa đầy đủ, cần bổ sung thêm quiz cho bài 3..."></textarea>
+                </div>
+            </div>
+            <div class="cb-modal-footer">
+                <button class="cb-modal-cancel"
+                    onclick="document.getElementById('rejectModal').classList.remove('active')">Hủy</button>
+                <button class="cb-btn cb-btn--danger" id="confirmReject">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M6 18L18 6M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    Từ chối & gửi feedback
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <!-- ================= UNPUBLISH MODAL ================= -->
+    <div class="cb-modal-backdrop" id="unpublishModal">
+        <div class="cb-modal cb-modal--sm">
+            <div class="cb-modal-header cb-modal-header--warning">
+                <h3>Hủy xuất bản khóa học</h3>
+                <button class="cb-modal-close"
+                    onclick="document.getElementById('unpublishModal').classList.remove('active')">&times;</button>
+            </div>
+            <div class="cb-modal-body">
+                <p style="font-size:0.92rem;color:#475569;margin-bottom:14px;">
+                    Khóa học: <strong id="unpublishCourseName" style="color:#1e293b;">—</strong>
+                </p>
+                <div class="cb-fg">
+                    <label class="cb-label">Lý do hủy xuất bản (tùy chọn)</label>
+                    <textarea class="cb-input cb-textarea" id="unpublishFeedback" rows="3"
+                        placeholder="VD: Cần cập nhật nội dung, phát hiện lỗi..."></textarea>
+                </div>
+            </div>
+            <div class="cb-modal-footer">
+                <button class="cb-modal-cancel"
+                    onclick="document.getElementById('unpublishModal').classList.remove('active')">Hủy</button>
+                <button class="cb-btn cb-btn--warning" id="confirmUnpublish">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12a9 9 0 1118 0 9 9 0 01-18 0z" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Hủy xuất bản
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin-api.js"></script>
+    <script type="module" src="js/course-builder-fixed.js"></script>
+</body>
+
+</html>

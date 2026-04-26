@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Problem Management - Admin</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../../Style/style.css">
-    <link rel="stylesheet" href="../../Style/admin.css">
-    <link rel="stylesheet" href="../../Style/Admin-problems.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
+    <link rel="stylesheet" href="/FrondEnd/Style/Admin-problems.css" />
 </head>
+
 <body>
     <div class="app-container admin-app">
         <div class="top-section">
@@ -20,90 +22,176 @@
                     <h1>Admin Panel</h1>
                 </div>
                 <nav class="admin-nav">
-                    <a href="admin-dashboard.html">Dashboard</a>
-                    <a href="Admin-Course.html">Courses</a>
-                    <a href="" class="active">Problems</a>
-                    <a href="user-management.html">Users</a>
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html"><i class="fas fa-chart-pie"
+                            style="width: 20px;"></i> Dashboard</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html"><i class="fas fa-book" style="width: 20px;"></i>
+                        Content (Courses)</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html"><i class="fas fa-users"
+                            style="width: 20px;"></i> Users</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-problems.html" class="active"><i class="fas fa-code"
+                            style="width: 20px;"></i> Problems</a>
                 </nav>
             </aside>
 
             <main class="admin-main">
-                <!-- Header -->
-                <div class="admin-header">
-                    <h1 class="admin-page-title">ADMIN PROBLEM MANAGEMENT</h1>
-                    <p class="admin-subtitle">Create, edit and manage coding problems and test cases</p>
+                <div class="dashboard-header">
+                    <div>
+                        <h1 class="admin-page-title">Problem Management</h1>
+                        <p style="color: #9ca3af; font-size: 0.95rem;">Quản lý bài tập coding và test cases</p>
+                    </div>
+                    <div class="dashboard-actions">
+                        <button type="button" class="btn btn-primary" id="btnAddProblem">
+                            <i class="fas fa-plus"></i> Create Problem
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Toolbar -->
-                <div class="admin-toolbar">
-                    <input type="text" class="search-input" id="problemSearch" placeholder="Search problems by title...">
-                    <button class="btn btn-primary" id="btnAddProblem">
-                        <i class="fas fa-plus"></i> Create New Problem
+                <!-- Stats Cards -->
+                <div class="problem-stats-grid">
+                    <div class="stat-card stat-total">
+                        <div class="stat-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Tổng Bài Tập</h3>
+                            <span class="value" id="totalProblems">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-easy">
+                        <div class="stat-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Dễ</h3>
+                            <span class="value" id="easyProblems">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-medium">
+                        <div class="stat-icon">
+                            <i class="fas fa-meh"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Trung Bình</h3>
+                            <span class="value" id="mediumProblems">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-hard">
+                        <div class="stat-icon">
+                            <i class="fas fa-frown"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Khó</h3>
+                            <span class="value" id="hardProblems">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-active">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Đang Hiện</h3>
+                            <span class="value" id="activeProblems">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card stat-hidden">
+                        <div class="stat-icon">
+                            <i class="fas fa-eye-slash"></i>
+                        </div>
+                        <div class="stat-content">
+                            <h3>Đang Ẩn</h3>
+                            <span class="value" id="hiddenProblems">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="problem-toolbar">
+                    <div class="search-wrapper">
+                        <i class="fas fa-search"></i>
+                        <input type="search" id="problemSearch" placeholder="Tìm kiếm theo tiêu đề..." />
+                    </div>
+                    <div class="filter-wrapper">
+                        <select id="difficultyFilter">
+                            <option value="">Tất cả độ khó</option>
+                            <option value="Easy">Dễ</option>
+                            <option value="Medium">Trung bình</option>
+                            <option value="Hard">Khó</option>
+                        </select>
+                        <select id="statusFilter">
+                            <option value="">Tất cả trạng thái</option>
+                            <option value="active">Đang hiện</option>
+                            <option value="hidden">Đang ẩn</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Problems Table -->
+                <div class="problems-table-container">
+                    <table class="problems-table" id="problemsTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Tiêu Đề</th>
+                                <th>Độ Khó</th>
+                                <th>Thời Gian (ms)</th>
+                                <th>Điểm</th>
+                                <th>Test Cases</th>
+                                <th>Nộp Bài</th>
+                                <th>Trạng Thái</th>
+                                <th>Hành Động</th>
+                            </tr>
+                        </thead>
+                        <tbody id="problemsTableBody">
+                            <tr>
+                                <td colspan="9" style="text-align: center; color: #6b7280; padding: 3rem;">
+                                    <i class="fas fa-spinner fa-spin" style="margin-right: 0.5rem;"></i> Đang tải...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination-wrap" id="problemPagination" style="display: none;">
+                    <button class="btn btn-secondary btn-sm" id="prevProblemPage">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <span id="problemPageInfo"></span>
+                    <button class="btn btn-secondary btn-sm" id="nextProblemPage">
+                        Next <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
 
-                <!-- Problem List Section -->
-                <div class="admin-section">
-                    <div class="section-header">
-                        <h2>Problem List</h2>
-                        <div class="section-actions">
-                            <span id="selectedProblemInfo" style="color: #94a3b8;"></span>
-                        </div>
-                    </div>
-                    <div class="admin-table-wrap" id="problemsTableWrap">
-                        <table class="admin-table problem-table" id="problemsTable">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Title</th>
-                                    <th>Difficulty</th>
-                                    <th>Time Limit (ms)</th>
-                                    <th>Score</th>
-                                    <th>Test Cases</th>
-                                    <th>Submissions</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="problemsTableBody">
-                                <tr>
-                                    <td colspan="9" class="text-center">Loading problems...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="pagination-wrap" id="problemPagination" style="display: none;">
-                        <button class="btn btn-secondary btn-sm" id="prevProblemPage">Previous</button>
-                        <span id="problemPageInfo"></span>
-                        <button class="btn btn-secondary btn-sm" id="nextProblemPage">Next</button>
-                    </div>
-                </div>
-
                 <!-- Test Case Manager Section -->
-                <div class="admin-section">
+                <div class="testcase-section" id="testcaseSection" style="display: none;">
                     <div class="section-header">
-                        <h2>Test Case Manager</h2>
-                        <span id="tcWarning" class="badge badge-warning" style="display: none;">⚠️ Add at least 2 test cases (1 public)</span>
+                        <h2><i class="fas fa-vial"></i> Quản Lý Test Cases</h2>
+                        <span id="selectedProblemInfo" class="selected-problem"></span>
                     </div>
-                    <div class="admin-table-wrap" id="testcasesTableWrap" style="display: none;">
-                        <table class="admin-table testcase-table" id="testcasesTable">
+                    <div class="testcase-warning" id="tcWarning" style="display: none;">
+                        <i class="fas fa-exclamation-triangle"></i> Thêm ít nhất 2 test cases (1 public)
+                    </div>
+                    <div class="testcases-table-container">
+                        <table class="testcases-table">
                             <thead>
                                 <tr>
-                                    <th>Input Data</th>
-                                    <th>Expected Output</th>
-                                    <th>Time Limit</th>
-                                    <th>Hidden</th>
-                                    <th>Actions</th>
+                                    <th>Input</th>
+                                    <th>Output</th>
+                                    <th>Thời Gian</th>
+                                    <th>Ẩn</th>
+                                    <th>Hành Động</th>
                                 </tr>
                             </thead>
                             <tbody id="testcasesTableBody">
-                                <tr>
-                                    <td colspan="5" class="text-center">Select a problem to manage test cases</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div class="admin-toolbar" id="testcaseToolbar" style="display: none; margin-top: 16px;">
+                    <div class="testcase-toolbar">
                         <button class="btn btn-primary" id="btnAddTestCase">
                             <i class="fas fa-plus"></i> Add Test Case
                         </button>
@@ -113,48 +201,61 @@
         </div>
     </div>
 
-    <!-- Problem Editor Modal -->
+    <!-- Problem Modal -->
     <div class="modal-overlay" id="problemModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="problemModalTitle">Create New Problem</h2>
-                <button class="close-btn" id="closeProblemModal">×</button>
+                <h2 id="problemModalTitle">
+                    <i class="fas fa-plus-circle"></i> Create Problem
+                </h2>
+                <button class="modal-close" id="closeProblemModal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="problemForm">
                     <input type="hidden" id="problemId">
-                    <div class="form-group">
-                        <label for="problemTitle">Problem Title *</label>
-                        <input type="text" id="problemTitle" required maxlength="255">
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="problemTitle">Tiêu Đề *</label>
+                            <input type="text" id="problemTitle" required maxlength="255" placeholder="Nhập tiêu đề bài tập">
+                        </div>
+                        <div class="form-group">
+                            <label for="problemDifficulty">Độ Khó *</label>
+                            <select id="problemDifficulty" required>
+                                <option value="">Chọn độ khó</option>
+                                <option value="Easy">Dễ</option>
+                                <option value="Medium">Trung bình</option>
+                                <option value="Hard">Khó</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="problemDifficulty">Difficulty *</label>
-                        <select id="problemDifficulty" required>
-                            <option value="">Select difficulty</option>
-                            <option value="Easy">Easy</option>
-                            <option value="Medium">Medium</option>
-                            <option value="Hard">Hard</option>
-                        </select>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="problemScore">Điểm</label>
+                            <input type="number" id="problemScore" value="0" min="0" placeholder="Điểm (mặc định: 0)">
+                        </div>
+                        <div class="form-group">
+                            <label for="problemTimeLimit">Thời Gian (ms) *</label>
+                            <input type="number" id="problemTimeLimit" required min="100" max="5000" value="2000">
+                        </div>
                     </div>
+
                     <div class="form-group">
-                        <label for="problemScore">Score</label>
-                        <input type="number" id="problemScore" value="0" min="0" placeholder="Score (default: 0)">
+                        <label for="problemDescription">Mô Tả *</label>
+                        <textarea id="problemDescription" required rows="8" placeholder="Mô tả chi tiết bài tập..."></textarea>
                     </div>
+
                     <div class="form-group">
-                        <label for="problemTimeLimit">Time Limit (ms) *</label>
-                        <input type="number" id="problemTimeLimit" required min="100" max="5000" value="2000">
+                        <label for="problemHints">Gợi Ý</label>
+                        <textarea id="problemHints" rows="3" placeholder="Gợi ý cho người dùng..."></textarea>
                     </div>
+
                     <div class="form-group">
-                        <label for="problemDescription">Problem Description *</label>
-                        <textarea id="problemDescription" required rows="8" placeholder="Write detailed problem description..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="problemHints">Hints</label>
-                        <textarea id="problemHints" rows="3" placeholder="Optional hints for users..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="problemExamples">Examples</label>
-                        <textarea id="problemExamples" rows="6" placeholder="Example Input/Output format:
+                        <label for="problemExamples">Ví Dụ</label>
+                        <textarea id="problemExamples" rows="6" placeholder="Ví dụ Input/Output:
 Input:
 5
 1 2 3 4 5
@@ -162,18 +263,21 @@ Input:
 Output:
 5"></textarea>
                     </div>
+
                     <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="problemAccept" checked> Accept (Show to users)
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" id="problemAccept" checked> Hiển thị cho người dùng
                         </label>
-                        <small style="color: var(--text-secondary); display: block; margin-top: 4px;">Uncheck to hide this problem from users</small>
+                        <small style="color: #94a3b8; display: block; margin-top: 0.25rem;">Bỏ chọn để ẩn bài tập này</small>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelProblem">Cancel</button>
+                <button type="button" class="btn btn-secondary" id="cancelProblem">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
                 <button type="button" class="btn btn-primary" id="saveProblem">
-                    <i class="fas fa-save"></i> Save Problem
+                    <i class="fas fa-save"></i> Lưu
                 </button>
             </div>
         </div>
@@ -183,36 +287,47 @@ Output:
     <div class="modal-overlay" id="testcaseModal">
         <div class="modal">
             <div class="modal-header">
-                <h2 id="testcaseModalTitle">Add Test Case</h2>
-                <button class="close-btn" id="closeTestcaseModal">×</button>
+                <h2 id="testcaseModalTitle">
+                    <i class="fas fa-plus-circle"></i> Add Test Case
+                </h2>
+                <button class="modal-close" id="closeTestcaseModal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="modal-body">
                 <form id="testcaseForm">
                     <input type="hidden" id="testcaseId">
                     <input type="hidden" id="currentProblemId">
+                    
                     <div class="form-group">
                         <label for="testcaseInput">Input Data *</label>
-                        <textarea id="testcaseInput" required rows="6" placeholder="Enter input data..."></textarea>
+                        <textarea id="testcaseInput" required rows="6" placeholder="Nhập input data..."></textarea>
                     </div>
+                    
                     <div class="form-group">
                         <label for="testcaseOutput">Expected Output *</label>
-                        <textarea id="testcaseOutput" required rows="6" placeholder="Enter expected output..."></textarea>
+                        <textarea id="testcaseOutput" required rows="6" placeholder="Nhập expected output..."></textarea>
                     </div>
-                    <div class="form-group">
-                        <label for="testcaseTimeLimit">Time Limit (ms)</label>
-                        <input type="number" id="testcaseTimeLimit" min="100" max="5000" value="2000">
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="testcaseHidden"> Hidden Test Case
-                        </label>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="testcaseTimeLimit">Thời Gian (ms)</label>
+                            <input type="number" id="testcaseTimeLimit" min="100" max="5000" value="2000">
+                        </div>
+                        <div class="form-group" style="display: flex; align-items: center; padding-top: 1.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="testcaseHidden"> Ẩn Test Case
+                            </label>
+                        </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelTestcase">Cancel</button>
+                <button type="button" class="btn btn-secondary" id="cancelTestcase">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
                 <button type="button" class="btn btn-primary" id="saveTestcase">
-                    <i class="fas fa-save"></i> Save Test Case
+                    <i class="fas fa-save"></i> Lưu
                 </button>
             </div>
         </div>
@@ -222,17 +337,23 @@ Output:
     <div class="modal-overlay" id="deleteConfirmModal">
         <div class="modal">
             <div class="modal-header">
-                <h2>Confirm Delete</h2>
-                <button class="close-btn" id="closeDeleteModal">×</button>
+                <h2>
+                    <i class="fas fa-exclamation-triangle"></i> Xác Nhận Xóa
+                </h2>
+                <button class="modal-close" id="closeDeleteModal">
+                    <i class="fas fa-times"></i>
+                </button>
             </div>
             <div class="modal-body">
-                <p>Are you sure you want to delete <strong id="deleteItemName"></strong>?</p>
+                <p>Bạn có chắc muốn xóa <strong id="deleteItemName"></strong>?</p>
                 <p class="text-danger" id="deleteWarning"></p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" id="cancelDelete">Cancel</button>
+                <button type="button" class="btn btn-secondary" id="cancelDelete">
+                    <i class="fas fa-times"></i> Hủy
+                </button>
                 <button type="button" class="btn btn-danger" id="confirmDelete">
-                    <i class="fas fa-trash"></i> Delete
+                    <i class="fas fa-trash"></i> Xóa
                 </button>
             </div>
         </div>
@@ -241,4 +362,5 @@ Output:
     <script type="module" src="js/admin-api.js"></script>
     <script type="module" src="js/admin-problem.js"></script>
 </body>
+
 </html>

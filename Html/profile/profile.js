@@ -135,8 +135,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.getElementById("inputLocation").value = user.Location || "";
                 document.getElementById("inputGender").value = user.Gender || "";
                 document.getElementById("inputBirthYear").value = user.BirthYear || "";
-                document.getElementById("inputScore").value = user.score || 0;
-                document.getElementById("inputTitle").value = user.title || "";
 
                 // Describe / Bio field
                 const describeEl = document.getElementById("inputDescribe");
@@ -258,8 +256,7 @@ document.addEventListener("DOMContentLoaded", () => {
             Location: document.getElementById("inputLocation").value,
             Gender: document.getElementById("inputGender").value,
             BirthYear: document.getElementById("inputBirthYear").value,
-            Describe: (document.getElementById("inputDescribe") || {}).value || '',
-            title: document.getElementById("inputTitle").value || ''
+            Describe: (document.getElementById("inputDescribe") || {}).value || ''
         };
 
         const updateBtn = document.getElementById('updateBtn');

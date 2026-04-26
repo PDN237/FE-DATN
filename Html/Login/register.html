@@ -116,6 +116,18 @@
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3>Đăng ký thành công!</h3>
+            <p>Tài khoản của bạn đã được tạo thành công</p>
+            <button onclick="closeModalAndRedirect()">Đăng nhập ngay</button>
+        </div>
+    </div>
+
     <script>
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
@@ -162,6 +174,22 @@
             }
         });
 
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.add('active');
+        }
+
+        function closeModalAndRedirect() {
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('active');
+            
+            // Add fade out animation before redirect
+            document.body.style.animation = 'fadeOut 0.5s ease-out forwards';
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 500);
+        }
+
         document.getElementById('registerForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
@@ -195,8 +223,7 @@
                 const result = await response.json();
                 
                 if (result.success) {
-                    alert(result.message);
-                    window.location.href = 'login.html';
+                    showSuccessModal();
                 } else {
                     alert(result.message);
                 }

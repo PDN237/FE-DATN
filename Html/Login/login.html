@@ -94,6 +94,18 @@
         </div>
     </div>
 
+    <!-- Success Modal -->
+    <div class="success-modal" id="successModal">
+        <div class="success-modal-content">
+            <div class="success-icon">
+                <i class="fas fa-check"></i>
+            </div>
+            <h3>Đăng nhập thành công!</h3>
+            <p>Chào mừng bạn quay trở lại Teen Lab</p>
+            <button onclick="closeModalAndRedirect()">Tiếp tục</button>
+        </div>
+    </div>
+
     <script>
         function togglePassword(fieldId) {
             const field = document.getElementById(fieldId);
@@ -107,6 +119,22 @@
                 icon.classList.remove('fa-eye-slash');
                 icon.classList.add('fa-eye');
             }
+        }
+
+        function showSuccessModal() {
+            const modal = document.getElementById('successModal');
+            modal.classList.add('active');
+        }
+
+        function closeModalAndRedirect() {
+            const modal = document.getElementById('successModal');
+            modal.classList.remove('active');
+            
+            // Add fade out animation before redirect
+            document.body.style.animation = 'fadeOut 0.5s ease-out forwards';
+            setTimeout(() => {
+                window.location.href = '../../Index.html';
+            }, 500);
         }
 
         document.getElementById('loginForm').addEventListener('submit', async (e) => {
@@ -127,8 +155,7 @@
                     localStorage.setItem('authToken', result.token);
                     localStorage.setItem('userId', result.user.id);
                     localStorage.setItem('user', JSON.stringify(result.user));
-                    alert(result.message);
-                    window.location.href = '../../Index.html';
+                    showSuccessModal();
                 } else {
                     alert(result.message);
                 }

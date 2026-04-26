@@ -5,6 +5,7 @@ class AdminProblemManager {
     this.currentPage = 1;
     this.currentProblemId = null;
     this.pendingDelete = null;
+    this.allProblems = [];
     this.init();
   }
 
@@ -16,7 +17,9 @@ class AdminProblemManager {
   bindEvents() {
     // Problem list
     document.getElementById('btnAddProblem').addEventListener('click', () => this.openProblemModal());
-    document.getElementById('problemSearch').addEventListener('input', debounce(this.searchProblems.bind(this), 300));
+    document.getElementById('problemSearch').addEventListener('input', debounce(this.filterProblems.bind(this), 300));
+    document.getElementById('difficultyFilter').addEventListener('change', () => this.filterProblems());
+    document.getElementById('statusFilter').addEventListener('change', () => this.filterProblems());
     document.getElementById('prevProblemPage').addEventListener('click', () => this.changePage(-1));
     document.getElementById('nextProblemPage').addEventListener('click', () => this.changePage(1));
 
@@ -31,9 +34,9 @@ class AdminProblemManager {
         if (action === 'edit') this.editProblem(id);
         if (action === 'delete') this.deleteProblem(id, title);
       }
-      const row = e.target.closest('tr[data-action]');
-      if (row && row.dataset.action === 'select') {
-        this.selectProblem(row.dataset.id);
+      const row = e.target.closest('tr[data-problem-id]');
+      if (row) {
+        this.selectProblem(row.dataset.problemId);
       }
     });
 
@@ -41,44 +44,77 @@ class AdminProblemManager {
     document.getElementById('saveProblem').addEventListener('click', () => this.saveProblem());
     document.getElementById('cancelProblem').addEventListener('click', () => this.closeProblemModal());
     document.getElementById('closeProblemModal').addEventListener('click', () => this.closeProblemModal());
+    document.getElementById('problemModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('problemModal')) {
+        this.closeProblemModal();
+      }
+    });
 
     // Testcase modal
     document.getElementById('btnAddTestCase').addEventListener('click', () => this.openTestcaseModal());
     document.getElementById('saveTestcase').addEventListener('click', () => this.saveTestcase());
     document.getElementById('cancelTestcase').addEventListener('click', () => this.closeTestcaseModal());
     document.getElementById('closeTestcaseModal').addEventListener('click', () => this.closeTestcaseModal());
+    document.getElementById('testcaseModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('testcaseModal')) {
+        this.closeTestcaseModal();
+      }
+    });
 
     // Delete modal
     document.getElementById('cancelDelete').addEventListener('click', () => this.closeDeleteModal());
     document.getElementById('closeDeleteModal').addEventListener('click', () => this.closeDeleteModal());
     document.getElementById('confirmDelete').addEventListener('click', () => this.confirmDelete());
+    document.getElementById('deleteConfirmModal').addEventListener('click', (e) => {
+      if (e.target === document.getElementById('deleteConfirmModal')) {
+        this.closeDeleteModal();
+      }
+    });
   }
 
   async loadProblems(page = 1, search = '') {
     try {
       this.currentPage = page;
-      document.getElementById('problemsTableBody').innerHTML = '<tr><td colspan="6" class="text-center">Loading...</td></tr>';
+      document.getElementById('problemsTableBody').innerHTML = '<tr><td colspan="9" style="text-align: center; color: #6b7280; padding: 3rem;"><i class="fas fa-spinner fa-spin" style="margin-right: 0.5rem;"></i> Đang tải...</td></tr>';
       
-      const data = await adminApi.getProblems(page, 10, search);
+      const data = await adminApi.getProblems(page, 50, search);
+      this.allProblems = data.problems;
       this.renderProblems(data.problems);
+      this.updateStats(data.problems);
       this.renderPagination(data.pagination, 'problem');
       
       document.getElementById('problemSearch').value = search;
   } catch (error) {
       console.error('Load problems error:', error);
-      document.getElementById('problemsTableBody').innerHTML = '<tr><td colspan="7" class="text-center text-danger">Failed to load problems</td></tr>';
+      document.getElementById('problemsTableBody').innerHTML = '<tr><td colspan="9" style="text-align: center; color: #ef4444; padding: 3rem;"><i class="fas fa-exclamation-circle" style="margin-right: 0.5rem;"></i> Lỗi tải dữ liệu</td></tr>';
     }
+  }
+
+  updateStats(problems) {
+    const total = problems.length;
+    const easy = problems.filter(p => p.difficulty === 'Easy').length;
+    const medium = problems.filter(p => p.difficulty === 'Medium').length;
+    const hard = problems.filter(p => p.difficulty === 'Hard').length;
+    const active = problems.filter(p => p.accept !== false).length;
+    const hidden = total - active;
+
+    animateValue(document.getElementById('totalProblems'), 0, total, 1000);
+    animateValue(document.getElementById('easyProblems'), 0, easy, 1000);
+    animateValue(document.getElementById('mediumProblems'), 0, medium, 1000);
+    animateValue(document.getElementById('hardProblems'), 0, hard, 1000);
+    animateValue(document.getElementById('activeProblems'), 0, active, 1000);
+    animateValue(document.getElementById('hiddenProblems'), 0, hidden, 1000);
   }
 
   renderProblems(problems) {
     const tbody = document.getElementById('problemsTableBody');
     if (problems.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="7" class="text-center">No problems found</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="9" style="text-align: center; color: #6b7280; padding: 3rem;"><i class="fas fa-code" style="margin-right: 0.5rem;"></i> Không có bài tập nào</td></tr>';
       return;
     }
 
     tbody.innerHTML = problems.map(problem => `
-      <tr data-problem-id="${problem.id}" class="problem-row ${problem.accept === false ? 'problem-hidden' : ''}" data-action="select" data-id="${problem.id}" style="cursor: pointer;" onmouseover="this.style.background=\'rgba(139, 92, 246, 0.1)\'" onmouseout="this.style.background=\'transparent\'">
+      <tr data-problem-id="${problem.id}" class="${problem.accept === false ? 'problem-hidden' : ''} ${this.currentProblemId == problem.id ? 'selected' : ''}">
         ${this.renderProblemRow(problem).innerHTML}
       </tr>
     `).join('');
@@ -87,39 +123,53 @@ class AdminProblemManager {
   renderProblemRow(problem) {
     const tr = document.createElement('tr');
     tr.dataset.id = problem.id;
-    const difficultyClass = problem.difficulty ? problem.difficulty.toLowerCase() : 'medium';
-    const statusClass = problem.accept ? 'status-active' : 'status-inactive';
-    const statusText = problem.accept ? 'Active' : 'Hidden';
+    const difficultyClass = problem.difficulty || 'Medium';
+    const statusClass = problem.accept ? 'active' : 'hidden';
+    const statusText = problem.accept ? 'Đang hiện' : 'Đang ẩn';
     tr.innerHTML = `
       <td>${problem.id}</td>
       <td class="problem-title-cell">${escapeHtml(problem.title)}</td>
-      <td><span class="badge badge-${difficultyClass}">${escapeHtml(problem.difficulty)}</span></td>
+      <td><span class="difficulty-badge ${difficultyClass}">${escapeHtml(problem.difficulty)}</span></td>
       <td>${problem.time_limit}</td>
       <td>${problem.score || 0}</td>
       <td>${problem.testcase_count}</td>
       <td>${problem.submission_count}</td>
       <td><span class="status-badge ${statusClass}">${statusText}</span></td>
       <td>
-        <button class="btn btn-sm btn-secondary" data-action="edit" data-id="${problem.id}" title="Edit">
-          <i class="fas fa-edit"></i>
-        </button>
-        <button class="btn btn-sm btn-danger" data-action="delete" data-id="${problem.id}" data-title="${escapeHtml(problem.title)}" title="Delete">
-          <i class="fas fa-trash"></i>
-        </button>
+        <div class="action-buttons">
+          <button class="action-btn edit" data-action="edit" data-id="${problem.id}" title="Edit">
+            <i class="fas fa-edit"></i> Edit
+          </button>
+          <button class="action-btn delete" data-action="delete" data-id="${problem.id}" data-title="${escapeHtml(problem.title)}" title="Delete">
+            <i class="fas fa-trash"></i> Delete
+          </button>
+        </div>
       </td>
     `;
     return tr;
   }
 
-  selectProblem(id) {
-    this.currentProblemId = id;
-    this.loadTestCases(id);
+  filterProblems() {
+    const search = document.getElementById('problemSearch').value.toLowerCase();
+    const difficultyFilter = document.getElementById('difficultyFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
+
+    const filtered = this.allProblems.filter(problem => {
+      const matchesSearch = (problem.title || '').toLowerCase().includes(search);
+      const matchesDifficulty = !difficultyFilter || problem.difficulty === difficultyFilter;
+      const matchesStatus = !statusFilter || 
+        (statusFilter === 'active' && problem.accept !== false) ||
+        (statusFilter === 'hidden' && problem.accept === false);
+      return matchesSearch && matchesDifficulty && matchesStatus;
+    });
+
+    this.renderProblems(filtered);
   }
 
-  getTestcaseStatusClass(count) {
-    if (count >= 2) return 'good';
-    if (count === 1) return 'warning';
-    return 'danger';
+  selectProblem(id) {
+    this.currentProblemId = id;
+    this.renderProblems(this.allProblems); // Re-render to update selected state
+    this.loadTestCases(id);
   }
 
   renderPagination(pagination, type) {
@@ -133,7 +183,7 @@ class AdminProblemManager {
     }
     
     el.style.display = 'flex';
-    infoEl.textContent = `Page ${pagination.page} of ${pagination.totalPages}`;
+    infoEl.textContent = `Trang ${pagination.page} / ${pagination.totalPages}`;
   }
 
   async searchProblems() {
@@ -152,10 +202,9 @@ class AdminProblemManager {
     const form = document.getElementById('problemForm');
     form.reset();
 
-    document.getElementById('problemModalTitle').textContent = problem ? 'Edit Problem' : 'Create New Problem';
-    document.getElementById('problemId').value = problem ? problem.id : '';
-
     if (problem) {
+      document.getElementById('problemModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Problem';
+      document.getElementById('problemId').value = problem.id;
       document.getElementById('problemTitle').value = problem.title;
       document.getElementById('problemDifficulty').value = problem.difficulty;
       document.getElementById('problemTimeLimit').value = problem.time_limit;
@@ -165,6 +214,8 @@ class AdminProblemManager {
       document.getElementById('problemAccept').checked = problem.accept !== false;
       document.getElementById('problemScore').value = problem.score || 0;
     } else {
+      document.getElementById('problemModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Create Problem';
+      document.getElementById('problemId').value = '';
       document.getElementById('problemAccept').checked = true;
     }
 
@@ -197,16 +248,16 @@ class AdminProblemManager {
     try {
       if (problemId) {
         await adminApi.updateProblem(problemId, data);
-        alert('Problem updated successfully!');
+        alert('Cập nhật bài tập thành công!');
       } else {
         await adminApi.createProblem(data);
-        alert('Problem created successfully! Add test cases below.');
+        alert('Tạo bài tập thành công! Thêm test cases bên dưới.');
       }
       this.closeProblemModal();
       this.loadProblems();
       this.loadTestCases(problemId || (await this.getLastProblemId()));
     } catch (error) {
-      alert('Error: ' + error.message);
+      alert('Lỗi: ' + error.message);
     }
   }
 
@@ -226,13 +277,13 @@ class AdminProblemManager {
       this.openProblemModal(problem);
       await this.loadTestCases(id);
     } catch (error) {
-      alert('Error loading problem: ' + error.message);
+      alert('Lỗi tải bài tập: ' + error.message);
     }
   }
 
   async deleteProblem(id, title) {
     document.getElementById('deleteItemName').textContent = title;
-    document.getElementById('deleteWarning').textContent = '';
+    document.getElementById('deleteWarning').textContent = 'Hành động này sẽ xóa tất cả test cases và submissions liên quan.';
     this.pendingDelete = { type: 'problem', id };
     document.getElementById('deleteConfirmModal').classList.add('active');
   }
@@ -240,15 +291,14 @@ class AdminProblemManager {
   // Test Cases
   async loadTestCases(problemId) {
     if (!problemId) {
-      document.getElementById('testcasesTableWrap').style.display = 'none';
-      document.getElementById('testcaseToolbar').style.display = 'none';
-      document.getElementById('tcWarning').style.display = 'none';
+      document.getElementById('testcaseSection').style.display = 'none';
       return;
     }
 
     try {
       this.currentProblemId = problemId;
-      document.getElementById('selectedProblemInfo').innerHTML = `<span class="selected-problem">Problem #${problemId}</span> selected`;
+      document.getElementById('selectedProblemInfo').textContent = `Problem #${problemId}`;
+      document.getElementById('testcaseSection').style.display = 'block';
       
       const testcases = await adminApi.getTestCases(problemId);
       this.renderTestCases(testcases, problemId);
@@ -256,10 +306,7 @@ class AdminProblemManager {
       const totalTC = testcases.length;
       const publicTC = testcases.filter(tc => !tc.is_hidden).length;
       
-      document.getElementById('tcWarning').style.display = totalTC < 2 || publicTC < 1 ? 'inline' : 'none';
-      
-      document.getElementById('testcasesTableWrap').style.display = 'block';
-      document.getElementById('testcaseToolbar').style.display = 'flex';
+      document.getElementById('tcWarning').style.display = totalTC < 2 || publicTC < 1 ? 'flex' : 'none';
     } catch (error) {
       console.error('Load testcases error:', error);
     }
@@ -268,26 +315,28 @@ class AdminProblemManager {
   renderTestCases(testcases, problemId) {
     const tbody = document.getElementById('testcasesTableBody');
     if (testcases.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5" class="text-center">No test cases. <button class="btn btn-primary btn-sm" onclick="adminProblems.openTestcaseModal()">Add first test case</button></td></tr>';
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #6b7280; padding: 3rem;"><i class="fas fa-vial" style="margin-right: 0.5rem;"></i> Không có test case. <button class="action-btn edit" onclick="adminProblems.openTestcaseModal()">Thêm test case đầu tiên</button></td></tr>';
       return;
     }
 
     tbody.innerHTML = testcases.map(tc => `
       <tr data-tcid="${tc.id}" class="${tc.is_hidden ? 'hidden' : ''}">
-        <td><div class="input-preview">${escapeHtml(tc.input_data)}</div></td>
-        <td><div class="output-preview">${escapeHtml(tc.expected_output)}</div></td>
+        <td><div class="testcase-preview">${escapeHtml(tc.input_data)}</div></td>
+        <td><div class="testcase-preview">${escapeHtml(tc.expected_output)}</div></td>
         <td>${tc.time_limit}ms</td>
-        <td>${tc.is_hidden ? '<i class="fas fa-eye-slash text-danger"></i>' : '<i class="fas fa-eye text-success"></i>'}</td>
-        <td class="actions">
-          <button class="btn btn-edit btn-sm" onclick="adminProblems.editTestcase(${problemId}, ${tc.id})">
-            <i class="fas fa-edit"></i>
-          </button>
-          <button class="btn btn-duplicate btn-sm" onclick="adminProblems.duplicateTestcase(${problemId}, ${tc.id})">
-            <i class="fas fa-copy"></i>
-          </button>
-          <button class="btn btn-danger btn-sm" onclick="adminProblems.deleteTestcase(${problemId}, ${tc.id}, 'Test Case #${tc.id}')">
-            <i class="fas fa-trash"></i>
-          </button>
+        <td>${tc.is_hidden ? '<i class="fas fa-eye-slash" style="color: #ef4444;"></i>' : '<i class="fas fa-eye" style="color: #10b981;"></i>'}</td>
+        <td>
+          <div class="action-buttons">
+            <button class="action-btn edit" onclick="adminProblems.editTestcase(${problemId}, ${tc.id})">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button class="action-btn edit" onclick="adminProblems.duplicateTestcase(${problemId}, ${tc.id})">
+              <i class="fas fa-copy"></i>
+            </button>
+            <button class="action-btn delete" onclick="adminProblems.deleteTestcase(${problemId}, ${tc.id}, 'Test Case #${tc.id}')">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
         </td>
       </tr>
     `).join('');
@@ -298,14 +347,16 @@ class AdminProblemManager {
     const form = document.getElementById('testcaseForm');
     form.reset();
     
-    document.getElementById('testcaseModalTitle').textContent = testcase ? 'Edit Test Case' : 'Add Test Case';
-    document.getElementById('testcaseId').value = testcase ? testcase.id : '';
-    
     if (testcase) {
+      document.getElementById('testcaseModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Test Case';
+      document.getElementById('testcaseId').value = testcase.id;
       document.getElementById('testcaseInput').value = testcase.input_data;
       document.getElementById('testcaseOutput').value = testcase.expected_output;
       document.getElementById('testcaseTimeLimit').value = testcase.time_limit;
       document.getElementById('testcaseHidden').checked = testcase.is_hidden;
+    } else {
+      document.getElementById('testcaseModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Add Test Case';
+      document.getElementById('testcaseId').value = '';
     }
     
     modal.classList.add('active');
@@ -340,7 +391,7 @@ class AdminProblemManager {
       await this.loadTestCases(this.currentProblemId);
       await this.loadProblems(); // Refresh problem list counts
     } catch (error) {
-      alert('Error: ' + error.message);
+      alert('Lỗi: ' + error.message);
     }
   }
 
@@ -355,25 +406,25 @@ class AdminProblemManager {
         throw new Error("Test case not found");
       }
     } catch (error) {
-      alert('Error loading testcase: ' + error.message);
+      alert('Lỗi tải testcase: ' + error.message);
     }
   }
 
   async duplicateTestcase(problemId, tcid) {
-    if (confirm('Duplicate this test case?')) {
+    if (confirm('Sao chép test case này?')) {
       try {
         await adminApi.duplicateTestCase(problemId, tcid);
         await this.loadTestCases(problemId);
         await this.loadProblems();
       } catch (error) {
-        alert('Error duplicating: ' + error.message);
+        alert('Lỗi sao chép: ' + error.message);
       }
     }
   }
 
   async deleteTestcase(problemId, tcid, name) {
     document.getElementById('deleteItemName').textContent = name;
-    document.getElementById('deleteWarning').innerHTML = 'This will not affect existing submissions.';
+    document.getElementById('deleteWarning').textContent = 'Hành động này sẽ không ảnh hưởng đến các submissions đã tồn tại.';
     this.pendingDelete = { type: 'testcase', problemId, tcid };
     document.getElementById('deleteConfirmModal').classList.add('active');
   }
@@ -392,9 +443,9 @@ class AdminProblemManager {
       if (type === 'testcase') {
         this.loadTestCases(problemId);
       }
-      alert('Deleted successfully!');
+      alert('Đã xóa thành công!');
     } catch (error) {
-      alert('Delete failed: ' + error.message);
+      alert('Lỗi xóa: ' + error.message);
     }
   }
 
@@ -420,6 +471,19 @@ function debounce(func, wait) {
     clearTimeout(timeout);
     timeout = setTimeout(later, wait);
   };
+}
+
+function animateValue(obj, start, end, duration) {
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    obj.innerHTML = Math.floor(progress * (end - start) + start);
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  };
+  window.requestAnimationFrame(step);
 }
 
 // Global instance
