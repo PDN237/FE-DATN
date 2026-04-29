@@ -274,7 +274,15 @@
                 return matchesAccept && matchesSearch && matchesDifficulty && matchesTimeLimit;
             });
 
-            displayProblems(filtered);
+            // Sort problems: Attempted first, then Not Started, then Solved
+            const sorted = filtered.sort((a, b) => {
+                const statusOrder = { 'Attempted': 0, 'Not Started': 1, 'Solved': 2 };
+                const statusA = statusOrder[a.user_status] ?? 1;
+                const statusB = statusOrder[b.user_status] ?? 1;
+                return statusA - statusB;
+            });
+
+            displayProblems(sorted);
         }
 
         // Event listeners for filters

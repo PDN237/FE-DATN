@@ -340,7 +340,11 @@
             if (!hints) return;
             const hintsSection = document.getElementById('hintsSection');
             const hintsContainer = document.getElementById('problemHints');
-            const hintsArray = hints.split(',').map(h => h.trim()).filter(h => h);
+            
+            // Parse hints that are in format "Gợi ý 1: ... Gợi ý 2: ... Gợi ý 3: ..."
+            // Split by "Gợi ý " pattern and filter out empty strings
+            const hintsArray = hints.split(/Gợi ý \d+:\s*/).filter(h => h.trim());
+            
             if (hintsArray.length > 0) {
                 hintsSection.style.display = 'block';
                 hintsContainer.innerHTML = hintsArray.map((hint, index) => `
@@ -351,7 +355,7 @@
                             <i class="fas fa-chevron-down hint-icon"></i>
                         </div>
                         <div class="hint-content" id="hint-${index}">
-                            <span class="hint-text">${hint}</span>
+                            <span class="hint-text">${hint.trim()}</span>
                         </div>
                     </div>
                 `).join('');
