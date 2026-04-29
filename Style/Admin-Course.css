@@ -508,6 +508,44 @@
     margin-left: auto;
 }
 
+.ac-card-instructor {
+    font-size: 0.75rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.ac-card-update-badge {
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: white;
+    border: 1px solid #7c3aed;
+}
+
+.ac-card--update {
+    border-left: 4px solid #8b5cf6;
+}
+
+.ac-card--update::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #8b5cf6 0%, #6366f1 100%);
+    animation: updatePulse 2s ease-in-out infinite;
+}
+
+@keyframes updatePulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
 /* ---- Card Actions ---- */
 .ac-card-actions {
     display: flex;

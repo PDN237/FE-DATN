@@ -1033,6 +1033,16 @@
     box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
 }
 
+.ins-btn--update {
+    background: linear-gradient(135deg, #8b5cf6, #6366f1);
+    color: white;
+}
+
+.ins-btn--update:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
+}
+
 .ins-btn--disabled {
     opacity: 0.5;
     cursor: not-allowed !important;

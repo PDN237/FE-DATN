@@ -331,6 +331,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    // ---- Filter courses by status ----
+    document.getElementById('courseStatusFilter').addEventListener('change', () => {
+        renderMyCourses();
+    });
+
     // ---- Render course cards ----
     function renderMyCourses() {
         if (myCoursesData.length === 0) {
@@ -349,7 +354,51 @@ document.addEventListener("DOMContentLoaded", () => {
             'Nâng cao': { bg: '#fce4ec', color: '#ee5a6f', border: '#f48fb1' }
         };
 
-        myCoursesGrid.innerHTML = myCoursesData.map(course => {
+        // Sort courses: Rejected (priority 0) -> Pending (priority 1) -> Published (priority 2)
+        // Within each status, sort by creation date descending (newest first)
+        const sortedCourses = [...myCoursesData].sort((a, b) => {
+            const getStatusPriority = (course) => {
+                if (!course.Accept && course.Feedback) return 0; // Rejected - highest priority
+                if (course.Accept && !course.IsCompleted) return 1; // Pending
+                if (course.Accept && course.IsCompleted) return 2; // Published - lowest priority
+                return 3; // Draft
+            };
+            
+            const priorityA = getStatusPriority(a);
+            const priorityB = getStatusPriority(b);
+            
+            if (priorityA !== priorityB) {
+                return priorityA - priorityB;
+            }
+            
+            // Same status, sort by creation date descending (newest first)
+            const dateA = new Date(a.CreatedAt || 0);
+            const dateB = new Date(b.CreatedAt || 0);
+            return dateB - dateA;
+        });
+
+        // Apply filter
+        const filterValue = document.getElementById('courseStatusFilter').value;
+        const filteredCourses = sortedCourses.filter(course => {
+            if (filterValue === 'all') return true;
+            if (filterValue === 'rejected') return !course.Accept && course.Feedback;
+            if (filterValue === 'pending') return course.Accept && !course.IsCompleted;
+            if (filterValue === 'published') return course.Accept && course.IsCompleted;
+            if (filterValue === 'draft') return !course.Accept && !course.Feedback;
+            return true;
+        });
+
+        if (filteredCourses.length === 0) {
+            myCoursesGrid.innerHTML = `
+                <div class="mc-empty">
+                    <div class="mc-empty-icon">📚</div>
+                    <h3>Không có khóa học nào</h3>
+                    <p>Không tìm thấy khóa học theo bộ lọc đã chọn.</p>
+                </div>`;
+            return;
+        }
+
+        myCoursesGrid.innerHTML = filteredCourses.map(course => {
             const lc = levelColors[course.Level] || levelColors['Cơ bản'];
             const date = course.CreatedAt ? new Date(course.CreatedAt).toLocaleDateString('vi-VN') : '—';
             const thumbUrl = course.Thumbnail || '';

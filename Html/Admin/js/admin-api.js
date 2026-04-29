@@ -39,6 +39,9 @@ export const adminApi = {
   getCourses: (page = 1, size = 10, search = '') => 
     apiCall(`/courses?page=${page}&size=${size}&search=${encodeURIComponent(search)}`),
     
+  getPendingCourses: (page = 1, size = 10, search = '') => 
+    apiCall(`/courses/pending?page=${page}&size=${size}&search=${encodeURIComponent(search)}`),
+    
   createCourse: (data) => apiCall('/courses', { method: 'POST', body: JSON.stringify(data) }),
   updateCourse: (id, data) => apiCall(`/courses/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteCourse: (id) => apiCall(`/courses/${id}`, { method: 'DELETE' }),

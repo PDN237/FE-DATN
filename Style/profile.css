@@ -831,6 +831,18 @@
     flex-wrap: wrap;
 }
 
+.mc-toolbar-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mc-toolbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .mc-toolbar-title {
     font-size: 1.15rem;
     font-weight: 800;
@@ -844,6 +856,71 @@
     width: 22px;
     height: 22px;
     color: var(--color-primary);
+}
+
+.mc-filter-group {
+    display: flex;
+    align-items: center;
+}
+
+.mc-filter-select {
+    padding: 10px 36px 10px 14px;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f8fafc, #f1f5f9);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+    min-width: 200px;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M6 9l6 6 6-6' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 18px;
+}
+
+.mc-filter-select:hover {
+    border-color: var(--color-primary);
+    background: linear-gradient(135deg, #e0e7ff, #e8f4ff);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(91, 123, 232, 0.15);
+}
+
+.mc-filter-select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(91, 123, 232, 0.15);
+}
+
+.mc-filter-select option {
+    padding: 10px 14px;
+    font-weight: 500;
+    background: white;
+    color: var(--text-primary);
+}
+
+.mc-filter-select option[value="rejected"] {
+    color: #ee5a6f;
+    font-weight: 600;
+}
+
+.mc-filter-select option[value="pending"] {
+    color: #f59e0b;
+    font-weight: 600;
+}
+
+.mc-filter-select option[value="published"] {
+    color: #48c78e;
+    font-weight: 600;
+}
+
+.mc-filter-select option[value="draft"] {
+    color: #64748b;
+    font-weight: 600;
 }
 
 .mc-btn-add {

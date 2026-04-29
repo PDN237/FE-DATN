@@ -87,6 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const label = document.getElementById('submitLabel');
         const banner = document.getElementById('feedbackBanner');
         const feedbackText = document.getElementById('feedbackText');
+        const updateBtn = document.getElementById('btnSendUpdate');
 
         // Status badge
         if (course.Accept && course.IsCompleted) {
@@ -95,24 +96,32 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.disabled = true;
             btn.classList.add('ins-btn--disabled');
             label.textContent = 'Đã xuất bản';
+            // Show update button for published courses
+            updateBtn.style.display = 'inline-flex';
         } else if (course.Accept && !course.IsCompleted) {
             statusEl.textContent = '⏳ Đang chờ duyệt';
             statusEl.className = 'ins-status-badge ins-status--pending';
             btn.disabled = true;
             btn.classList.add('ins-btn--disabled');
             label.textContent = 'Đang chờ duyệt...';
+            // Hide update button for pending courses
+            updateBtn.style.display = 'none';
         } else if (!course.Accept && course.Feedback) {
             statusEl.textContent = '✕ Bị từ chối';
             statusEl.className = 'ins-status-badge ins-status--rejected';
             btn.disabled = false;
             btn.classList.remove('ins-btn--disabled');
             label.textContent = 'Gửi lại yêu cầu';
+            // Hide update button for rejected courses
+            updateBtn.style.display = 'none';
         } else {
             statusEl.textContent = 'Đang soạn';
             statusEl.className = 'ins-status-badge ins-status--draft';
             btn.disabled = false;
             btn.classList.remove('ins-btn--disabled');
             label.textContent = 'Gửi yêu cầu xuất bản';
+            // Hide update button for draft courses
+            updateBtn.style.display = 'none';
         }
 
         // Feedback banner
@@ -353,7 +362,10 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const res = await fetch(`${API}/lessons/${lessonId}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(fd) });
             const data = await res.json();
-            if (data.success) { showToast('✅ Lưu bài học thành công!'); loadCourseTree(); }
+            if (data.success) { 
+                showToast('✅ Lưu bài học thành công!'); 
+                loadCourseTree(); 
+            }
             else showToast(data.message || 'Lỗi', 'error');
         } catch (err) { showToast('Không thể kết nối server', 'error'); }
         finally {
@@ -587,6 +599,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.success) {
                 showToast(isEdit ? '✅ Cập nhật module!' : '✅ Thêm module!');
+                if (data.wasUnpublished) {
+                    showToast('⚠️ Khóa học đã hủy xuất bản và gửi lên Admin duyệt lại!', 'warning');
+                }
                 closeModal('moduleModal');
                 loadCourseTree();
             } else showToast(data.message || 'Lỗi', 'error');
@@ -617,6 +632,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.success) {
                 showToast('✅ Thêm bài học thành công!');
+                if (data.wasUnpublished) {
+                    showToast('⚠️ Khóa học đã hủy xuất bản và gửi lên Admin duyệt lại!', 'warning');
+                }
                 closeModal('lessonModal');
                 loadCourseTree();
             } else showToast(data.message || 'Lỗi', 'error');
@@ -640,6 +658,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await res.json();
             if (data.success) {
                 showToast('✅ Xóa thành công!');
+                if (data.wasUnpublished) {
+                    showToast('⚠️ Khóa học đã hủy xuất bản và gửi lên Admin duyệt lại!', 'warning');
+                }
                 closeModal('deleteConfirmModal');
                 if (deleteTarget.type === 'lesson' && activeLesson && activeLesson.LessonID === deleteTarget.id) {
                     activeLesson = null;
@@ -668,6 +689,25 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!confirm('Gửi khóa học này để Admin xem xét và phê duyệt xuất bản?')) return;
         try {
             const res = await fetch(`${API}/course/${courseId}/submit`, {
+                method: 'PUT', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId })
+            });
+            const data = await res.json();
+            if (data.success) {
+                showToast('✅ ' + data.message);
+                loadCourseTree();
+            } else showToast(data.message || 'Lỗi', 'error');
+        } catch (err) { showToast('Không thể kết nối server', 'error'); }
+    };
+
+    // ============================================================
+    // SEND UPDATE
+    // ============================================================
+    document.getElementById('btnSendUpdate').onclick = async () => {
+        if (!courseData) return;
+        if (!confirm('Gửi bản cập nhật này để Admin xem xét và phê duyệt? Khóa học sẽ tạm thời hủy xuất bản cho đến khi Admin duyệt.')) return;
+        try {
+            const res = await fetch(`${API}/course/${courseId}/send-update`, {
                 method: 'PUT', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ userId })
             });

@@ -48,18 +48,25 @@ async function loadCourses(page = 1, search = '') {
     try {
         coursesGrid.innerHTML = '<div class="ac-loading"><div class="ac-spinner"></div><span>Đang tải khóa học...</span></div>';
 
-        const data = await adminApi.getCourses(page, 50, search);
-        allCourses = data.courses || [];
+        // Load published courses
+        const publishedData = await adminApi.getCourses(page, 50, search);
+        const publishedCourses = publishedData.courses || [];
 
-        // Split by status
-        const pending = allCourses.filter(c => c.Accept && !c.IsCompleted);
-        const published = allCourses.filter(c => c.Accept && c.IsCompleted);
+        // Load pending courses separately
+        const pendingData = await adminApi.getPendingCourses(page, 50, search);
+        const pendingCourses = pendingData.courses || [];
+
+        // Combine all courses with their status
+        allCourses = [
+            ...pendingCourses.map(c => ({ ...c, _status: 'pending' })),
+            ...publishedCourses.map(c => ({ ...c, _status: 'published' }))
+        ];
 
         // Update counts
-        document.getElementById('pendingCount').textContent = pending.length;
-        document.getElementById('publishedCount').textContent = published.length;
-        document.getElementById('tabPendingCount').textContent = pending.length;
-        document.getElementById('tabPublishedCount').textContent = published.length;
+        document.getElementById('pendingCount').textContent = pendingCourses.length;
+        document.getElementById('publishedCount').textContent = publishedCourses.length;
+        document.getElementById('tabPendingCount').textContent = pendingCourses.length;
+        document.getElementById('tabPublishedCount').textContent = publishedCourses.length;
 
         renderGrid();
     } catch (error) {
@@ -71,9 +78,9 @@ async function loadCourses(page = 1, search = '') {
 function getFilteredCourses() {
     let filtered;
     if (currentTab === 'pending') {
-        filtered = allCourses.filter(c => c.Accept && !c.IsCompleted);
+        filtered = allCourses.filter(c => c._status === 'pending');
     } else {
-        filtered = allCourses.filter(c => c.Accept && c.IsCompleted);
+        filtered = allCourses.filter(c => c._status === 'published');
     }
 
     if (searchTerm) {
@@ -136,8 +143,11 @@ function renderGrid() {
                 </button>`;
         }
 
+        const isUpdate = course.Feedback === 'Bản cập nhật';
+        const updateBadge = isUpdate ? `<span class="ac-card-update-badge">🔄 Bản cập nhật</span>` : '';
+
         return `
-            <div class="ac-card ${currentTab === 'pending' ? 'ac-card--pending' : ''}">
+            <div class="ac-card ${currentTab === 'pending' ? 'ac-card--pending' : ''} ${isUpdate ? 'ac-card--update' : ''}">
                 ${thumbHtml}
                 <div class="ac-card-body">
                     <h3 class="ac-card-title">${escHtml(course.Title)}</h3>
@@ -147,6 +157,8 @@ function renderGrid() {
                         <span class="ac-card-score">Score: ${course.score || 0}</span>
                         <span class="ac-card-modules">📦 ${course.moduleCount || 0} module</span>
                         <span class="ac-card-date">${formatDate(course.CreatedAt)}</span>
+                        ${course.InstructorName ? `<span class="ac-card-instructor">👨‍🏫 ${escHtml(course.InstructorName)}</span>` : ''}
+                        ${updateBadge}
                     </div>
                     <div class="ac-card-actions">${actionsHtml}</div>
                 </div>

@@ -13,21 +13,63 @@ document.addEventListener("DOMContentLoaded", () => {
         } catch(e) {}
     }
 
+    let currentSort = 'score'; // Default sort by score
+    let leaderboardData = [];
+
     // Load leaderboard data
     async function loadLeaderboard() {
         try {
-            const response = await fetch(`${API_BASE}/leaderboard`);
+            const response = await fetch(`${API_BASE}/leaderboard?sort=${currentSort}`);
             const data = await response.json();
 
             if (data.success) {
-                renderPodium(data.leaderboard);
-                renderTable(data.leaderboard);
+                leaderboardData = data.leaderboard;
+                renderPodium(leaderboardData);
+                renderTable(leaderboardData);
             } else {
                 console.error('Failed to load leaderboard:', data.message);
             }
         } catch (err) {
             console.error('loadLeaderboard error:', err);
         }
+    }
+
+    // Handle filter tab clicks
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Update active state
+            filterTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            
+            // Get sort criteria
+            currentSort = tab.dataset.sort;
+            
+            // Re-sort and render
+            sortAndRender();
+        });
+    });
+
+    // Sort and render leaderboard based on current criteria
+    function sortAndRender() {
+        const sorted = [...leaderboardData].sort((a, b) => {
+            if (currentSort === 'score') {
+                return b.score - a.score;
+            } else if (currentSort === 'problems') {
+                return b.solved_problems - a.solved_problems;
+            } else if (currentSort === 'courses') {
+                return b.completed_courses - a.completed_courses;
+            }
+            return 0;
+        });
+        
+        // Update ranks
+        sorted.forEach((user, index) => {
+            user.rank = index + 1;
+        });
+        
+        renderPodium(sorted);
+        renderTable(sorted);
     }
 
     // Render top 3 podium
