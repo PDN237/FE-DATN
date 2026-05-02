@@ -33,6 +33,7 @@ class AdminProblemManager {
         const title = btn.dataset.title;
         if (action === 'edit') this.editProblem(id);
         if (action === 'delete') this.deleteProblem(id, title);
+        return; // Dừng lại ở đây, không chọn row
       }
       const row = e.target.closest('tr[data-problem-id]');
       if (row) {
@@ -60,6 +61,16 @@ class AdminProblemManager {
         this.closeTestcaseModal();
       }
     });
+
+    // Testcase drawer
+    const closeDrawerBtn = document.getElementById('closeTestcaseDrawer');
+    if (closeDrawerBtn) {
+      closeDrawerBtn.addEventListener('click', () => this.closeTestcaseDrawer());
+    }
+    const drawerOverlay = document.getElementById('testcaseDrawerOverlay');
+    if (drawerOverlay) {
+      drawerOverlay.addEventListener('click', () => this.closeTestcaseDrawer());
+    }
 
     // Delete modal
     document.getElementById('cancelDelete').addEventListener('click', () => this.closeDeleteModal());
@@ -137,11 +148,11 @@ class AdminProblemManager {
       <td><span class="status-badge ${statusClass}">${statusText}</span></td>
       <td>
         <div class="action-buttons">
-          <button class="action-btn edit" data-action="edit" data-id="${problem.id}" title="Edit">
-            <i class="fas fa-edit"></i> Edit
+          <button class="action-btn edit" data-action="edit" data-id="${problem.id}" title="Sửa">
+            <i class="fas fa-edit"></i> Sửa
           </button>
-          <button class="action-btn delete" data-action="delete" data-id="${problem.id}" data-title="${escapeHtml(problem.title)}" title="Delete">
-            <i class="fas fa-trash"></i> Delete
+          <button class="action-btn delete" data-action="delete" data-id="${problem.id}" data-title="${escapeHtml(problem.title)}" title="Xóa">
+            <i class="fas fa-trash"></i> Xóa
           </button>
         </div>
       </td>
@@ -203,7 +214,7 @@ class AdminProblemManager {
     form.reset();
 
     if (problem) {
-      document.getElementById('problemModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Problem';
+      document.getElementById('problemModalTitle').innerHTML = '<i class="fas fa-edit"></i> Chỉnh sửa bài tập';
       document.getElementById('problemId').value = problem.id;
       document.getElementById('problemTitle').value = problem.title;
       document.getElementById('problemDifficulty').value = problem.difficulty;
@@ -214,7 +225,7 @@ class AdminProblemManager {
       document.getElementById('problemAccept').checked = problem.accept !== false;
       document.getElementById('problemScore').value = problem.score || 0;
     } else {
-      document.getElementById('problemModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Create Problem';
+      document.getElementById('problemModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Tạo Bài tập';
       document.getElementById('problemId').value = '';
       document.getElementById('problemAccept').checked = true;
     }
@@ -275,7 +286,6 @@ class AdminProblemManager {
       const problem = await adminApi.getProblem(id);
       this.currentProblemId = id;
       this.openProblemModal(problem);
-      await this.loadTestCases(id);
     } catch (error) {
       alert('Lỗi tải bài tập: ' + error.message);
     }
@@ -291,14 +301,15 @@ class AdminProblemManager {
   // Test Cases
   async loadTestCases(problemId) {
     if (!problemId) {
-      document.getElementById('testcaseSection').style.display = 'none';
+      this.closeTestcaseDrawer();
       return;
     }
 
     try {
       this.currentProblemId = problemId;
-      document.getElementById('selectedProblemInfo').textContent = `Problem #${problemId}`;
-      document.getElementById('testcaseSection').style.display = 'block';
+      document.getElementById('selectedProblemInfo').textContent = `Bài tập #${problemId}`;
+      document.getElementById('testcaseSection').classList.add('active');
+      document.getElementById('testcaseDrawerOverlay').classList.add('active');
       
       const testcases = await adminApi.getTestCases(problemId);
       this.renderTestCases(testcases, problemId);
@@ -348,14 +359,14 @@ class AdminProblemManager {
     form.reset();
     
     if (testcase) {
-      document.getElementById('testcaseModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Test Case';
+      document.getElementById('testcaseModalTitle').innerHTML = '<i class="fas fa-edit"></i> Chỉnh sửa Test Case';
       document.getElementById('testcaseId').value = testcase.id;
       document.getElementById('testcaseInput').value = testcase.input_data;
       document.getElementById('testcaseOutput').value = testcase.expected_output;
       document.getElementById('testcaseTimeLimit').value = testcase.time_limit;
       document.getElementById('testcaseHidden').checked = testcase.is_hidden;
     } else {
-      document.getElementById('testcaseModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Add Test Case';
+      document.getElementById('testcaseModalTitle').innerHTML = '<i class="fas fa-plus-circle"></i> Thêm Test Case';
       document.getElementById('testcaseId').value = '';
     }
     
@@ -364,6 +375,12 @@ class AdminProblemManager {
 
   closeTestcaseModal() {
     document.getElementById('testcaseModal').classList.remove('active');
+  }
+
+  closeTestcaseDrawer() {
+    document.getElementById('testcaseSection').classList.remove('active');
+    const overlay = document.getElementById('testcaseDrawerOverlay');
+    if (overlay) overlay.classList.remove('active');
   }
 
   async saveTestcase() {

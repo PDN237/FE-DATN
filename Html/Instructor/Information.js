@@ -117,15 +117,15 @@ function createCourseCard(course) {
     const card = document.createElement('div');
     card.className = 'course-card';
 
-    const thumbnail = course.Thumbnail || 'https://via.placeholder.com/400x225?text=No+Thumbnail';
+    const thumbnail = course.Thumbnail || 'https://via.placeholder.com/400x225?text=Khong+co+anh';
     const levelClass = course.Level ? course.Level.toLowerCase() : 'beginner';
 
     card.innerHTML = `
         <div class="course-thumbnail">
-            <img src="${thumbnail}" alt="${course.Title}" onerror="this.src='https://via.placeholder.com/400x225?text=No+Thumbnail'">
+            <img src="${thumbnail}" alt="${course.Title}" onerror="this.src='https://via.placeholder.com/400x225?text=Khong+co+anh'">
         </div>
         <div class="course-content">
-            <div class="course-level level-${levelClass}">${course.Level || 'Beginner'}</div>
+            <div class="course-level level-${levelClass}">${course.Level || 'Cơ bản'}</div>
             <h3 class="course-title">${course.Title}</h3>
             <p class="course-description">${course.Description || 'Không có mô tả'}</p>
             <div class="course-meta">

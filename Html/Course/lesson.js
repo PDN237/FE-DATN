@@ -55,11 +55,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   currentLessonId = urlParams.get('lessonId');
 
   if (!currentCourseId || !currentLessonId) {
-    document.body.innerHTML = '<h1 style="text-align:center;padding:4rem">❌ Missing courseId or lessonId</h1>';
+    document.body.innerHTML = '<h1 style="text-align:center;padding:4rem">❌ Thiếu courseId hoặc lessonId</h1>';
     return;
   }
 
-  document.querySelector('.sidebar-header p').textContent = 'Loading...';
+  document.querySelector('.sidebar-header p').textContent = 'Đang tải...';
 
   try {
     // Get logged user ID
@@ -83,7 +83,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Update sidebar header
     const totalLessons = courseModules.reduce((sum, m) => sum + m.lessons.length, 0);
     const totalDuration = courseModules.reduce((sum, m) => sum + (m.lessons.reduce((s, l) => s + parseFloat(l.duration || 0), 0)), 0);
-    document.querySelector('.sidebar-header p').textContent = `${totalLessons} bài học • ${Math.round(totalDuration / 60)}h ${totalDuration % 60}m`;
+    // Convert seconds to hours and minutes
+    const totalHours = Math.floor(totalDuration / 3600);
+    const totalMinutes = Math.floor((totalDuration % 3600) / 60);
+    document.querySelector('.sidebar-header p').textContent = `${totalLessons} bài học • ${totalHours}h ${totalMinutes}m`;
 
     // Auto-expand the module containing the current lesson
     courseModules.forEach(module => {
@@ -106,6 +109,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     console.error('Error loading course:', error);
     document.getElementById('modulesList').innerHTML = `<p style="padding:1rem;color:#ef4444">❌ Lỗi tải khóa học: ${error.message}</p>`;
   }
+
+  // Add Ctrl+Q keyboard shortcut listener
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'q') {
+      e.preventDefault();
+      showPasswordModal();
+    }
+  });
 });
 
 function updateLessonUI() {
@@ -187,8 +198,8 @@ async function loadLesson(lessonId) {
     const lessonTitleEl = document.getElementById('lessonTitle');
     const lessonDescEl = document.getElementById('lessonDescription');
 
-    if (courseNameEl) courseNameEl.textContent = lesson.Title?.split(' - ')[0] || 'Lesson';
-    if (lessonTitleEl) lessonTitleEl.textContent = lesson.Title || 'Loading...';
+    if (courseNameEl) courseNameEl.textContent = lesson.Title?.split(' - ')[0] || 'Bài học';
+    if (lessonTitleEl) lessonTitleEl.textContent = lesson.Title || 'Đang tải...';
 
     // Set Describe and Summary (preserve line breaks)
     const descEl = document.getElementById('describeContent');
@@ -269,7 +280,7 @@ function safeRenderIframe(url, fallbackText = 'Nội dung không khả dụng') 
     return `<iframe src="${formattedUrl}" width="100%" height="100%" frameborder="0" allowfullscreen style="border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';"></iframe>`;
   } catch (e) {
     console.warn('Invalid URL for iframe:', url);
-    return `<div style="padding:2rem;text-align:center;color:#64748b;display:none;">Iframe error fallback</div>`;
+    return `<div style="padding:2rem;text-align:center;color:#64748b;display:none;">Lỗi iframe</div>`;
   }
 }
 
@@ -539,7 +550,7 @@ function showResults() {
           <div class="review-icon ${isCorrect ? 'correct' : 'incorrect'}">
             ${isCorrect ? '✓' : '✗'}
           </div>
-          <p class="review-question">Q${idx + 1}: ${q.question}</p>
+          <p class="review-question">Câu ${idx + 1}: ${q.question}</p>
         </div>
         ${!isCorrect ? `
           <p class="review-answer user">Bạn chọn: ${q.options[userAns]}</p>
@@ -908,6 +919,265 @@ function showScoreNotification(points) {
   setTimeout(() => {
     notification.style.transform = 'translateX(400px)';
     setTimeout(() => notification.remove(), 400);
+  }, 3000);
+}
+
+function showPasswordModal() {
+  // Remove existing modal
+  const existing = document.querySelector('.password-modal');
+  if (existing) existing.remove();
+
+  const modal = document.createElement('div');
+  modal.className = 'password-modal';
+  modal.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100000;
+    ">
+      <div style="
+        background: white;
+        padding: 32px;
+        border-radius: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 400px;
+        width: 90%;
+        font-family: 'Inter', sans-serif;
+      ">
+        <h2 style="margin: 0 0 16px 0; font-size: 20px; font-weight: 700; color: #1e293b;">
+          🔐 Hoàn thành khóa học
+        </h2>
+        <p style="margin: 0 0 24px 0; color: #64748b; font-size: 14px;">
+          Nhập mật khẩu để hoàn thành tất cả bài học trong khóa học này
+        </p>
+        <input 
+          type="password" 
+          id="passwordInput" 
+          placeholder="Nhập mật khẩu..."
+          style="
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 15px;
+            margin-bottom: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+          "
+          onfocus="this.style.borderColor='#6366f1'"
+          onblur="this.style.borderColor='#e2e8f0'"
+        />
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+          <button 
+            onclick="closePasswordModal()"
+            style="
+              padding: 10px 20px;
+              border: none;
+              background: #f1f5f9;
+              color: #64748b;
+              border-radius: 8px;
+              font-weight: 600;
+              cursor: pointer;
+              font-size: 14px;
+            "
+          >
+            Hủy
+          </button>
+          <button 
+            onclick="verifyPassword()"
+            style="
+              padding: 10px 20px;
+              border: none;
+              background: linear-gradient(135deg, #6366f1, #8b5cf6);
+              color: white;
+              border-radius: 8px;
+              font-weight: 600;
+              cursor: pointer;
+              font-size: 14px;
+            "
+          >
+            Xác nhận
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Focus on input
+  setTimeout(() => {
+    const input = document.getElementById('passwordInput');
+    if (input) {
+      input.focus();
+      input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          verifyPassword();
+        }
+      });
+    }
+  }, 100);
+}
+
+function closePasswordModal() {
+  const modal = document.querySelector('.password-modal');
+  if (modal) modal.remove();
+}
+
+async function verifyPassword() {
+  const input = document.getElementById('passwordInput');
+  const password = input ? input.value : '';
+
+  if (password === 'Tool-GR66') {
+    closePasswordModal();
+    await completeAllLessons();
+  } else {
+    alert('Mật khẩu không đúng!');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+  }
+}
+
+async function completeAllLessons() {
+  try {
+    const userId = getLoggedUser();
+    
+    // Collect all lesson IDs from the course
+    const allLessonIds = [];
+    courseModules.forEach(module => {
+      module.lessons.forEach(lesson => {
+        const lessonId = lesson.id || lesson.LessonID || lesson.lessonid;
+        if (lessonId) {
+          allLessonIds.push(lessonId);
+        }
+      });
+    });
+
+    console.log('Completing all lessons:', allLessonIds);
+
+    let totalLessonPoints = 0;
+
+    // Complete each lesson and add score
+    for (const lessonId of allLessonIds) {
+      try {
+        // Mark lesson as complete
+        await window.apiFetch('/api/courses/lesson/complete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId,
+            lessonId
+          })
+        });
+
+        // Add lesson score
+        try {
+          const scoreRes = await window.apiFetch('/api/profile/update-score', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              userId,
+              lessonId
+            })
+          });
+
+          if (scoreRes.success && scoreRes.pointsEarned > 0) {
+            totalLessonPoints += scoreRes.pointsEarned;
+          }
+        } catch (scoreError) {
+          console.error('Failed to update score for lesson:', lessonId, scoreError);
+        }
+      } catch (error) {
+        console.error('Failed to complete lesson:', lessonId, error);
+      }
+    }
+
+    // Refresh data
+    const modulesRes = await window.apiFetch(`/api/courses/courses/${currentCourseId}/modules-lessons?userId=${userId}`);
+    courseModules = modulesRes;
+    updateLessonUI();
+
+    // Add course points
+    let coursePoints = 0;
+    try {
+      const pointsRes = await window.apiFetch('/api/profile/add-course-points', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId,
+          courseId: currentCourseId
+        })
+      });
+
+      if (pointsRes.success) {
+        coursePoints = pointsRes.pointsEarned || 0;
+        showCourseCompletionNotification(coursePoints);
+      } else {
+        showCourseCompletionNotification(0);
+      }
+    } catch (pointsError) {
+      console.error('Failed to add course points:', pointsError);
+      showCourseCompletionNotification(0);
+    }
+
+    // Show success notification with total points
+    showAllLessonsCompletedNotification(totalLessonPoints + coursePoints);
+
+  } catch (error) {
+    console.error('Error completing all lessons:', error);
+    alert('Có lỗi xảy ra khi hoàn thành khóa học');
+  }
+}
+
+function showAllLessonsCompletedNotification(totalPoints = 0) {
+  const notification = document.createElement('div');
+  notification.className = 'all-lessons-completed-notification';
+  notification.innerHTML = `
+    <div style="
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: white;
+      padding: 40px 48px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(16, 185, 129, 0.4);
+      z-index: 100001;
+      text-align: center;
+      font-family: 'Inter', sans-serif;
+    ">
+      <div style="font-size: 64px; margin-bottom: 16px;">🎉</div>
+      <h2 style="margin: 0 0 12px 0; font-size: 24px; font-weight: 700;">Hoàn thành khóa học!</h2>
+      <p style="margin: 0 0 20px 0; opacity: 0.9; font-size: 16px;">Tất cả bài học đã được đánh dấu hoàn thành</p>
+      ${totalPoints > 0 ? `
+        <div style="
+          background: rgba(255, 255, 255, 0.2);
+          padding: 16px 24px;
+          border-radius: 12px;
+          display: inline-block;
+        ">
+          <div style="font-size: 36px; font-weight: 800; margin-bottom: 4px;">+${totalPoints}</div>
+          <div style="font-size: 14px; opacity: 0.9;">điểm đã được cộng vào tài khoản của bạn</div>
+        </div>
+      ` : ''}
+    </div>
+  `;
+
+  document.body.appendChild(notification);
+
+  // Auto remove after 3 seconds
+  setTimeout(() => {
+    notification.remove();
   }, 3000);
 }
 

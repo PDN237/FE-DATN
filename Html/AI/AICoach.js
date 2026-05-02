@@ -199,7 +199,7 @@ function renderView() {
   if (step === 1) {
     viewContainer.innerHTML = `
       <div class="welcome-view fade-in">
-        <h1 class="glow-text">AI VISUALIZER</h1>
+        <h1 class="glow-text">AI MÔ PHỎNG</h1>
         <p class="description">Hệ thống huấn luyện tư duy thuật toán chuyên sâu.</p>
         <button class="btn-primary" onclick="setStep(2)">Bắt đầu</button>
       </div>
@@ -253,7 +253,7 @@ function renderView() {
       <div class="workspace fade-in">
         <div class="editor-side">
           <div class="editor-top">
-            <span>${selectedLang} Editor</span>
+            <span>Trình soạn thảo ${selectedLang}</span>
           </div>
           <textarea id="codeInput" spellcheck="false" placeholder="Nhập mã nguồn..."></textarea>
           <div class="submit-row">
@@ -262,7 +262,7 @@ function renderView() {
         </div>
 
         <div class="info-side">
-          <h3>${selectedAlgo} Task</h3>
+          <h3>Bài tập ${selectedAlgo}</h3>
           <button class="btn-reload btn-reload-fixed" onclick="newQuestion()" title="Tạo đề mới">↻</button>
           <p style="color:#b3f0e6; margin-bottom:10px;">Đề bài</p>
           <div id="question" style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px;"></div>

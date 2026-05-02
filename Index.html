@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Sorting Visualizer - Interactive Algorithm Demonstration</title>
+    <title>Trình Visualize Sắp Xếp - Minh Họa Thuật Toán Tương Tác</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="Style/style.css" />
@@ -40,7 +40,7 @@
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor" />
                     </svg>
-                    Home
+                    Trang chủ
                 </a>
 
                 <a href="Html/Course/course.html" class="nav-link">
@@ -48,21 +48,21 @@
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
                             stroke-width="2" />
                     </svg>
-                    Course
+                    Khóa học
                 </a>
 
                 <a href="Html/Practice/Problems.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
                     </svg>
-                    Problem
+                    Bài tập
                 </a>
 
                 <a href="Html/AI/AICoach.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor" />
                     </svg>
-                    AI Coach
+                    Huấn luyện viên AI
                 </a>
 
                 <a href="Html/Admin/admin-dashboard.html" class="nav-link">
@@ -71,12 +71,12 @@
                             d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4l-2.1.7.3 2.2-2 1.2-1.6-1.5-2.1.9-.4 2.2h-2.2l-.4-2.2-2.1-.9-1.6 1.5-2-1.2.3-2.2L2 12l2.1-.7-.3-2.2 2-1.2 1.6 1.5 2.1-.9.4-2.2h2.2l.4 2.2 2.1.9 1.6-1.5 2 1.2-.3 2.2L20 12z"
                             fill="currentColor" />
                     </svg>
-                    Admin
+                    Quản trị
                 </a>
             </nav>
 
             <div class="header-actions">
-                <button class="theme-toggle" title="Toggle theme">
+                <button class="theme-toggle" title="Chuyển đổi chủ đề">
                     <svg viewBox="0 0 24 24" fill="none">
                         <path
                             d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
@@ -85,7 +85,7 @@
                 </button>
                 <div class="profile-dropdown">
                     <button class="profile-btn" id="profileBtn">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" id="headerAvatar" />
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Hồ sơ" id="headerAvatar" />
                     </button>
                     <div class="dropdown-menu" id="dropdownMenu">
                         <!-- Dropdown menu items will be dynamically populated by JavaScript based on login state -->
@@ -101,36 +101,36 @@
             <div class="hero-content">
                 <div class="hero-badge">
                     <span class="badge-dot"></span>
-                    Interactive Learning
+                    Học tập tương tác
                 </div>
                 <h1 class="hero-title">
-                    Sorting Algorithm
-                    <span class="gradient-text">Visualizer</span>
+                    Trình Visualize
+                    <span class="gradient-text">Thuật Toán Sắp Xếp</span>
                 </h1>
                 <p class="hero-description">
-                    Master sorting algorithms through interactive visualizations.
-                    Watch how different algorithms compare and sort data in real-time.
+                    Làm chủ thuật toán sắp xếp thông qua hình ảnh tương tác.
+                    Quan sát cách các thuật toán khác nhau so sánh và sắp xếp dữ liệu theo thời gian thực.
                 </p>
                 <div class="hero-stats">
                     <div class="stat-item">
                         <div class="stat-number">5</div>
-                        <div class="stat-label">Algorithms</div>
+                        <div class="stat-label">Thuật toán</div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
                         <div class="stat-number">3</div>
-                        <div class="stat-label">Visualizations</div>
+                        <div class="stat-label">Hình ảnh</div>
                     </div>
                     <div class="stat-divider"></div>
                     <div class="stat-item">
                         <div class="stat-number">5</div>
-                        <div class="stat-label">Languages</div>
+                        <div class="stat-label">Ngôn ngữ</div>
                     </div>
                 </div>
             </div>
             <div class="hero-visual">
                 <div class="floating-card card-1">
-                    <div class="card-header">Time Complexity</div>
+                    <div class="card-header">Độ phức tạp thời gian</div>
                     <div class="complexity-grid">
                         <span class="complexity-badge best">O(n log n)</span>
                         <span class="complexity-badge average">O(n²)</span>
@@ -208,7 +208,7 @@
             <aside class="sidebar">
 
                 <div class="sidebar-header">
-                    <h2>Controls</h2>
+                    <h2>Điều khiển</h2>
                     <div class="help-icon-wrapper">
                         <div class="help-icon">
                             <svg viewBox="0 0 24 24" fill="currentColor">
@@ -218,12 +218,12 @@
                         <div class="help-tooltip">
                             <h4>Bảng Điều Khiển</h4>
                             <ul>
-                                <li><strong>Elements:</strong> Số lượng phần tử cần sắp xếp (5-100)</li>
-                                <li><strong>Algorithm:</strong> Chọn thuật toán sắp xếp</li>
-                                <li><strong>Speed:</strong> Tốc độ animation (0.25x - 4x)</li>
-                                <li><strong>Visualization:</strong> Chế độ hiển thị</li>
-                                <li><strong>Sort:</strong> Bắt đầu sắp xếp</li>
-                                <li><strong>Randomize:</strong> Tạo dữ liệu mới</li>
+                                <li><strong>Số phần tử:</strong> Số lượng phần tử cần sắp xếp (5-100)</li>
+                                <li><strong>Thuật toán:</strong> Chọn thuật toán sắp xếp</li>
+                                <li><strong>Tốc độ:</strong> Tốc độ animation (0.25x - 4x)</li>
+                                <li><strong>Hình ảnh:</strong> Chế độ hiển thị</li>
+                                <li><strong>Sắp xếp:</strong> Bắt đầu sắp xếp</li>
+                                <li><strong>Ngẫu nhiên:</strong> Tạo dữ liệu mới</li>
                             </ul>
                             <div class="color-legend-mini">
                                 <h5>Ý nghĩa màu sắc:</h5>
@@ -247,23 +247,23 @@
                 <div class="controls">
 
                     <div class="control-group">
-                        <label for="numElements">Elements</label>
+                        <label for="numElements">Số phần tử</label>
                         <input type="number" id="numElements" min="5" max="100" value="30" />
                     </div>
 
                     <div class="control-group">
-                        <label for="sortType">Algorithm</label>
+                        <label for="sortType">Thuật toán</label>
                         <select id="sortType">
-                            <option value="bubble">Bubble Sort</option>
-                            <option value="selection">Selection Sort</option>
-                            <option value="insertion">Insertion Sort</option>
-                            <option value="quick">Quick Sort</option>
-                            <option value="merge">Merge Sort</option>
+                            <option value="bubble">Bubble Sort (Sắp xếp nổi bọt)</option>
+                            <option value="selection">Selection Sort (Sắp xếp chọn)</option>
+                            <option value="insertion">Insertion Sort (Sắp xếp chèn)</option>
+                            <option value="quick">Quick Sort (Sắp xếp nhanh)</option>
+                            <option value="merge">Merge Sort (Sắp xếp trộn)</option>
                         </select>
                     </div>
 
                     <div class="control-group">
-                        <label for="speed">Speed</label>
+                        <label for="speed">Tốc độ</label>
                         <select id="speed">
                             <option value="0.25">0.25x</option>
                             <option value="0.5">0.5x</option>
@@ -274,17 +274,17 @@
                     </div>
 
                     <div class="control-group">
-                        <label for="visualizationMode">Visualization</label>
+                        <label for="visualizationMode">Hình ảnh</label>
                         <select id="visualizationMode">
-                            <option value="boxes" selected>Boxes</option>
-                            <option value="bars">Bars</option>
-                            <option value="sized-boxes">Sized Boxes</option>
+                            <option value="boxes" selected>Hộp</option>
+                            <option value="bars">Thanh</option>
+                            <option value="sized-boxes">Hộp có kích thước</option>
                         </select>
                     </div>
 
                     <div class="button-group">
-                        <button id="sortBtn">Sort</button>
-                        <button id="randomizeBtn">Randomize</button>
+                        <button id="sortBtn">Sắp xếp</button>
+                        <button id="randomizeBtn">Ngẫu nhiên</button>
                     </div>
 
                 </div>
@@ -312,22 +312,22 @@
                     </div>
                     <div class="complexity-cards">
                         <div class="complexity-card best-case">
-                            <h3>Best Case</h3>
+                            <h3>Trường hợp tốt nhất</h3>
                             <p class="complexity-value" id="bestCase">O(n)</p>
                             <p class="complexity-desc" id="bestCaseDesc">Tốt nhất</p>
                         </div>
                         <div class="complexity-card avg-case">
-                            <h3>Average Case</h3>
+                            <h3>Trường hợp trung bình</h3>
                             <p class="complexity-value" id="avgCase">O(n²)</p>
                             <p class="complexity-desc" id="avgCaseDesc">Trung bình</p>
                         </div>
                         <div class="complexity-card worst-case">
-                            <h3>Worst Case</h3>
+                            <h3>Trường hợp tệ nhất</h3>
                             <p class="complexity-value" id="worstCase">O(n²)</p>
                             <p class="complexity-desc" id="worstCaseDesc">Tệ nhất</p>
                         </div>
                         <div class="complexity-card space-case">
-                            <h3>Space</h3>
+                            <h3>Bộ nhớ</h3>
                             <p class="complexity-value" id="spaceCase">O(1)</p>
                             <p class="complexity-desc" id="spaceCaseDesc">Bộ nhớ</p>
                         </div>
@@ -365,43 +365,43 @@
                             <thead>
                                 <tr>
                                     <th>Thuật toán</th>
-                                    <th>Best Case</th>
-                                    <th>Average Case</th>
-                                    <th>Worst Case</th>
-                                    <th>Space</th>
+                                    <th>Trường hợp tốt nhất</th>
+                                    <th>Trường hợp trung bình</th>
+                                    <th>Trường hợp tệ nhất</th>
+                                    <th>Bộ nhớ</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="algo-name">Bubble Sort</td>
+                                    <td class="algo-name">Bubble Sort (Sắp xếp nổi bọt)</td>
                                     <td class="complexity-good">O(n)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-good">O(1)</td>
                                 </tr>
                                 <tr>
-                                    <td class="algo-name">Selection Sort</td>
+                                    <td class="algo-name">Selection Sort (Sắp xếp chọn)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-good">O(1)</td>
                                 </tr>
                                 <tr>
-                                    <td class="algo-name">Insertion Sort</td>
+                                    <td class="algo-name">Insertion Sort (Sắp xếp chèn)</td>
                                     <td class="complexity-good">O(n)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-good">O(1)</td>
                                 </tr>
                                 <tr>
-                                    <td class="algo-name">Quick Sort</td>
+                                    <td class="algo-name">Quick Sort (Sắp xếp nhanh)</td>
                                     <td class="complexity-excellent">O(n log n)</td>
                                     <td class="complexity-excellent">O(n log n)</td>
                                     <td class="complexity-bad">O(n²)</td>
                                     <td class="complexity-good">O(log n)</td>
                                 </tr>
                                 <tr>
-                                    <td class="algo-name">Merge Sort</td>
+                                    <td class="algo-name">Merge Sort (Sắp xếp trộn)</td>
                                     <td class="complexity-excellent">O(n log n)</td>
                                     <td class="complexity-excellent">O(n log n)</td>
                                     <td class="complexity-excellent">O(n log n)</td>
@@ -444,27 +444,27 @@
                     </svg>
                     <span class="brand-name">Teen Lab</span>
                 </div>
-                <p class="footer-tagline">Master algorithms through visualization</p>
+                <p class="footer-tagline">Làm chủ thuật toán thông qua hình ảnh</p>
             </div>
 
             <div class="footer-links">
                 <div class="footer-column">
-                    <h4>Learn</h4>
-                    <a href="#">Algorithms</a>
-                    <a href="#">Data Structures</a>
-                    <a href="#">Tutorials</a>
+                    <h4>Học tập</h4>
+                    <a href="#">Thuật toán</a>
+                    <a href="#">Cấu trúc dữ liệu</a>
+                    <a href="#">Hướng dẫn</a>
                 </div>
                 <div class="footer-column">
-                    <h4>Practice</h4>
-                    <a href="#">Problems</a>
-                    <a href="#">Challenges</a>
-                    <a href="#">Contest</a>
+                    <h4>Luyện tập</h4>
+                    <a href="#">Bài tập</a>
+                    <a href="#">Thử thách</a>
+                    <a href="#">Cuộc thi</a>
                 </div>
                 <div class="footer-column">
-                    <h4>Community</h4>
-                    <a href="#">Forum</a>
+                    <h4>Cộng đồng</h4>
+                    <a href="#">Diễn đàn</a>
                     <a href="#">Blog</a>
-                    <a href="#">Contributors</a>
+                    <a href="#">Người đóng góp</a>
                 </div>
             </div>
 
@@ -472,7 +472,7 @@
                 <a href="#" class="social-link">
                     <svg viewBox="0 0 24 24" fill="currentColor">
                         <path
-                            d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z" />
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
                     </svg>
                 </a>
                 <a href="#" class="social-link">
@@ -491,7 +491,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p> 2026 Sorting Visualizer | Interactive Learning Platform</p>
+            <p> 2026 Trình Visualize Sắp Xếp | Nền tảng Học tập Tương tác</p>
         </div>
     </footer>
 

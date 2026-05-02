@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>User Management - Admin</title>
+    <title>Quản lý Người dùng - Quản trị viên</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
     <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
@@ -19,29 +19,29 @@
         <div class="top-section">
             <aside class="admin-sidebar">
                 <div class="sidebar-header">
-                    <h1>Admin Panel</h1>
+                    <h1>Quản trị viên</h1>
                 </div>
                 <nav class="admin-nav">
                     <a href="/FrondEnd/Html/Admin/admin-dashboard.html"><i class="fas fa-chart-pie"
-                            style="width: 20px;"></i> Dashboard</a>
+                            style="width: 20px;"></i> Bảng điều khiển</a>
                     <a href="/FrondEnd/Html/Admin/Admin-Course.html"><i class="fas fa-book" style="width: 20px;"></i>
-                        Content (Courses)</a>
+                        Khóa học</a>
                     <a href="/FrondEnd/Html/Admin/user-management.html" class="active"><i class="fas fa-users"
-                            style="width: 20px;"></i> Users</a>
+                            style="width: 20px;"></i> Người dùng</a>
                     <a href="/FrondEnd/Html/Admin/Admin-problems.html"><i class="fas fa-code" style="width: 20px;"></i>
-                        Problems</a>
+                        Bài tập</a>
                 </nav>
             </aside>
 
             <main class="admin-main">
                 <div class="dashboard-header">
                     <div>
-                        <h1 class="admin-page-title">User Management</h1>
+                        <h1 class="admin-page-title">Quản lý Người dùng</h1>
                         <p style="color: #9ca3af; font-size: 0.95rem;">Quản lý tất cả người dùng trong hệ thống</p>
                     </div>
                     <div class="dashboard-actions">
                         <button type="button" class="btn btn-primary" id="btnAddUser">
-                            <i class="fas fa-plus"></i> Add User
+                            <i class="fas fa-plus"></i> Thêm Người dùng
                         </button>
                     </div>
                 </div>
@@ -99,8 +99,8 @@
                         <select id="roleFilter">
                             <option value="">Tất cả vai trò</option>
                             <option value="admin">Admin</option>
-                            <option value="instructor">Instructor</option>
-                            <option value="student">Student</option>
+                            <option value="instructor">Giảng viên</option>
+                            <option value="student">Học viên</option>
                         </select>
                         <select id="statusFilter">
                             <option value="">Tất cả trạng thái</option>
@@ -115,7 +115,7 @@
                     <table class="users-table">
                         <thead>
                             <tr>
-                                <th>User</th>
+                                <th>Người dùng</th>
                                 <th>Email</th>
                                 <th>Vai Trò</th>
                                 <th>Điểm</th>
@@ -143,7 +143,7 @@
         <div class="modal">
             <div class="modal-header">
                 <h2 id="userModalTitle">
-                    <i class="fas fa-user-plus"></i> Add User
+                    <i class="fas fa-user-plus"></i> Thêm Người dùng
                 </h2>
                 <button class="modal-close" id="userModalClose">
                     <i class="fas fa-times"></i>
@@ -173,8 +173,8 @@
                         <div class="form-group">
                             <label for="userRole">Vai Trò</label>
                             <select id="userRole">
-                                <option value="student">Student</option>
-                                <option value="instructor">Instructor</option>
+                                <option value="student">Học viên</option>
+                                <option value="instructor">Giảng viên</option>
                                 <option value="admin">Admin</option>
                             </select>
                         </div>

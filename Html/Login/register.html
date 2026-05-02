@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - Teen Lab</title>
+    <title>Đăng ký - Teen Lab</title>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../../Style/Account.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -18,7 +19,7 @@
                         </div>
                         <h1>Teen Lab</h1>
                     </div>
-                    <p class="tagline">Start your journey to master algorithms</p>
+                    <p class="tagline">Bắt đầu hành trình nắm vững thuật toán của bạn</p>
                     <div class="illustration">
                         <div class="chart-bars">
                             <div class="bar" style="height: 60%;"></div>
@@ -34,16 +35,16 @@
             <div class="auth-right">
                 <div class="form-container">
                     <div class="form-header">
-                        <h2>Create Account</h2>
-                        <p>Join thousands of learners worldwide</p>
+                        <h2>Tạo tài khoản</h2>
+                        <p>Tham gia cùng hàng ngàn học viên trên toàn cầu</p>
                     </div>
 
                     <form id="registerForm" class="auth-form">
                         <div class="form-group">
-                            <label for="username">Full Name</label>
+                            <label for="username">Họ và tên</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-user"></i>
-                                <input type="text" id="username" name="username" placeholder="Enter your full name" required>
+                                <input type="text" id="username" name="username" placeholder="Nhập họ và tên của bạn" required>
                             </div>
                         </div>
 
@@ -51,30 +52,30 @@
                             <label for="email">Email</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-envelope"></i>
-                                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+                                <input type="email" id="email" name="email" placeholder="Nhập email của bạn" required>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="regPassword">Password</label>
+                            <label for="regPassword">Mật khẩu</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-lock"></i>
-                                <input type="password" id="regPassword" name="password" placeholder="Create a password" required>
+                                <input type="password" id="regPassword" name="password" placeholder="Tạo mật khẩu" required>
                                 <i class="fas fa-eye toggle-password" onclick="togglePassword('regPassword')"></i>
                             </div>
                             <div class="password-strength">
                                 <div class="strength-bar">
                                     <div class="strength-fill" id="strengthBar"></div>
                                 </div>
-                                <span class="strength-text" id="strengthText">Weak</span>
+                                <span class="strength-text" id="strengthText">Yếu</span>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="confirmPassword">Confirm Password</label>
+                            <label for="confirmPassword">Xác nhận mật khẩu</label>
                             <div class="input-wrapper">
                                 <i class="fas fa-lock"></i>
-                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter password" required>
+                                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Nhập lại mật khẩu" required>
                                 <i class="fas fa-eye toggle-password" onclick="togglePassword('confirmPassword')"></i>
                             </div>
                         </div>
@@ -83,18 +84,18 @@
                             <label class="checkbox-container">
                                 <input type="checkbox" name="terms" required>
                                 <span class="checkmark"></span>
-                                I agree to <a href="#">Terms & Conditions</a>
+                                Tôi đồng ý với <a href="#">Điều khoản & Điều kiện</a>
                             </label>
                         </div>
 
                         <button type="submit" class="btn-primary">
-                            <span>Create Account</span>
+                            <span>Đăng ký</span>
                             <i class="fas fa-arrow-right"></i>
                         </button>
                     </form>
 
                     <div class="divider">
-                        <span>or sign up with</span>
+                        <span>hoặc đăng ký với</span>
                     </div>
 
                     <div class="social-login">
@@ -109,7 +110,7 @@
                     </div>
 
                     <div class="form-footer">
-                        <p>Already have an account? <a href="login.html">Sign in</a></p>
+                        <p>Đã có tài khoản? <a href="login.html">Đăng nhập</a></p>
                     </div>
                 </div>
             </div>
@@ -161,15 +162,15 @@
             
             if (strength <= 2) {
                 strengthBar.style.background = '#ff4757';
-                strengthText.textContent = 'Weak';
+                strengthText.textContent = 'Yếu';
                 strengthText.style.color = '#ff4757';
             } else if (strength <= 3) {
                 strengthBar.style.background = '#ffa502';
-                strengthText.textContent = 'Medium';
+                strengthText.textContent = 'Trung bình';
                 strengthText.style.color = '#ffa502';
             } else {
                 strengthBar.style.background = '#2ecc71';
-                strengthText.textContent = 'Strong';
+                strengthText.textContent = 'Mạnh';
                 strengthText.style.color = '#2ecc71';
             }
         });
@@ -228,7 +229,7 @@
                     alert(result.message);
                 }
             } catch (err) {
-                alert('Lỗi kết nối server');
+                alert('Lỗi kết nối máy chủ');
             }
         });
     </script>

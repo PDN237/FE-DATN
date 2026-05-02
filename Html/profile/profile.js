@@ -439,7 +439,7 @@ document.addEventListener("DOMContentLoaded", () => {
                             <span class="mc-card-level" style="background:${lc.bg};color:${lc.color};border:1px solid ${lc.border};">${course.Level || 'Cơ bản'}</span>
                             <span class="mc-card-status ${statusClass}">${statusLabel}</span>
                             <span class="mc-card-modules">${course.moduleCount || 0} module</span>
-                        <span class="mc-card-score">Score: ${course.score || 0}</span>
+                        <span class="mc-card-score">Điểm: ${course.score || 0}</span>
                         </div>
                         <h3 class="mc-card-title">${course.Title}</h3>
                         <p class="mc-card-desc">${(course.Description || '').substring(0, 100)}${(course.Description || '').length > 100 ? '...' : ''}</p>

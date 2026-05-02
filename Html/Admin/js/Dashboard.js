@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function initDifficultyChart(problemDifficulty) {
         const ctx = document.getElementById('difficultyChart').getContext('2d');
         
-        const labels = problemDifficulty.map(d => d.difficulty || 'Unknown');
+        const labels = problemDifficulty.map(d => d.difficulty || 'Không xác định');
         const counts = problemDifficulty.map(d => d.count);
         const colors = ['#10b981', '#f59e0b', '#ef4444', '#64748b'];
 
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
                                         ${initial}
                                     </div>
                                     <div>
-                                        <div style="font-weight: 600; color: #1e293b;">${user.FullName || 'No Name'}</div>
+                                        <div style="font-weight: 600; color: #1e293b;">${user.FullName || 'Chưa cập nhật tên'}</div>
                                     </div>
                                 </div>
                             </td>
@@ -168,10 +168,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         badgeClass = 'accepted';
                     } else if (sub.status.includes('Wrong') || sub.status.includes('Error') || sub.status.includes('Fail')) {
                         badgeClass = 'wrong';
-                        badgeText = 'Failed';
+                        badgeText = 'Thất bại';
                     }
 
-                    const displayName = sub.FullName && sub.FullName !== 'Unknown User' ? sub.FullName : (sub.Email || 'Unknown');
+                    const displayName = sub.FullName && sub.FullName !== 'Unknown User' ? sub.FullName : (sub.Email || 'Không xác định');
 
                     subTable.innerHTML += `
                         <tr>

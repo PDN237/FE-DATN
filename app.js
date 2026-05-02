@@ -33,7 +33,7 @@ class App {
                 this.updateButtonStates();
                 // Revert the change
                 this.numElementsInput.value = this.array.length;
-                alert('Sorting stopped. Please enter new data into the input if needed.');
+                alert('Đã dừng sắp xếp. Vui lòng nhập dữ liệu mới vào ô nhập liệu nếu cần.');
             } else {
                 this.randomize();
             }
@@ -99,10 +99,10 @@ class App {
         popup.className = "compare-popup";
 
         popup.innerHTML = `
-            <div class="compare-label">Comparing</div>
+            <div class="compare-label">Đang so sánh</div>
             <div class="compare-values">
                 <div class="compare-value left">${value1}</div>
-                <div class="compare-operator">vs</div>
+                <div class="compare-operator">với</div>
                 <div class="compare-value right">${value2}</div>
             </div>
             <div class="compare-result">
@@ -398,12 +398,12 @@ class App {
             if (this.isPaused) {
                 // Resume
                 this.isPaused = false;
-                this.sortBtn.textContent = 'Pause';
+                this.sortBtn.textContent = 'Tạm dừng';
                 this.currentSorter.resume();
             } else {
                 // Pause
                 this.isPaused = true;
-                this.sortBtn.textContent = 'Resume';
+                this.sortBtn.textContent = 'Tiếp tục';
                 this.currentSorter.pause();
                 this.enableArrayEditing();
             }
@@ -416,7 +416,7 @@ class App {
     startSort() {
         this.isSorting = true;
         this.isPaused = false;
-        this.sortBtn.textContent = 'Pause';
+        this.sortBtn.textContent = 'Tạm dừng';
         this.randomizeBtn.disabled = true;
         this.numElementsInput.disabled = true;
         this.sortTypeSelect.disabled = true;
@@ -459,7 +459,7 @@ class App {
     finishSorting() {
         this.isSorting = false;
         this.isPaused = false;
-        this.sortBtn.textContent = 'Sort';
+        this.sortBtn.textContent = 'Sắp xếp';
         this.randomizeBtn.disabled = false;
         this.numElementsInput.disabled = false;
         this.sortTypeSelect.disabled = false;
@@ -489,7 +489,7 @@ class App {
     enableArrayEditing() {
         this.boxes.forEach((box, index) => {
             box.style.cursor = 'pointer';
-            box.title = 'Click to edit value';
+            box.title = 'Nhấp để chỉnh giá trị';
             box.addEventListener('click', () => this.editBoxValue(index));
         });
     }
@@ -505,7 +505,7 @@ class App {
     editBoxValue(index) {
         if (!this.isPaused) return;
 
-        const newValue = prompt('Enter new value:', this.array[index]);
+        const newValue = prompt('Nhập giá trị mới:', this.array[index]);
         if (newValue !== null && !isNaN(newValue)) {
             this.array[index] = parseInt(newValue);
             this.boxes[index].textContent = this.visualizationModeSelect.value === 'boxes' ? this.array[index] : '';

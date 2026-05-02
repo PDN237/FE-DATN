@@ -429,7 +429,7 @@ function renderQuizPreview(lesson) {
   quizzes.forEach((quiz, qIdx) => {
     html += `
       <div class="cb-quiz-block">
-        <h4 class="cb-quiz-title">Quiz ${qIdx + 1}: ${escHtml(quiz.Title || 'Untitled')}</h4>
+        <h4 class="cb-quiz-title">Trắc nghiệm ${qIdx + 1}: ${escHtml(quiz.Title || 'Chưa có tiêu đề')}</h4>
     `;
     
     const questions = quiz.questions || [];

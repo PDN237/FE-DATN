@@ -1,122 +1,127 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
-  <title>AI Sorting Visualizer</title>
+  <title>AI Mô Phỏng Thuật Toán</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="../../Style/AICoach.css" />
 </head>
+
 <body>
 
-    <!-- Modern Header with Navigation -->
-    <header class="modern-header">
-        <div class="header-container">
-            <div class="brand">
-                <svg class="brand-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M3 4H21V6H3V4ZM9 11H21V13H9V11ZM3 18H21V20H3V18Z" fill="currentColor" />
-                </svg>
-                <span class="brand-name">Teen Lab</span>
-                <span class="brand-badge">Pro</span>
-            </div>
-
-            <nav class="main-nav">
-                <a href="../../Index.html" class="nav-link">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor" />
-                    </svg>
-                    Home
-                </a>
-
-                <a href="../Course/course.html" class="nav-link">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
-                            stroke-width="2" />
-                    </svg>
-                    Course
-                </a>
-
-                <a href="../Practice/Problems.html" class="nav-link">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
-                    </svg>
-                    Problem
-                </a>
-
-                <a href="../AI/AICoach.html" class="nav-link active">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor" />
-                    </svg>
-                    AI Coach
-                </a>
-
-                <a href="../Admin/admin-dashboard.html" class="nav-link">
-                    <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4l-2.1.7.3 2.2-2 1.2-1.6-1.5-2.1.9-.4 2.2h-2.2l-.4-2.2-2.1-.9-1.6 1.5-2-1.2.3-2.2L2 12l2.1-.7-.3-2.2 2-1.2 1.6 1.5 2.1-.9.4-2.2h2.2l.4 2.2 2.1.9 1.6-1.5 2 1.2-.3 2.2L20 12z"
-                            fill="currentColor" />
-                    </svg>
-                    Admin
-                </a>
-            </nav>
-
-            <div class="header-actions">
-                <button class="theme-toggle" title="Toggle theme">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path
-                            d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
-                            stroke="currentColor" stroke-width="2" />
-                    </svg>
-                </button>
-                <div class="profile-dropdown">
-                    <button class="profile-btn" id="profileBtn">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" id="headerAvatar" />
-                    </button>
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        <!-- Dropdown menu items will be dynamically populated by JavaScript based on login state -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </header>
-
-<div class="app-container">
-  <!-- SIDEBAR   -->
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <div class="logo">AI SORTING</div>
-    </div> 
-
-    <nav class="sidebar-nav" id="sidebarNav"></nav>
-
-    <div class="sidebar-footer">
-      <button class="btn-exit" onclick="window.location.href='../../Index.html'">Thoát ứng dụng</button>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main-content">
-    <header class="content-header">
-      <div class="breadcrumb">
-        <span id="backBtn" class="back-link">← Quay lại</span>
-        <span class="path" id="pathText">Hệ thống / Bước 1</span>
+  <!-- Modern Header with Navigation -->
+  <header class="modern-header">
+    <div class="header-container">
+      <div class="brand">
+        <svg class="brand-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M3 4H21V6H3V4ZM9 11H21V13H9V11ZM3 18H21V20H3V18Z" fill="currentColor" />
+        </svg>
+        <span class="brand-name">Teen Lab</span>
+        <span class="brand-badge">Pro</span>
       </div>
-    </header>
 
-    <div class="view-container" id="viewContainer"></div>
-    <div id="modalContainer"></div>
-  </main>
-</div>
+      <nav class="main-nav">
+        <a href="../../Index.html" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor" />
+          </svg>
+          Trang chủ
+        </a>
+
+        <a href="../Course/course.html" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="2" />
+          </svg>
+          Khóa học
+        </a>
+
+        <a href="../Practice/Problems.html" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
+          </svg>
+          Bài tập
+        </a>
+
+        <a href="../AI/AICoach.html" class="nav-link active">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"
+              fill="currentColor" />
+          </svg>
+          Huấn luyện viên AI
+        </a>
+
+        <a href="../Admin/admin-dashboard.html" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4l-2.1.7.3 2.2-2 1.2-1.6-1.5-2.1.9-.4 2.2h-2.2l-.4-2.2-2.1-.9-1.6 1.5-2-1.2.3-2.2L2 12l2.1-.7-.3-2.2 2-1.2 1.6 1.5 2.1-.9.4-2.2h2.2l.4 2.2 2.1.9 1.6-1.5 2 1.2-.3 2.2L20 12z"
+              fill="currentColor" />
+          </svg>
+          Quản trị
+        </a>
+      </nav>
+
+      <div class="header-actions">
+        <button class="theme-toggle" title="Đổi giao diện">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+              stroke="currentColor" stroke-width="2" />
+          </svg>
+        </button>
+        <div class="profile-dropdown">
+          <button class="profile-btn" id="profileBtn">
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" id="headerAvatar" />
+          </button>
+          <div class="dropdown-menu" id="dropdownMenu">
+            <!-- Dropdown menu items will be dynamically populated by JavaScript based on login state -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="app-container">
+    <!-- SIDEBAR   -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">AI SẮP XẾP</div>
+      </div>
+
+      <nav class="sidebar-nav" id="sidebarNav"></nav>
+
+      <div class="sidebar-footer">
+        <button class="btn-exit" onclick="window.location.href='../../Index.html'">Thoát ứng dụng</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main-content">
+      <header class="content-header">
+        <div class="breadcrumb">
+          <span id="backBtn" class="back-link">← Quay lại</span>
+          <span class="path" id="pathText">Hệ thống / Bước 1</span>
+        </div>
+      </header>
+
+      <div class="view-container" id="viewContainer"></div>
+      <div id="modalContainer"></div>
+    </main>
+  </div>
   <!-- Exit button (fixed, global) -->
-  <button id="exitBtn" class="exit-icon" title="Thoát ứng dụng (Esc)" onclick="window.location.href='../../Index.html'">  
+  <button id="exitBtn" class="exit-icon" title="Thoát ứng dụng (Esc)" onclick="window.location.href='../../Index.html'">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M12 2v10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-      <path d="M5.07 6.93a8 8 0 1 0 13.86 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M12 2v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      <path d="M5.07 6.93a8 8 0 1 0 13.86 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+        stroke-linejoin="round" />
     </svg>
   </button>
 
-<script src="AICoach.js"></script>
-<script src="../../Js/header.js"></script>
+  <script src="AICoach.js"></script>
+  <script src="../../Js/header.js"></script>
 </body>
+
 </html>

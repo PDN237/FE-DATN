@@ -4,10 +4,10 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Course Preview - Admin</title>
+    <title>Xem trước khóa học - Quản trị viên</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
     <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
@@ -20,13 +20,13 @@
             <!-- Sidebar -->
             <aside class="admin-sidebar">
                 <div class="sidebar-header">
-                    <h1>Admin Panel</h1>
+                    <h1>Quản trị viên</h1>
                 </div>
                 <nav class="admin-nav">
-                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html"><i class="fas fa-chart-pie" style="width: 20px;"></i> Dashboard</a>
-                    <a href="/FrondEnd/Html/Admin/Admin-Course.html" class="active"><i class="fas fa-book" style="width: 20px;"></i> Content (Courses)</a>
-                    <a href="/FrondEnd/Html/Admin/user-management.html"><i class="fas fa-users" style="width: 20px;"></i> Users</a>
-                    <a href="/FrondEnd/Html/Admin/Admin-problems.html"><i class="fas fa-code" style="width: 20px;"></i> Problems</a>
+                    <a href="/FrondEnd/Html/Admin/admin-dashboard.html"><i class="fas fa-chart-pie" style="width: 20px;"></i> Bảng điều khiển</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-Course.html" class="active"><i class="fas fa-book" style="width: 20px;"></i> Khóa học</a>
+                    <a href="/FrondEnd/Html/Admin/user-management.html"><i class="fas fa-users" style="width: 20px;"></i> Người dùng</a>
+                    <a href="/FrondEnd/Html/Admin/Admin-problems.html"><i class="fas fa-code" style="width: 20px;"></i> Bài tập</a>
                 </nav>
             </aside>
 
@@ -36,8 +36,8 @@
                 <!-- Header -->
                 <div class="dashboard-header">
                     <div>
-                        <h1 class="admin-page-title" id="courseTitleHeader">Course Preview</h1>
-                        <p style="color: #9ca3af; font-size: 0.95rem;" id="courseSubtitle">Loading course...</p>
+                        <h1 class="admin-page-title" id="courseTitleHeader">Xem trước khóa học</h1>
+                        <p style="color: #9ca3af; font-size: 0.95rem;" id="courseSubtitle">Đang tải...</p>
                     </div>
                     <div class="dashboard-actions">
                         <button class="cb-btn cb-btn--secondary" onclick="window.location.href='/FrondEnd/Html/Admin/Admin-Course.html'">
@@ -65,7 +65,7 @@
                                 <i class="fas fa-book-open"></i>
                             </div>
                             <div class="cb-course-info">
-                                <h2 id="courseName">Loading...</h2>
+                                <h2 id="courseName">Đang tải...</h2>
                                 <div class="cb-course-meta">
                                     <span class="cb-level-badge" id="courseLevel">—</span>
                                     <span class="cb-module-count" id="moduleCount">0 module</span>
@@ -83,7 +83,7 @@
                     <div class="cb-feedback-content">
                         <span class="cb-feedback-icon">⚠️</span>
                         <div>
-                            <strong>Admin Feedback</strong>
+                            <strong>Phản hồi từ Admin</strong>
                             <p id="feedbackText"></p>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                     <!-- Left: Module Tree -->
                     <div class="cb-tree-panel">
                         <div class="cb-panel-header">
-                            <h3><i class="fas fa-folder-tree"></i> Course Structure</h3>
+                            <h3><i class="fas fa-folder-tree"></i> Cấu trúc khóa học</h3>
                         </div>
                         <div id="moduleTree" class="cb-module-tree">
                             <div class="cb-loading">
@@ -107,13 +107,13 @@
                     <!-- Right: Content Preview -->
                     <div class="cb-content-panel">
                         <div class="cb-panel-header">
-                            <h3><i class="fas fa-eye"></i> Content Preview</h3>
+                            <h3><i class="fas fa-eye"></i> Xem trước nội dung</h3>
                         </div>
                         <div id="contentPreview" class="cb-content-preview">
                             <div class="cb-empty-state">
                                 <div class="cb-empty-icon">📖</div>
-                                <h3>Select a lesson to preview</h3>
-                                <p>Click on any lesson in the course structure to view its content</p>
+                                <h3>Chọn một bài học để xem</h3>
+                                <p>Nhấn vào bài học bất kỳ trong cây cấu trúc để xem chi tiết</p>
                             </div>
                         </div>
                     </div>

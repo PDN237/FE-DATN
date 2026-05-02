@@ -300,7 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <!-- Quiz Section -->
                 <div class="ins-quiz-section" id="quizSection">
                     <div class="ins-quiz-header">
-                        <h3>🧠 Quản lý câu hỏi Quiz</h3>
+                        <h3>🧠 Quản lý câu hỏi trắc nghiệm</h3>
                         <button class="ins-quiz-add-btn" id="btnAddQuestion">+ Thêm câu hỏi</button>
                     </div>
                     <div id="questionsContainer">
@@ -367,7 +367,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadCourseTree(); 
             }
             else showToast(data.message || 'Lỗi', 'error');
-        } catch (err) { showToast('Không thể kết nối server', 'error'); }
+        } catch (err) { showToast('Không thể kết nối máy chủ', 'error'); }
         finally {
             btn.disabled = false;
             btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Lưu thay đổi';
@@ -396,7 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ LessonID: lessonId, Title: 'Quiz' })
                 });
                 if (createRes.ok) { const d = await createRes.json(); quiz = d.quiz || d; }
-                else { container.innerHTML = '<div class="ins-quiz-empty">Không thể tạo quiz.</div>'; return; }
+                else { container.innerHTML = '<div class="ins-quiz-empty">Không thể tạo trắc nghiệm.</div>'; return; }
             }
 
             currentQuiz = quiz;
@@ -417,7 +417,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderQuiz(lessonId);
         } catch (err) {
             console.error('loadQuiz:', err);
-            container.innerHTML = '<div class="ins-quiz-empty">Lỗi tải quiz.</div>';
+            container.innerHTML = '<div class="ins-quiz-empty">Lỗi tải trắc nghiệm.</div>';
         }
     }
 
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal('moduleModal');
                 loadCourseTree();
             } else showToast(data.message || 'Lỗi', 'error');
-        } catch (err) { showToast('Không thể kết nối server', 'error'); }
+        } catch (err) { showToast('Không thể kết nối máy chủ', 'error'); }
     };
 
     // ============================================================
@@ -638,7 +638,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 closeModal('lessonModal');
                 loadCourseTree();
             } else showToast(data.message || 'Lỗi', 'error');
-        } catch (err) { showToast('Không thể kết nối server', 'error'); }
+        } catch (err) { showToast('Không thể kết nối máy chủ', 'error'); }
     };
 
     // ============================================================
@@ -669,7 +669,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 loadCourseTree();
             } else showToast(data.message || 'Xóa thất bại', 'error');
-        } catch (err) { showToast('Không thể kết nối server', 'error'); }
+        } catch (err) { showToast('Không thể kết nối máy chủ', 'error'); }
         deleteTarget = null;
     };
 
@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('✅ ' + data.message);
                 loadCourseTree();
             } else showToast(data.message || 'Lỗi', 'error');
-        } catch (err) { showToast('Không thể kết nối server', 'error'); }
+        } catch (err) { showToast('Không thể kết nối máy chủ', 'error'); }
     };
 
     // ============================================================
@@ -716,7 +716,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 showToast('✅ ' + data.message);
                 loadCourseTree();
             } else showToast(data.message || 'Lỗi', 'error');
-        } catch (err) { showToast('Không thể kết nối server', 'error'); }
+        } catch (err) { showToast('Không thể kết nối máy chủ', 'error'); }
     };
 
     // ---- INIT ----

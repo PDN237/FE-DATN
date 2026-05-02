@@ -114,7 +114,7 @@ function displayUsers(users) {
                 <div class="user-cell">
                     <div class="user-avatar">${initial}</div>
                     <div class="user-info">
-                        <span class="user-name">${user.FullName || 'Unknown'}</span>
+                        <span class="user-name">${user.FullName || 'Không xác định'}</span>
                         <span class="user-email">${user.Email || ''}</span>
                     </div>
                 </div>
@@ -128,10 +128,10 @@ function displayUsers(users) {
             <td>
                 <div class="action-buttons">
                     <button class="action-btn edit" onclick="editUser(${user.UserID})">
-                        <i class="fas fa-edit"></i> Edit
+                        <i class="fas fa-edit"></i> Sửa
                     </button>
                     <button class="action-btn delete" onclick="deleteUser(${user.UserID})">
-                        <i class="fas fa-trash"></i> Delete
+                        <i class="fas fa-trash"></i> Xóa
                     </button>
                 </div>
             </td>
@@ -182,12 +182,12 @@ function openUserModal(userId = null) {
     const passwordHint = document.getElementById('passwordHint');
 
     if (userId) {
-        title.innerHTML = '<i class="fas fa-user-edit"></i> Edit User';
+        title.innerHTML = '<i class="fas fa-user-edit"></i> Chỉnh sửa Người dùng';
         loadUserForEdit(userId);
         if (passwordField) passwordField.required = false;
         if (passwordHint) passwordHint.textContent = 'Bỏ trống nếu không đổi';
     } else {
-        title.innerHTML = '<i class="fas fa-user-plus"></i> Add User';
+        title.innerHTML = '<i class="fas fa-user-plus"></i> Thêm Người dùng';
         form.reset();
         if (passwordField) passwordField.required = true;
         if (passwordHint) passwordHint.textContent = 'Bắt buộc cho người dùng mới';

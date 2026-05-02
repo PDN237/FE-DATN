@@ -129,7 +129,7 @@ class HeaderManager {
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4l-2.1.7.3 2.2-2 1.2-1.6-1.5-2.1.9-.4 2.2h-2.2l-.4-2.2-2.1-.9-1.6 1.5-2-1.2.3-2.2L20 12z"/>
                         </svg>
-                        Admin Dashboard
+                        Trang quản trị
                     </a>
                 `;
             }

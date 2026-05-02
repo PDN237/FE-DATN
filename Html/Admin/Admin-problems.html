@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Problem Management - Admin</title>
+    <title>Quản lý Bài tập - Quản trị viên</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/FrondEnd/Style/style.css" />
     <link rel="stylesheet" href="/FrondEnd/Style/admin.css" />
@@ -19,29 +20,29 @@
         <div class="top-section">
             <aside class="admin-sidebar">
                 <div class="sidebar-header">
-                    <h1>Admin Panel</h1>
+                    <h1>Quản trị viên</h1>
                 </div>
                 <nav class="admin-nav">
                     <a href="/FrondEnd/Html/Admin/admin-dashboard.html"><i class="fas fa-chart-pie"
-                            style="width: 20px;"></i> Dashboard</a>
+                            style="width: 20px;"></i> Bảng điều khiển</a>
                     <a href="/FrondEnd/Html/Admin/Admin-Course.html"><i class="fas fa-book" style="width: 20px;"></i>
-                        Content (Courses)</a>
+                        Khóa học</a>
                     <a href="/FrondEnd/Html/Admin/user-management.html"><i class="fas fa-users"
-                            style="width: 20px;"></i> Users</a>
+                            style="width: 20px;"></i> Người dùng</a>
                     <a href="/FrondEnd/Html/Admin/Admin-problems.html" class="active"><i class="fas fa-code"
-                            style="width: 20px;"></i> Problems</a>
+                            style="width: 20px;"></i> Bài tập</a>
                 </nav>
             </aside>
 
             <main class="admin-main">
                 <div class="dashboard-header">
                     <div>
-                        <h1 class="admin-page-title">Problem Management</h1>
+                        <h1 class="admin-page-title">Quản lý Bài tập</h1>
                         <p style="color: #9ca3af; font-size: 0.95rem;">Quản lý bài tập coding và test cases</p>
                     </div>
                     <div class="dashboard-actions">
                         <button type="button" class="btn btn-primary" id="btnAddProblem">
-                            <i class="fas fa-plus"></i> Create Problem
+                            <i class="fas fa-plus"></i> Tạo Bài tập
                         </button>
                     </div>
                 </div>
@@ -159,19 +160,24 @@
                 <!-- Pagination -->
                 <div class="pagination-wrap" id="problemPagination" style="display: none;">
                     <button class="btn btn-secondary btn-sm" id="prevProblemPage">
-                        <i class="fas fa-chevron-left"></i> Previous
+                        <i class="fas fa-chevron-left"></i> Trước
                     </button>
                     <span id="problemPageInfo"></span>
                     <button class="btn btn-secondary btn-sm" id="nextProblemPage">
-                        Next <i class="fas fa-chevron-right"></i>
+                        Tiếp <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
 
                 <!-- Test Case Manager Section -->
                 <div class="testcase-section" id="testcaseSection" style="display: none;">
                     <div class="section-header">
-                        <h2><i class="fas fa-vial"></i> Quản Lý Test Cases</h2>
-                        <span id="selectedProblemInfo" class="selected-problem"></span>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <h2><i class="fas fa-vial"></i> Quản Lý Test Cases</h2>
+                            <span id="selectedProblemInfo" class="selected-problem"></span>
+                        </div>
+                        <button class="drawer-close" id="closeTestcaseDrawer">
+                            <i class="fas fa-times"></i>
+                        </button>
                     </div>
                     <div class="testcase-warning" id="tcWarning" style="display: none;">
                         <i class="fas fa-exclamation-triangle"></i> Thêm ít nhất 2 test cases (1 public)
@@ -193,7 +199,7 @@
                     </div>
                     <div class="testcase-toolbar">
                         <button class="btn btn-primary" id="btnAddTestCase">
-                            <i class="fas fa-plus"></i> Add Test Case
+                            <i class="fas fa-plus"></i> Thêm Test Case
                         </button>
                     </div>
                 </div>
@@ -201,12 +207,15 @@
         </div>
     </div>
 
+    <!-- Testcase Drawer Overlay -->
+    <div class="drawer-overlay" id="testcaseDrawerOverlay"></div>
+
     <!-- Problem Modal -->
     <div class="modal-overlay" id="problemModal">
         <div class="modal">
             <div class="modal-header">
                 <h2 id="problemModalTitle">
-                    <i class="fas fa-plus-circle"></i> Create Problem
+                    <i class="fas fa-plus-circle"></i> Tạo Bài tập
                 </h2>
                 <button class="modal-close" id="closeProblemModal">
                     <i class="fas fa-times"></i>
@@ -215,11 +224,12 @@
             <div class="modal-body">
                 <form id="problemForm">
                     <input type="hidden" id="problemId">
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="problemTitle">Tiêu Đề *</label>
-                            <input type="text" id="problemTitle" required maxlength="255" placeholder="Nhập tiêu đề bài tập">
+                            <input type="text" id="problemTitle" required maxlength="255"
+                                placeholder="Nhập tiêu đề bài tập">
                         </div>
                         <div class="form-group">
                             <label for="problemDifficulty">Độ Khó *</label>
@@ -245,7 +255,8 @@
 
                     <div class="form-group">
                         <label for="problemDescription">Mô Tả *</label>
-                        <textarea id="problemDescription" required rows="8" placeholder="Mô tả chi tiết bài tập..."></textarea>
+                        <textarea id="problemDescription" required rows="8"
+                            placeholder="Mô tả chi tiết bài tập..."></textarea>
                     </div>
 
                     <div class="form-group">
@@ -268,7 +279,8 @@ Output:
                         <label style="display: flex; align-items: center; gap: 0.5rem;">
                             <input type="checkbox" id="problemAccept" checked> Hiển thị cho người dùng
                         </label>
-                        <small style="color: #94a3b8; display: block; margin-top: 0.25rem;">Bỏ chọn để ẩn bài tập này</small>
+                        <small style="color: #94a3b8; display: block; margin-top: 0.25rem;">Bỏ chọn để ẩn bài tập
+                            này</small>
                     </div>
                 </form>
             </div>
@@ -288,7 +300,7 @@ Output:
         <div class="modal">
             <div class="modal-header">
                 <h2 id="testcaseModalTitle">
-                    <i class="fas fa-plus-circle"></i> Add Test Case
+                    <i class="fas fa-plus-circle"></i> Thêm Test Case
                 </h2>
                 <button class="modal-close" id="closeTestcaseModal">
                     <i class="fas fa-times"></i>
@@ -298,17 +310,18 @@ Output:
                 <form id="testcaseForm">
                     <input type="hidden" id="testcaseId">
                     <input type="hidden" id="currentProblemId">
-                    
+
                     <div class="form-group">
                         <label for="testcaseInput">Input Data *</label>
                         <textarea id="testcaseInput" required rows="6" placeholder="Nhập input data..."></textarea>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="testcaseOutput">Expected Output *</label>
-                        <textarea id="testcaseOutput" required rows="6" placeholder="Nhập expected output..."></textarea>
+                        <textarea id="testcaseOutput" required rows="6"
+                            placeholder="Nhập expected output..."></textarea>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="testcaseTimeLimit">Thời Gian (ms)</label>

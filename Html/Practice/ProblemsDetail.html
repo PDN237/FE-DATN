@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Problem Detail</title>
+    <title>Chi tiết bài tập</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -29,7 +29,7 @@
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" fill="currentColor" />
                     </svg>
-                    Home
+                    Trang chủ
                 </a>
 
                 <a href="../Course/course.html" class="nav-link">
@@ -37,21 +37,21 @@
                         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor"
                             stroke-width="2" />
                     </svg>
-                    Course
+                    Khóa học
                 </a>
 
                 <a href="../Practice/Problems.html" class="nav-link active">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M9 3L5 7h3v7h2V7h3L9 3zm7 14h-3v-7h-2v7H8l4 4 4-4z" fill="currentColor" />
                     </svg>
-                    Problem
+                    Bài tập
                 </a>
 
                 <a href="../AI/AICoach.html" class="nav-link">
                     <svg class="nav-icon" viewBox="0 0 24 24" fill="none">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor" />
                     </svg>
-                    AI Coach
+                    Huấn luyện viên AI
                 </a>
 
                 <a href="../Admin/admin-dashboard.html" class="nav-link">
@@ -60,12 +60,12 @@
                             d="M12 8a4 4 0 100 8 4 4 0 000-8zm8 4l-2.1.7.3 2.2-2 1.2-1.6-1.5-2.1.9-.4 2.2h-2.2l-.4-2.2-2.1-.9-1.6 1.5-2-1.2.3-2.2L2 12l2.1-.7-.3-2.2 2-1.2 1.6 1.5 2.1-.9.4-2.2h2.2l.4 2.2 2.1.9 1.6-1.5 2 1.2-.3 2.2L20 12z"
                             fill="currentColor" />
                     </svg>
-                    Admin
+                    Quản trị
                 </a>
             </nav>
 
             <div class="header-actions">
-                <button class="theme-toggle" title="Toggle theme">
+                <button class="theme-toggle" title="Chuyển đổi chủ đề">
                     <svg viewBox="0 0 24 24" fill="none">
                         <path
                             d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
@@ -74,7 +74,7 @@
                 </button>
                 <div class="profile-dropdown">
                     <button class="profile-btn" id="profileBtn">
-                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Profile" id="headerAvatar" />
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Hồ sơ" id="headerAvatar" />
                     </button>
                     <div class="dropdown-menu" id="dropdownMenu">
                         <!-- Dropdown menu items will be dynamically populated by JavaScript based on login state -->
@@ -87,36 +87,36 @@
     <main class="problem-main">
         <div class="problem-header">
             <div class="problem-title-section">
-                <h1 id="problemTitle">Loading...</h1>
+                <h1 id="problemTitle">Đang tải...</h1>
                 <div class="problem-meta">
                     <span id="problemDifficulty" class="difficulty easy">-</span>
                     <span class="acceptance" id="problemAcceptance">-</span>
                 </div>
             </div>
             <div class="problem-actions">
-                <button class="btn btn-outline"><i class="fas fa-star"></i> Favorite</button>
-                <button class="btn btn-outline"><i class="fas fa-share"></i> Share</button>
+                <button class="btn btn-outline"><i class="fas fa-star"></i> Yêu thích</button>
+                <button class="btn btn-outline"><i class="fas fa-share"></i> Chia sẻ</button>
             </div>
         </div>
 
         <div class="problem-content">
             <div class="problem-description-panel">
                 <div class="description-content">
-                    <h2>Description</h2>
+                    <h2>Mô tả</h2>
                     <div id="problemDescription">
-                        <p>Loading problem details...</p>
+                        <p>Đang tải chi tiết bài tập...</p>
                     </div>
                     <div id="examplesSection" style="display: none; margin-top: 20px;">
-                        <h3>Examples</h3>
+                        <h3>Ví dụ</h3>
                         <div id="problemExamples" class="examples-container"></div>
                     </div>
                     <div id="hintsSection" style="display: none; margin-top: 20px;">
-                        <h3>Hints</h3>
+                        <h3>Gợi ý</h3>
                         <div id="problemHints" class="hints-container"></div>
                     </div>
                 </div>
                 <div class="topics-section">
-                    <h3>Related Topics</h3>
+                    <h3>Chủ đề liên quan</h3>
                     <div class="topics-tags" id="problemTopics">
                         <span class="topic-tag">-</span>
                     </div>
@@ -125,7 +125,7 @@
 
             <div class="code-editor-panel">
                 <div class="editor-header">
-                    <span class="editor-title">Code Editor</span>
+                    <span class="editor-title">Trình soạn thảo mã</span>
                     <select id="languageSelect" class="language-select" onchange="onLanguageChange()">
                         <option value="python">Python</option>
                         <option value="javascript">JavaScript</option>
@@ -144,7 +144,7 @@
                         <span>1</span>
                     </div>
                     <textarea id="codeInput" class="code-input" spellcheck="false"
-                        placeholder="Write your Python code here..."></textarea>
+                        placeholder="Viết mã Python của bạn tại đây..."></textarea>
                 </div>
 
                 <!-- Unified Test Cases & Results Panel -->
@@ -152,12 +152,12 @@
                     <div class="panel-tabs">
                         <button class="panel-tab active" id="tabTestCases" onclick="switchTab('testCases')">
                             <i class="fas fa-vial"></i>
-                            <span>Test Cases</span>
+                            <span>Bộ kiểm thử</span>
                             <span class="tab-count" id="testCaseCount">(0)</span>
                         </button>
                         <button class="panel-tab" id="tabResults" onclick="switchTab('results')">
                             <i class="fas fa-clipboard-check"></i>
-                            <span>Results</span>
+                            <span>Kết quả</span>
                             <span id="resultStatusBadge" class="status-badge"></span>
                         </button>
                     </div>
@@ -165,7 +165,7 @@
                     <!-- Test Cases Content -->
                     <div class="tab-content" id="testCasesContent">
                         <div id="testCasesContainer">
-                            <div class="loading-message">Loading test cases...</div>
+                            <div class="loading-message">Đang tải bộ kiểm thử...</div>
                         </div>
                     </div>
 
@@ -173,26 +173,26 @@
                     <div class="tab-content" id="resultsContent" style="display: none;">
                         <div class="results-summary">
                             <div class="result-item">
-                                <span class="result-label"><i class="fas fa-clock"></i> Runtime:</span>
+                                <span class="result-label"><i class="fas fa-clock"></i> Thời gian chạy:</span>
                                 <span class="result-value" id="runtimeValue">0 ms</span>
                             </div>
                             <div class="result-item">
-                                <span class="result-label"><i class="fas fa-microchip"></i> Memory:</span>
+                                <span class="result-label"><i class="fas fa-microchip"></i> Bộ nhớ:</span>
                                 <span class="result-value" id="memoryValue">0 MB</span>
                             </div>
                         </div>
                         <div class="test-results-container" id="testResultsContainer">
                             <div class="empty-results">
                                 <i class="fas fa-info-circle"></i>
-                                <span>Run or submit your code to see results</span>
+                                <span>Chạy hoặc nộp mã để xem kết quả</span>
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="editor-actions">
-                    <button class="btn btn-secondary" id="runBtn"><i class="fas fa-play"></i> Run</button>
-                    <button class="btn btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Submit</button>
+                    <button class="btn btn-secondary" id="runBtn"><i class="fas fa-play"></i> Chạy</button>
+                    <button class="btn btn-primary" id="submitBtn"><i class="fas fa-paper-plane"></i> Nộp</button>
                 </div>
             </div>
         </div>
@@ -208,27 +208,27 @@
                     </svg>
                     <span class="brand-name">Teen Lab</span>
                 </div>
-                <p class="footer-tagline">Master algorithms through visualization</p>
+                <p class="footer-tagline">Làm chủ thuật toán thông qua hình ảnh</p>
             </div>
 
             <div class="footer-links">
                 <div class="footer-column">
-                    <h4>Learn</h4>
-                    <a href="#">Algorithms</a>
-                    <a href="#">Data Structures</a>
-                    <a href="#">Tutorials</a>
+                    <h4>Học tập</h4>
+                    <a href="#">Thuật toán</a>
+                    <a href="#">Cấu trúc dữ liệu</a>
+                    <a href="#">Hướng dẫn</a>
                 </div>
                 <div class="footer-column">
-                    <h4>Practice</h4>
-                    <a href="#">Problems</a>
-                    <a href="#">Challenges</a>
-                    <a href="#">Contest</a>
+                    <h4>Luyện tập</h4>
+                    <a href="#">Bài tập</a>
+                    <a href="#">Thử thách</a>
+                    <a href="#">Cuộc thi</a>
                 </div>
                 <div class="footer-column">
-                    <h4>Community</h4>
-                    <a href="#">Forum</a>
+                    <h4>Cộng đồng</h4>
+                    <a href="#">Diễn đàn</a>
                     <a href="#">Blog</a>
-                    <a href="#">Contributors</a>
+                    <a href="#">Người đóng góp</a>
                 </div>
             </div>
 
@@ -255,7 +255,7 @@
         </div>
 
         <div class="footer-bottom">
-            <p>© 2026 Teen Lab | Interactive Learning Platform</p>
+            <p>© 2026 Teen Lab | Nền tảng Học tập Tương tác</p>
         </div>
     </footer>
 
@@ -316,7 +316,7 @@
         async function fetchProblemDetail() {
             const problemId = getProblemId();
             if (!problemId) {
-                document.getElementById('problemTitle').textContent = 'Problem not found';
+                document.getElementById('problemTitle').textContent = 'Không tìm thấy bài tập';
                 return;
             }
             try {
@@ -328,11 +328,11 @@
                     displayProblem(result.data);
                 } else {
                     console.error('Error:', result.message);
-                    document.getElementById('problemTitle').textContent = 'Problem not found';
+                    document.getElementById('problemTitle').textContent = 'Không tìm thấy bài tập';
                 }
             } catch (error) {
                 console.error('Error fetching problem:', error);
-                document.getElementById('problemTitle').textContent = 'Error loading problem';
+                document.getElementById('problemTitle').textContent = 'Lỗi tải bài tập';
             }
         }
 
@@ -388,7 +388,7 @@
                 examplesSection.style.display = 'block';
                 examplesContainer.innerHTML = examplesArray.map((example, index) => {
                     const formattedExample = example.replace(/\s*-\s*/g, '<br>');
-                    return '<div class="example-card"><div class="example-header">Example ' + (index + 1) + '</div><div class="example-content">' + formattedExample + '</div></div>';
+                    return '<div class="example-card"><div class="example-header">Ví dụ ' + (index + 1) + '</div><div class="example-content">' + formattedExample + '</div></div>';
                 }).join('');
             }
         }
@@ -396,22 +396,33 @@
         function displayProblem(problem) {
             let statusBadge = '';
             if (problem.user_status === 'Solved') {
-                statusBadge = '<span class="status-badge accepted" style="margin-left: 10px; font-size: 0.5em;"><i class="fas fa-check-circle"></i> Solved</span>';
+                statusBadge = '<span class="status-badge accepted" style="margin-left: 10px; font-size: 0.5em;"><i class="fas fa-check-circle"></i> Đã giải</span>';
                 isProblemSolved = true;
             } else if (problem.user_status === 'Attempted') {
-                statusBadge = '<span class="status-badge" style="margin-left: 10px; font-size: 0.5em; background-color: #f39c12;"><i class="fas fa-dot-circle"></i> Attempted</span>';
+                statusBadge = '<span class="status-badge" style="margin-left: 10px; font-size: 0.5em; background-color: #f39c12;"><i class="fas fa-dot-circle"></i> Đã thử</span>';
                 isProblemSolved = false;
             } else {
                 isProblemSolved = false;
             }
 
             document.getElementById('problemTitle').innerHTML = problem.id + '. ' + problem.title + statusBadge;
-            document.title = problem.title + ' - Problem';
+            document.title = problem.title + ' - Bài tập';
             const difficultyEl = document.getElementById('problemDifficulty');
             difficultyEl.textContent = problem.difficulty;
             difficultyEl.className = 'difficulty ' + problem.difficulty.toLowerCase();
             const descEl = document.getElementById('problemDescription');
-            descEl.innerHTML = problem.description ? problem.description : '<p>No description available.</p>';
+            if (problem.description) {
+                // Chuyển \n thành <br> để hiển thị xuống dòng đúng
+                const formatted = problem.description
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/\n/g, '<br>')
+                    .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;');
+                descEl.innerHTML = '<div class="problem-desc-text">' + formatted + '</div>';
+            } else {
+                descEl.innerHTML = '<p>Không có mô tả.</p>';
+            }
             if (problem.examples) displayExamples(problem.examples);
             if (problem.hints) displayHints(problem.hints);
             const topicsEl = document.getElementById('problemTopics');
@@ -436,7 +447,7 @@
         async function fetchTestCases() {
             const problemId = getProblemId();
             if (!problemId) {
-                document.getElementById('testCasesContainer').innerHTML = '<div class="no-testcases">Problem not found</div>';
+                document.getElementById('testCasesContainer').innerHTML = '<div class="no-testcases">Không tìm thấy bài tập</div>';
                 return;
             }
             try {
@@ -448,37 +459,37 @@
                     document.getElementById('testCaseCount').textContent = '(' + result.data.length + ')';
                 } else {
                     window.currentTestCases = [];
-                    document.getElementById('testCasesContainer').innerHTML = '<div class="no-testcases">No test cases available</div>';
+                    document.getElementById('testCasesContainer').innerHTML = '<div class="no-testcases">Không có bộ kiểm thử</div>';
                     document.getElementById('testCaseCount').textContent = '(0)';
                 }
             } catch (error) {
                 console.error('Error fetching test cases:', error);
-                document.getElementById('testCasesContainer').innerHTML = '<div class="no-testcases">Error loading test cases</div>';
+                document.getElementById('testCasesContainer').innerHTML = '<div class="no-testcases">Lỗi tải bộ kiểm thử</div>';
             }
         }
 
         function displayTestCases(testCases) {
             const container = document.getElementById('testCasesContainer');
             container.innerHTML = testCases.map((tc, index) => {
-                const inputDisplay = tc.is_hidden ? '<span class="hidden">[Hidden]</span>' : escapeHtml(tc.input_data);
-                const outputDisplay = tc.is_hidden ? '<span class="hidden">[Hidden]</span>' : escapeHtml(tc.expected_output);
-                const badge = tc.is_hidden ? '<span class="test-case-badge">Hidden</span>' : '';
+                const inputDisplay = tc.is_hidden ? '<span class="hidden">[Ẩn]</span>' : escapeHtml(tc.input_data);
+                const outputDisplay = tc.is_hidden ? '<span class="hidden">[Ẩn]</span>' : escapeHtml(tc.expected_output);
+                const badge = tc.is_hidden ? '<span class="test-case-badge">Ẩn</span>' : '';
                 return `
                     <div class="test-case-card">
                         <div class="test-case-header">
                             <div class="test-case-title">
                                 <i class="fas fa-vial"></i>
-                                <span>Test Case ${index + 1}</span>
+                                <span>Bộ kiểm thử ${index + 1}</span>
                             </div>
                             ${badge}
                         </div>
                         <div class="test-case-body">
                             <div class="test-case-row">
-                                <span class="test-case-label"><i class="fas fa-sign-in-alt"></i> Input:</span>
+                                <span class="test-case-label"><i class="fas fa-sign-in-alt"></i> Đầu vào:</span>
                                 <code class="test-case-value">${inputDisplay}</code>
                             </div>
                             <div class="test-case-row">
-                                <span class="test-case-label"><i class="fas fa-sign-out-alt"></i> Expected Output:</span>
+                                <span class="test-case-label"><i class="fas fa-sign-out-alt"></i> Đầu ra mong đợi:</span>
                                 <code class="test-case-value">${outputDisplay}</code>
                             </div>
                         </div>
@@ -529,14 +540,14 @@
             const problemTitle = document.getElementById('problemTitle').textContent;
 
             const placeholders = {
-                python: 'Write your Python code here...',
-                javascript: 'Write your JavaScript code here...',
-                java: 'Write your Java code here...',
-                cpp: 'Write your C++ code here...',
-                c: 'Write your C code here...'
+                python: 'Viết mã Python của bạn tại đây...',
+                javascript: 'Viết mã JavaScript của bạn tại đây...',
+                java: 'Viết mã Java của bạn tại đây...',
+                cpp: 'Viết mã C++ của bạn tại đây...',
+                c: 'Viết mã C của bạn tại đây...'
             };
 
-            codeInput.placeholder = placeholders[language] || 'Write your code here...';
+            codeInput.placeholder = placeholders[language] || 'Viết mã của bạn tại đây...';
             
             // Try to load saved code if problem is not solved
             if (!isProblemSolved) {
@@ -589,10 +600,10 @@
             switchTab('results');
             const badge = document.getElementById('resultStatusBadge');
             badge.className = 'status-badge pending';
-            badge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Running...';
+            badge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang chạy...';
             
             const container = document.getElementById('testResultsContainer');
-            container.innerHTML = '<div class="loading-message" style="color:white; padding: 20px;">Running test cases on server...</div>';
+            container.innerHTML = '<div class="loading-message" style="color:white; padding: 20px;">Đang chạy bộ kiểm thử trên máy chủ...</div>';
             
             try {
                 const res = await fetch(`https://be-datn-6gb6.onrender.com/api/submit/run/${problemId}`, {
@@ -620,33 +631,34 @@
                         <div class="test-case-card" style="margin-bottom: 20px;">
                             <div class="test-case-header">
                                 <div class="test-case-title">
-                                    <span>Sample ${i + 1}</span>
+                                    <i class="fas fa-vial"></i>
+                                    <span>Mẫu ${i + 1}</span>
                                 </div>
                                 <span class="test-case-badge" style="color: ${status === 'Accepted' ? '#10b981' : '#ef4444'}">${status}</span>
                             </div>
                             <div class="test-case-body">
-                                <div class="test-case-row"><span class="test-case-label">Input:</span><code class="test-case-value">${escapeHtml(tc.input)}</code></div>
-                                <div class="test-case-row"><span class="test-case-label">Expected:</span><code class="test-case-value">${escapeHtml(tc.expectedOutput)}</code></div>
-                                <div class="test-case-row"><span class="test-case-label">Actual:</span><code class="test-case-value">${escapeHtml(tc.actualOutput || 'No output')}</code></div>
-                                <div class="test-case-row"><span class="test-case-label">Runtime:</span><code class="test-case-value">${tc.executionTime} ms</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Đầu vào:</span><code class="test-case-value">${escapeHtml(tc.input)}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Đầu ra mong đợi:</span><code class="test-case-value">${escapeHtml(tc.expectedOutput)}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Đầu ra thực tế:</span><code class="test-case-value">${escapeHtml(tc.actualOutput || 'Không có đầu ra')}</code></div>
+                                <div class="test-case-row"><span class="test-case-label">Thời gian chạy:</span><code class="test-case-value">${tc.executionTime} ms</code></div>
                             </div>
                         </div>`;
                     });
                     
                     container.innerHTML = html;
                     badge.className = 'status-badge ' + (allPassed ? 'accepted' : 'rejected');
-                    badge.innerHTML = allPassed ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> Failed';
+                    badge.innerHTML = allPassed ? '<i class="fas fa-check-circle"></i> Đã chấp nhận' : '<i class="fas fa-times-circle"></i> Thất bại';
                     document.getElementById('runtimeValue').textContent = maxRuntime + ' ms';
                     document.getElementById('memoryValue').textContent = maxMemory + ' MB';
                 } else {
                     badge.className = 'status-badge rejected';
-                    badge.innerHTML = 'Error';
-                    container.innerHTML = `<div style="color:#ef4444; padding: 20px;">${data.message || 'Unknown error'}</div>`;
+                    badge.innerHTML = 'Lỗi';
+                    container.innerHTML = `<div style="color:#ef4444; padding: 20px;">${data.message || 'Lỗi không xác định'}</div>`;
                 }
             } catch (e) {
                 badge.className = 'status-badge rejected';
-                badge.innerHTML = 'Network Error';
-                container.innerHTML = `<div style="color:#ef4444; padding: 20px;">Could not connect to server</div>`;
+                badge.innerHTML = 'Lỗi mạng';
+                container.innerHTML = `<div style="color:#ef4444; padding: 20px;">Không thể kết nối đến máy chủ</div>`;
             }
         }
 
@@ -717,10 +729,10 @@
             switchTab('results');
             const badge = document.getElementById('resultStatusBadge');
             badge.className = 'status-badge pending';
-            badge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+            badge.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang nộp...';
             
             const container = document.getElementById('testResultsContainer');
-            container.innerHTML = '<div class="loading-message" style="color:white; padding: 20px;">Evaluating submission on server...</div>';
+            container.innerHTML = '<div class="loading-message" style="color:white; padding: 20px;">Đang đánh giá bài nộp trên máy chủ...</div>';
             
             try {
                 const res = await fetch(`https://be-datn-6gb6.onrender.com/api/submit/${problemId}`, {
@@ -734,7 +746,7 @@
                     status = data.data.status;
                     const statusClass = status === 'Accepted' ? 'accepted' : 'rejected';
                     badge.className = 'status-badge ' + statusClass;
-                    badge.innerHTML = status === 'Accepted' ? '<i class="fas fa-check-circle"></i> Accepted' : '<i class="fas fa-times-circle"></i> ' + status;
+                    badge.innerHTML = status === 'Accepted' ? '<i class="fas fa-check-circle"></i> Đã chấp nhận' : '<i class="fas fa-times-circle"></i> ' + status;
 
                     document.getElementById('runtimeValue').textContent = (data.data.runtime || 0) + ' ms';
                     document.getElementById('memoryValue').textContent = (data.data.memory || 0) + ' MB';
@@ -744,11 +756,11 @@
                         showProblemSolvedNotification(data.data.pointsEarned);
                     }
                     
-                    let html = '<h3 style="color:white; margin: 15px 10px;">Test Cases (' + data.data.testcases.length + ')</h3><div style="display:flex; flex-wrap:wrap; gap:10px; padding: 10px;">';
+                    let html = '<h3 style="color:white; margin: 15px 10px;">Bộ kiểm thử (' + data.data.testcases.length + ')</h3><div style="display:flex; flex-wrap:wrap; gap:10px; padding: 10px;">';
                     data.data.testcases.forEach((tc, i) => {
                         const bg = tc.status === 'Accepted' ? '#10b981' : (tc.status.includes('Not Executed') ? '#64748b' : '#ef4444');
                         html += `<div style="padding: 15px; border-radius: 8px; background-color: #1e293b; border-left: 5px solid ${bg}; min-width: 140px; margin-bottom: 10px;">
-                            <div style="font-size:12px; color:#94a3b8; margin-bottom: 5px;">Test Case ${i+1}</div>
+                            <div style="font-size:12px; color:#94a3b8; margin-bottom: 5px;">Bộ kiểm thử ${i+1}</div>
                             <div style="font-size:15px; color:${bg}; font-weight:bold">${tc.status}</div>
                         </div>`;
                     });
@@ -756,13 +768,13 @@
                     container.innerHTML = html;
                 } else {
                     badge.className = 'status-badge rejected';
-                    badge.innerHTML = 'Error';
-                    container.innerHTML = `<div style="color:#ef4444; padding: 20px;">${data.message || 'Unknown error'}</div>`;
+                    badge.innerHTML = 'Lỗi';
+                    container.innerHTML = `<div style="color:#ef4444; padding: 20px;">${data.message || 'Lỗi không xác định'}</div>`;
                 }
             } catch (e) {
                 badge.className = 'status-badge rejected';
-                badge.innerHTML = 'Network Error';
-                container.innerHTML = `<div style="color:#ef4444; padding: 20px;">Could not connect to server</div>`;
+                badge.innerHTML = 'Lỗi mạng';
+                container.innerHTML = `<div style="color:#ef4444; padding: 20px;">Không thể kết nối đến máy chủ</div>`;
             }
             
             // Clear saved code if problem was just solved
