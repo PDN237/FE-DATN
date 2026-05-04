@@ -502,8 +502,13 @@ body {
     border: none;
 }
 
-
-
+.problem-desc-text {
+    color: #3a4a5c;
+    font-size: 0.95rem;
+    line-height: 1.85;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
 
 /* ===== TOPICS SECTION ===== */
 .topics-section {

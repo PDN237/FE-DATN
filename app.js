@@ -27,19 +27,30 @@ class App {
         this.sortBtn.addEventListener('click', () => this.toggleSort());
         this.numElementsInput.addEventListener('change', () => {
             if (this.isSorting) {
-                // Stop sorting completely
-                this.currentSorter.stop();
-                this.isSorting = false;
-                this.updateButtonStates();
-                // Revert the change
-                this.numElementsInput.value = this.array.length;
-                alert('Đã dừng sắp xếp. Vui lòng nhập dữ liệu mới vào ô nhập liệu nếu cần.');
+                // Stop sorting and show confirmation
+                const confirmChange = confirm('Đang sắp xếp! Thay đổi số phần tử sẽ dừng sắp xếp hiện tại.\n\nBạn có muốn tiếp tục thay đổi số phần tử không?');
+                if (confirmChange) {
+                    this.currentSorter.stop();
+                    this.isSorting = false;
+                    this.updateButtonStates();
+                    this.randomize();
+                } else {
+                    // Revert the change
+                    this.numElementsInput.value = this.array.length;
+                }
             } else {
                 this.randomize();
             }
         });
 
         this.sortTypeSelect.addEventListener('change', () => {
+            if (this.isSorting) {
+                // Stop sorting and show confirmation
+                this.currentSorter.stop();
+                this.isSorting = false;
+                this.updateButtonStates();
+                alert('Đã dừng sắp xếp. Thuật toán đã được thay đổi. Nhấn "Sắp xếp" để bắt đầu lại với thuật toán mới.');
+            }
             this.updateAlgorithmDescription();
         });
 
@@ -75,6 +86,12 @@ class App {
 
     showComparePopup(index1, index2) {
         if (!this.boxes[index1] || !this.boxes[index2]) return;
+
+        // Don't show popup for bar and sized-box modes
+        const mode = this.visualizationModeSelect.value;
+        if (mode === 'bars' || mode === 'sized-boxes') {
+            return;
+        }
 
         if (this.comparePopup) {
             this.comparePopup.remove();
@@ -420,7 +437,7 @@ class App {
         this.randomizeBtn.disabled = true;
         this.numElementsInput.disabled = true;
         this.sortTypeSelect.disabled = true;
-        this.visualizationModeSelect.disabled = true;
+        // Keep visualization mode enabled during sorting
 
         // Fix positions before starting sort to avoid jump
         this.updateBoxes(this.array);

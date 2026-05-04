@@ -910,7 +910,6 @@ main {
 
 /* ==================== ANIMATION STATES ==================== */
 .box.sorted,
-.bar.sorted,
 .sized-box.sorted {
     background: var(--color-success) !important;
     box-shadow: var(--shadow-lg) !important;
@@ -918,8 +917,14 @@ main {
     border-color: #379a6f;
 }
 
+.bar.sorted {
+    background: linear-gradient(180deg, var(--color-success) 0%, #3eb56d 100%) !important;
+    box-shadow: 0 0 20px rgba(72, 199, 142, 0.6), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-color: #379a6f !important;
+    animation: barSortedGlow 0.8s ease-in-out;
+}
+
 .box.comparing,
-.bar.comparing,
 .sized-box.comparing {
     background: var(--color-danger) !important;
     box-shadow: var(--shadow-lg) !important;
@@ -927,8 +932,15 @@ main {
     transform: scale(1.1);
 }
 
+.bar.comparing {
+    background: linear-gradient(180deg, var(--color-danger) 0%, #d94a5e 100%) !important;
+    box-shadow: 0 0 25px rgba(238, 90, 111, 0.7), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-color: #d94a5e !important;
+    animation: barCompareGlow 0.5s ease-in-out;
+    transform: scaleY(1.05);
+}
+
 .box.swapping,
-.bar.swapping,
 .sized-box.swapping {
     background: var(--color-warning) !important;
     box-shadow: var(--shadow-lg) !important;
@@ -936,13 +948,27 @@ main {
     transform: scale(1.15);
 }
 
+.bar.swapping {
+    background: linear-gradient(180deg, var(--color-warning) 0%, #e5a52a 100%) !important;
+    box-shadow: 0 0 25px rgba(247, 183, 49, 0.7), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-color: #e5a52a !important;
+    animation: barSwapLift 0.4s ease-in-out;
+    transform: translateY(-10px);
+}
+
 .box.pivot,
-.bar.pivot,
 .sized-box.pivot {
     background: var(--color-purple) !important;
     box-shadow: var(--shadow-lg) !important;
     animation: pivotSpin 0.5s ease-in-out;
     border-color: #7f55c9;
+}
+
+.bar.pivot {
+    background: linear-gradient(180deg, var(--color-purple) 0%, #8a5bd9 100%) !important;
+    box-shadow: 0 0 25px rgba(155, 109, 232, 0.7), 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+    border-color: #8a5bd9 !important;
+    animation: barPivotPulse 0.6s ease-in-out;
 }
 
 /* ==================== KEYFRAME ANIMATIONS ==================== */
@@ -966,6 +992,49 @@ main {
     0% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(180deg) scale(1.2); }
     100% { transform: rotate(360deg) scale(1); }
+}
+
+/* Bar-specific animations */
+@keyframes barSortedGlow {
+    0%, 100% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 0.9;
+        filter: brightness(1.2);
+    }
+}
+
+@keyframes barCompareGlow {
+    0%, 100% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 0.95;
+        filter: brightness(1.3);
+    }
+}
+
+@keyframes barSwapLift {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes barPivotPulse {
+    0%, 100% {
+        opacity: 1;
+        filter: brightness(1);
+    }
+    50% {
+        opacity: 0.9;
+        filter: brightness(1.25);
+    }
 }
 
 @keyframes randomize {
